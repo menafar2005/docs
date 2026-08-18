@@ -1,0 +1,303 @@
+---
+title: "وب‌هوک‌های پرداخت"
+description: "مرجع ساختار داده و شرایط ارسال وب‌هوک‌های ایجاد و ویرایش پرداخت در دیدار"
+sidebarTitle: "وب هوک پرداخت"
+---
+
+# وب‌هوک‌های پرداخت
+
+وب‌هوک‌های پرداخت اطلاعات پرداخت را پس از ایجاد یا ویرایش آن به آدرس مقصد ارسال می‌کنند. ساختار کلی Payload در هر دو رویداد یکسان است؛ با این تفاوت که در وب‌هوک ویرایش، آرایه `changes` مشخص می‌کند کدام اطلاعات پرداخت در همان عملیات تغییر کرده‌اند.
+
+## ساختار داده ارسالی
+
+<ParamField path="data" type="object">
+  اطلاعات کامل پرداختی است که وب‌هوک برای آن ارسال شده است. در وب‌هوک ایجاد، این Object وضعیت پرداختی تازه ایجادشده را نشان می‌دهد و در وب‌هوک ویرایش، آخرین وضعیت همان پرداخت را پس از اعمال تغییرات در اختیار شما قرار می‌دهد.
+
+  <Expandable title="property">
+    <ParamField path="data.Id" type="string">
+      شناسه پرداختی است که این وب‌هوک برای آن ارسال شده است. اگر رویداد از نوع ایجاد باشد، این مقدار شناسه پرداختی است که تازه در دیدار ایجاد شده و اگر رویداد از نوع ویرایش باشد، شناسه همان پرداختی است که اطلاعات آن تغییر کرده است.
+    </ParamField>
+
+    <ParamField path="data.Title" type="string">
+      عنوان پرداختی است که ایجاد یا ویرایش شده است. این عنوان برای تشخیص علت یا نوع پرداخت در فهرست پرداخت‌های معامله استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.Amount" type="number">
+      مبلغ این پرداخت است. برای تفسیر صحیح مبلغ باید ارز مشخص‌شده در `data.CurrencyId` را نیز در نظر بگیرید.
+    </ParamField>
+
+    <ParamField path="data.DealId" type="string">
+      شناسه معامله‌ای است که این پرداخت برای آن ثبت شده است. این مقدار مشخص می‌کند مبلغ پرداخت‌شده یا قابل‌پرداخت مربوط به کدام فرصت فروش است.
+    </ParamField>
+
+    <ParamField path="data.Status" type="number">
+      وضعیت عمومی رکورد پرداخت را در دیدار مشخص می‌کند و نشان می‌دهد پرداخت در چه مرحله‌ای از فرایند ثبت یا پیگیری قرار دارد.
+    </ParamField>
+
+    <ParamField path="data.PaymentNote" type="string">
+      توضیحی است که برای این پرداخت ثبت شده و مشخص می‌کند مبلغ بابت چه موضوعی دریافت یا پرداخت می‌شود؛ برای مثال شماره رسید، روش پرداخت یا توضیح تکمیلی درباره تسویه معامله.
+    </ParamField>
+
+    <ParamField path="data.CreatedDate" type="string">
+      زمانی است که این پرداخت برای اولین بار در دیدار ایجاد و ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.ModifiedDate" type="string">
+      زمان آخرین ویرایش اطلاعات این پرداخت است. این مقدار نشان می‌دهد مبلغ، وضعیت، سررسید یا سایر اطلاعات پرداخت چه زمانی آخرین بار تغییر کرده‌اند.
+    </ParamField>
+
+    <ParamField path="data.PayedDate" type="string">
+      زمانی است که این پرداخت در دیدار به‌عنوان پرداخت‌شده ثبت شده است. این تاریخ زمان واقعی تسویه را نشان می‌دهد و با تاریخ ایجاد یا سررسید پرداخت متفاوت است.
+    </ParamField>
+
+    <ParamField path="data.DueDate" type="string">
+      تاریخ سررسید پرداخت است؛ یعنی زمانی که انتظار می‌رود این مبلغ تا آن تاریخ پرداخت یا تسویه شود.
+    </ParamField>
+
+    <ParamField path="data.CreatorId" type="string">
+      شناسه کاربری است که این پرداخت را برای اولین بار در دیدار ایجاد کرده است.
+    </ParamField>
+
+    <ParamField path="data.PayerId" type="string">
+      شناسه شخص یا رکوردی است که این پرداخت از طرف او انجام شده است و پرداخت‌کننده مبلغ را مشخص می‌کند.
+    </ParamField>
+
+    <ParamField path="data.EditorId" type="string">
+      شناسه کاربری است که آخرین تغییر ثبت‌شده روی این پرداخت را انجام داده است.
+    </ParamField>
+
+    <ParamField path="data.PaymentStatus" type="string">
+      کد وضعیت مالی پرداخت است و مشخص می‌کند مبلغ هنوز در انتظار پرداخت است، پرداخت شده یا در وضعیت مالی دیگری قرار دارد.
+    </ParamField>
+
+    <ParamField path="data.CurrencyId" type="number">
+      شناسه ارزی است که مبلغ این پرداخت براساس آن ثبت شده است. مقدار `data.Amount` بدون این شناسه واحد پول مشخصی ندارد.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="changes" type="array">
+  تغییراتی که باعث ارسال وب‌هوک ویرایش پرداخت شده‌اند در این Array قرار می‌گیرند. در وب‌هوک ایجاد، `changes` خالی است؛ چون پرداخت تازه ساخته شده و نسخه قبلی‌ای برای مقایسه وجود ندارد. در وب‌هوک ویرایش، هر عضو مشخص می‌کند کدام فیلد تغییر کرده، مقدار آن پیش از ویرایش چه بوده و پس از ویرایش به چه مقداری تبدیل شده است. Object `data` وضعیت نهایی پرداخت را نشان می‌دهد و `changes` فقط تغییرات همان عملیات را گزارش می‌کند.
+
+  <Expandable title="property">
+    <ParamField path="changes[].propertyName" type="string">
+      نام فیلدی از پرداخت است که در این عملیات ویرایش تغییر کرده است. این مقدار مشخص می‌کند `before` و `after` مربوط به کدام بخش از اطلاعات پرداخت هستند.
+    </ParamField>
+
+    <ParamField path="changes[].before" type="number">
+      مقدار فیلد پیش از انجام این ویرایش است. با مقایسه آن با `changes[].after` می‌توانید دقیقاً تشخیص دهید اطلاعات پرداخت از چه مقداری تغییر کرده است. نوع مقدار به فیلد نوشته‌شده در `propertyName` بستگی دارد و می‌تواند رشته، عدد، Boolean، Object، Array یا `null` باشد.
+    </ParamField>
+
+    <ParamField path="changes[].after" type="number">
+      مقدار فیلد پس از انجام و ذخیره ویرایش است. این مقدار نتیجه نهایی همان تغییر را نشان می‌دهد و باید با مقدار متناظر آن در Object `data` هم‌خوان باشد.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="meta" type="object">
+  اطلاعات فنی مربوط به خود رویداد وب‌هوک است، نه اطلاعات پرداخت. این Object مشخص می‌کند چه عملیاتی انجام شده، رویداد متعلق به کدام بیزدامنه و پرداخت است، چه کاربری آن را ایجاد کرده، تغییر از چه منبعی آمده و Payload توسط کدام تنظیم وب‌هوک و در چندمین تلاش ارسال شده است.
+
+  <Expandable title="property">
+    <ParamField path="meta.actionType" type="number">
+      کد عددی نوع عملیاتی است که باعث ارسال این وب‌هوک شده است. براساس نمونه‌ها، مقدار `1` یعنی پرداخت ایجاد شده و مقدار `2` یعنی پرداخت ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.actionTypeTitle" type="string">
+      عنوان متنی همان عملیاتی است که در `meta.actionType` به‌صورت عددی مشخص شده است. در نمونه ایجاد مقدار `Add` و در نمونه ویرایش مقدار `Change` ارسال می‌شود.
+    </ParamField>
+
+    <ParamField path="meta.bizDomainId" type="string">
+      شناسه بیزدامنه‌ای است که پرداخت در آن ایجاد یا ویرایش شده است. این مقدار مشخص می‌کند رویداد وب‌هوک متعلق به کدام حساب یا فضای کاری دیدار است.
+    </ParamField>
+
+    <ParamField path="meta.entityId" type="string">
+      شناسه پرداختی است که رویداد وب‌هوک برای آن ثبت شده است. این مقدار باید به همان رکوردی اشاره کند که اطلاعات کامل آن داخل `data` قرار گرفته و معمولاً با `data.Id` یکسان است.
+    </ParamField>
+
+    <ParamField path="meta.entity" type="number">
+      کد عددی داخلی نوع موجودیتی است که رویداد برای آن ثبت شده است. در Payload این صفحه، این کد به موجودیت پرداخت اشاره می‌کند.
+    </ParamField>
+
+    <ParamField path="meta.entityTitle" type="string">
+      عنوان فنی موجودیتی است که این وب‌هوک به آن مربوط می‌شود و نشان می‌دهد رکورد داخل `data` از نوع پرداخت است.
+    </ParamField>
+
+    <ParamField path="meta.id" type="number">
+      شناسه رویدادی است که پس از ایجاد یا ویرایش پرداخت در سیستم ثبت شده و این Payload براساس آن ساخته شده است. این شناسه مربوط به خود رویداد است، نه شناسه پرداخت.
+    </ParamField>
+
+    <ParamField path="meta.isBulkEdit" type="boolean">
+      مشخص می‌کند تغییر پرداخت در قالب یک عملیات گروهی انجام شده است یا خیر. مقدار `true` یعنی این رویداد نتیجه ویرایش گروهی بوده و مقدار `false` یعنی پرداخت به‌صورت تکی ایجاد یا ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.timeStamp" type="string">
+      زمانی است که رویداد ایجاد یا ویرایش پرداخت در دیدار ثبت شده و Payload وب‌هوک براساس آن تولید شده است. این زمان لزوماً با تاریخ‌های داخل خود پرداخت یکسان نیست.
+    </ParamField>
+
+    <ParamField path="meta.userId" type="string">
+      شناسه کاربری است که عملیات منجر به ارسال این وب‌هوک را انجام داده است. در رویداد ایجاد، کاربری را نشان می‌دهد که پرداخت را ساخته و در رویداد ویرایش، کاربری را مشخص می‌کند که تغییر را انجام داده است.
+    </ParamField>
+
+    <ParamField path="meta.webhookId" type="number">
+      شناسه تنظیم وب‌هوکی است که این Payload را به آدرس مقصد ارسال کرده است. این مقدار برای تشخیص وب‌هوک تعریف‌شده‌ای که رویداد از طریق آن ارسال شده کاربرد دارد.
+    </ParamField>
+
+    <ParamField path="meta.changeSource" type="number">
+      کد عددی منبعی است که عملیات ایجاد یا ویرایش از طریق آن انجام شده است. عنوان قابل‌خواندن همین منبع در `meta.changeSourceTitle` قرار می‌گیرد.
+    </ParamField>
+
+    <ParamField path="meta.changeSourceTitle" type="string">
+      عنوان متنی منبعی است که پرداخت از طریق آن ایجاد یا ویرایش شده است. برای مثال مقدار `Api` یعنی عملیات از طریق API انجام شده است.
+    </ParamField>
+
+    <ParamField path="meta.attempt" type="number">
+      شماره تلاش برای ارسال همین رویداد وب‌هوک به آدرس مقصد است. مقدار `1` یعنی Payload در اولین تلاش ارسال شده است.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## وب‌هوک ایجاد پرداخت چه زمانی ارسال می‌شود؟
+
+وب‌هوک ایجاد پرداخت زمانی ارسال می‌شود که یک پرداخت جدید با موفقیت در دیدار ثبت شود. آبجکت `data` شامل اطلاعات پرداخت تازه ایجادشده است و آرایه `changes` خالی ارسال می‌شود، چون پیش از این عملیات رکوردی وجود نداشته که فیلدی از آن تغییر کرده باشد.
+
+## وب‌هوک ویرایش پرداخت چه زمانی ارسال می‌شود؟
+
+وب‌هوک ویرایش پرداخت زمانی ارسال می‌شود که حداقل یکی از اطلاعات موجود در `data` تغییر کند. فیلدهایی که تغییر آن‌ها می‌تواند باعث ارسال این وب‌هوک شود عبارت‌اند از:
+
+- `data.Id`
+- `data.Title`
+- `data.Amount`
+- `data.DealId`
+- `data.Status`
+- `data.PaymentNote`
+- `data.CreatedDate`
+- `data.ModifiedDate`
+- `data.PayedDate`
+- `data.DueDate`
+- `data.CreatorId`
+- `data.PayerId`
+- `data.EditorId`
+- `data.PaymentStatus`
+- `data.CurrencyId`
+
+اگر هیچ‌کدام از فیلدهای موجود در `data` تغییر نکنند، وب‌هوک ویرایش پرداخت ارسال نمی‌شود. آرایه `changes` عامل Trigger نیست؛ این آرایه نتیجه تغییرات انجام‌شده را گزارش می‌کند و `data` آخرین وضعیت پرداخت را پس از ویرایش نشان می‌دهد.
+
+## نمونه داده ارسالی
+
+<CodeGroup>
+
+```json وب‌هوک ایجاد پرداخت
+{
+  "data": {
+    "Id": "0928f600-d28c-4a8a-aef3-ace9f07d9b02",
+    "Title": "پرداخت",
+    "Amount": 550000,
+    "DealId": "fb2fb2ad-34b1-458d-86a5-ddb68ec3176f",
+    "Status": 0,
+    "PaymentNote": null,
+    "CreatedDate": "2026-08-02T15:49:08.5559779+00:00",
+    "ModifiedDate": "0001-01-01T00:00:00",
+    "PayedDate": null,
+    "DueDate": "2026-08-02T15:49:08.265Z",
+    "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "PayerId": null,
+    "EditorId": null,
+    "PaymentStatus": "NotPaid",
+    "CurrencyId": 258325
+  },
+  "changes": [],
+  "meta": {
+    "actionType": 1,
+    "actionTypeTitle": "Add",
+    "bizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "entityId": "0928f600-d28c-4a8a-aef3-ace9f07d9b02",
+    "entity": 8788,
+    "entityTitle": "PaymentInstallment",
+    "id": 639212825485563231,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-02T15:49:08.5563231Z",
+    "userId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "webhookId": 32500,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+```json وب‌هوک ویرایش پرداخت
+{
+  "data": {
+    "Id": "0928f600-d28c-4a8a-aef3-ace9f07d9b02",
+    "Title": "پرداخت",
+    "Amount": 550000,
+    "DealId": "fb2fb2ad-34b1-458d-86a5-ddb68ec3176f",
+    "Status": 1,
+    "PaymentNote": "پرداخت دستی\nتوسط: احسان نفری",
+    "CreatedDate": "2026-08-02T15:49:08.5559779",
+    "ModifiedDate": "2026-08-02T15:50:12.3316865+00:00",
+    "PayedDate": "2026-08-02T15:50:12.3316865+00:00",
+    "DueDate": "2026-08-02T15:49:08.265",
+    "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "PayerId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "EditorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "PaymentStatus": "ManualPayment",
+    "CurrencyId": 258325
+  },
+  "changes": [
+    {
+      "propertyName": "PaymentStatus",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "propertyName": "PayerId",
+      "before": null,
+      "after": "58f610e7-061a-4efc-9a87-af7b31bde808"
+    },
+    {
+      "propertyName": "PayedDate",
+      "before": null,
+      "after": "2026-08-02T15:50:12.3316865+00:00"
+    },
+    {
+      "propertyName": "EditorId",
+      "before": null,
+      "after": "58f610e7-061a-4efc-9a87-af7b31bde808"
+    },
+    {
+      "propertyName": "ModifiedDate",
+      "before": "0001-01-01T00:00:00",
+      "after": "2026-08-02T15:50:12.3316865+00:00"
+    },
+    {
+      "propertyName": "PaymentNote",
+      "before": null,
+      "after": "پرداخت دستی\nتوسط: احسان نفری"
+    },
+    {
+      "propertyName": "IsPaid",
+      "before": false,
+      "after": true
+    }
+  ],
+  "meta": {
+    "actionType": 2,
+    "actionTypeTitle": "Change",
+    "bizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "entityId": "0928f600-d28c-4a8a-aef3-ace9f07d9b02",
+    "entity": 8788,
+    "entityTitle": "PaymentInstallment",
+    "id": 639212826574329485,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-02T15:50:57.4329485Z",
+    "userId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "webhookId": 32501,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+</CodeGroup>

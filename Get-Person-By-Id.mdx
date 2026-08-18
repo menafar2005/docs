@@ -1,0 +1,245 @@
+---
+title: "Get Person By Id"
+tag: "POST"
+sidebarTitle: "Get Person By Id"
+---
+
+## دریافت جزئیات شخص توسط شناسه شخص
+
+با این Endpoint می‌توانید اطلاعات یک شخص مشخص را از روی ID او دریافت کنید.‎ زمانی از آن استفاده کنید که ID شخص را دارید و به جزئیات کامل‌تر مخاطب برای نمایش یا پردازش در سیستم خودتان نیاز دارید.‎
+
+```http
+POST {{baseURL}}/api/contact/GetContactDetail?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Id" type="string" required>
+  شناسه یکتای شخصی است که می‌خواهید اطلاعاتش را دریافت کنید.
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Id": "78fd26e1-e816-437f-a691-b50419d133c2"
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/contact/GetContactDetail?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Id": "78fd26e1-e816-437f-a691-b50419d133c2"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "c15ab449-4432-4ebc-9b96-d39db57af988",
+        "Code": 14503,
+        "Title": "جناب آقای",
+        "FirstName": "12",
+        "LastName": "آشنasasا",
+        "DisplayName": "12 آشنasasا",
+        "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+        "CompanyId": "39e05281-f35a-4923-bed4-8d2db9947be8",
+        "BirthDate": "2025-08-31T00:00:00Z",
+        "BirthDateMessageId": "88356367-c004-4263-98e5-6b4e8bbc9852",
+        "BirthDateisValid": false,
+        "MobilePhone": "09391232",
+        "WorkPhone": "02155587458",
+        "WorkPhoneExtension": "تلفن منشی",
+        "Fax": "فکس منشی 023934443",
+        "Email": "",
+        "CanDelete": true,
+        "CanEdit": true,
+        "IsDeleted": false,
+        "IsVIP": true,
+        "IsMine": false,
+        "HasAccess": true,
+        "LeadGenerationType": "Manual",
+        "LeadStatus": "None",
+        "LeadType": "General",
+        "ContactType": "General",
+        "IsCustomer": false,
+        "IsProspect": false,
+        "Type": "Person",
+        "BackgroundInfo": "12312sdsd",
+        "RegisterTime": "2026-07-28T09:03:58Z",
+        "Position": "مدیر واحد",
+        "CustomerCode": "12311213",
+        "EconomicIssue": "",
+        "NationalCode": "asdfdsdd2132",
+        "RegistrationNumber": "",
+        "NationalID": "",
+        "ZipCode": "123assdddf",
+        "CityTitle": "اسکو",
+        "ProvinceTitle": "آذربایجان شرقی",
+        "ProvinceId": "c990e86b-a13a-40f4-b21d-79bf09e6e579",
+        "CityId": "314409ce-ee7f-424e-ab88-c578d0ca187f",
+        "HasCompany": true,
+        "CompanyName": "",
+        "CompanyIsCustomer": false,
+        "CompanyIsProspect": false,
+        "CompanyCode": 164,
+        "CompanyAndPosition": " - مدیر واحد",
+        "Feedback": 60.0,
+        "VisibilityType": "All",
+        "OtherPhones": {
+            "KeyValues": [
+                {
+                    "Key": "همراه",
+                    "Value": "تلفن 0123",
+                    "Title": "همراه"
+                },
+                {
+                    "Key": "محل کار",
+                    "Value": "موبایل 09123",
+                    "Title": "محل کار"
+                }
+            ]
+        },
+        "OtherEmails": {
+            "KeyValues": [
+                {
+                    "Key": "کاری",
+                    "Value": "mamo@sd.comsd",
+                    "Title": "کاری"
+                }
+            ]
+        },
+        "Websites": {
+            "KeyValues": [
+                {
+                    "Key": "asdf",
+                    "Value": "asdfasdfasdf",
+                    "Title": "asdf"
+                }
+            ]
+        },
+        "Addresses": {
+            "KeyValues": [
+                {
+                    "Key": "محل کار",
+                    "Value": "ASDF",
+                    "Title": "محل کار"
+                },
+                {
+                    "Key": "منزل",
+                    "Value": "ASDFASDF",
+                    "Title": "منزل"
+                }
+            ]
+        },
+        "BankAccounts": {
+            "Values": [
+                {
+                    "Values": [
+                        "Card",
+                        "asdfasfd",
+                        "asdfasdf",
+                        "asdfasdf",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ],
+                    "Value1": "Card",
+                    "Value2": "asdfasfd",
+                    "Value3": "asdfasdf",
+                    "Value4": "asdfasdf",
+                    "Value5": "",
+                    "Value6": "",
+                    "Value7": "",
+                    "Value8": "",
+                    "Value9": "",
+                    "Value10": "",
+                    "Value11": "",
+                    "Value12": "",
+                    "Value13": "",
+                    "Value14": "",
+                    "Value15": ""
+                },
+                {
+                    "Values": [
+                        "Account",
+                        "sadfasdf",
+                        "asdfasdf",
+                        "asdfasdf",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ],
+                    "Value1": "Account",
+                    "Value2": "sadfasdf",
+                    "Value3": "asdfasdf",
+                    "Value4": "asdfasdf",
+                    "Value5": "",
+                    "Value6": "",
+                    "Value7": "",
+                    "Value8": "",
+                    "Value9": "",
+                    "Value10": "",
+                    "Value11": "",
+                    "Value12": "",
+                    "Value13": "",
+                    "Value14": "",
+                    "Value15": ""
+                }
+            ]
+        },
+        "Owner": {
+            "UserId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+            "DisplayName": " محمد علی مزینی",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/52c406aa-ae3d-4699-b253-6c5af7648549.jpg",
+            "Email": "mamozayyani@gmail.com"
+        },
+        "ContactStatus": {},
+        "Fields": {
+            "Field_996_0_7": "asdfasdfasdf",
+            "Field_996_0_8": "asdfasdfasdf"
+        },
+        "Segments": [],
+        "KeepInTouch": null,
+        "LastUpdateTime": "2026-07-28T09:03:58Z",
+        "OwnerId_Old": "f1599895-3d58-44a8-a830-e77b42d8e4c6"
+    }
+}
+```
+
+</ResponseExample>

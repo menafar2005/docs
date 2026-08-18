@@ -1,0 +1,79 @@
+---
+title: "Remove Quote"
+sidebarTitle: "Remove Quote"
+description: "حذف یک پیش‌فاکتور موجود در دیدار با استفاده از شناسه پیش‌فاکتور"
+tag: "POST"
+---
+
+# حذف پیش‌فاکتور
+
+این Endpoint برای حذف یک پیش‌فاکتور موجود در دیدار استفاده می‌شود. برای مشخص کردن پیش‌فاکتوری که باید حذف شود، شناسه همان پیش‌فاکتور را در فیلد `id` داخل بدنه درخواست ارسال کنید.
+
+```http
+POST {{baseURL}}/api/AccountingQuote/RemoveQuote?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="id" type="number" required>
+  شناسه پیش‌فاکتوری است که می‌خواهید حذف کنید. این مقدار باید `Id` همان پیش‌فاکتور موجود در دیدار باشد.
+</ParamField>
+
+## قواعد و محدودیت‌ها
+
+- تنها فیلد الزامی در بدنه درخواست `id` است.
+- مقدار `id` باید شناسه پیش‌فاکتوری باشد که قصد حذف آن را دارید.
+- در پاسخ موفق این Endpoint، مقدار `Response` برابر `null` برگردانده می‌شود.
+
+## حداقل درخواست
+
+```json
+{
+  "id": 2377534
+}
+```
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "id": 2377534
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location '{{baseURL}}/api/AccountingQuote/RemoveQuote?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "id": 2377534
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+  "Response": null
+}
+```
+
+</ResponseExample>
+
+## لینک‌های مرتبط
+
+- [Create Quote](/Create-Quote)
+- [Update Quote](/Update-Quote)

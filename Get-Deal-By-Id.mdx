@@ -1,0 +1,190 @@
+---
+title: "Get Deal By Id"
+tag: "POST"
+sidebarTitle: "Get Deal By Id"
+---
+
+## دریافت جزئیات معامله
+
+این Endpoint اطلاعات یک معامله مشخص را براساس ID آن برمی‌گرداند.‎ اطلاعاتی مثل طرف معامله، مبلغ، وضعیت، مسئول، مرحله کاریز، محصولات و فیلدهای اضافه را می‌توانید از پاسخ دریافت کنید.‎
+
+```http
+POST {{baseURL}}/api/deal/getdealdetail?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Id" type="string" required>
+  شناسه معامله‌ای است که می‌خواهید اطلاعاتش را دریافت کنید.
+</ParamField>
+
+## قواعد و محدودیت‌ها
+
+- با دادن مقدار شناسه معامله می توان جزئیات معامله را مشاهده کرد
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Id": "2e4be09f-ce8b-4bfe-a96d-290ebddd81483"
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/deal/getdealdetail?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Id": "2e4be09f-ce8b-4bfe-a96d-290ebddd81483"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+  "Response": {
+    "Id": "f928a603-4369-400a-8741-2b44d15691f7",
+    "Code": 903235,
+    "BizDomainId": "ffc39d03-0fcf-467d-88cc-b645ad92bf7c",
+    "Title": "معامله fghbfghb",
+    "Description": "",
+    "OwnerId": "f677929c-0f9a-4570-8234-c5b6ac20b892",
+    "ContactId": "ffe00a7d-db08-4c11-b6ef-24fcbac9703b",
+    "PersonId": "ffe00a7d-db08-4c11-b6ef-24fcbac9703b",
+    "CompanyId": "00000000-0000-0000-0000-000000000000",
+    "OtherContactIds": "",
+    "IsDeleted": false,
+    "IsPaid": false,
+    "Status": "Pending",
+    "Probability": 100,
+    "Price": 0,
+    "FinalAdjustmentPrice": 0,
+    "LostReasonId": "00000000-0000-0000-0000-000000000000",
+    "LostReasonNote": "",
+    "LostReasonOther": "",
+    "RegisterTime": "2023-02-06T14:40:29Z",
+    "ChangeToWonTime": "2023-02-06T14:40:29Z",
+    "ChangeToLossTime": "2023-02-06T14:40:29Z",
+    "LastTrackingTime": "1930-01-01T00:00:00Z",
+    "NextTrackingTime": "1930-01-01T00:00:00Z",
+    "HasTracking": false,
+    "ExpectedCloseDate": null,
+    "CanEdit": true,
+    "CanDelete": true,
+    "CanSetLost": true,
+    "CanChangeToPending": false,
+    "CanSetVisibility": true,
+    "CanChangeProbability": false,
+    "CanSetWon": true,
+    "CanViewPrice": true,
+    "CanSetPaid": false,
+    "CanUnsetPaid": false,
+    "HasAccess": true,
+    "IsIdle": null,
+    "IsRotten": null,
+    "EstimatedPrice": 0,
+    "InvoiceId": "d4133ab1-cb56-4d64-8cf1-36645d2ae0dd",
+    "Pin": 0,
+    "LabelId": "00000000-0000-0000-0000-000000000000",
+    "VisibilityType": "OwnerGroup",
+    "ReferrerId": "00000000-0000-0000-0000-000000000000",
+    "SourceId": "00000000-0000-0000-0000-000000000000",
+    "SourceOther": "",
+    "PipelineStageId": "36fce292-50b7-4e7d-8e73-604b8ba6c2f9",
+    "NextActivityDate": null,
+    "LastActivityUpdateTime": null,
+    "Owner": {
+      "UserId": "f677929c-0f9a-4570-8234-c5b6ac20b892",
+      "DisplayName": "نگین عابدیان",
+      "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/e326b384-94d1-41fa-a5cb-8845181be7d8.jpg",
+      "Email": "abediannegin@gmail.com"
+    },
+    "UserLosing": {
+      "UserId": "00000000-0000-0000-0000-000000000000",
+      "DisplayName": "کاربر میهمان ",
+      "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+      "Email": ""
+    },
+    "Invoice": {
+      "Id": "d4133ab1-cb56-4d64-8cf1-36645d2ae0dd",
+      "Status": "Verified",
+      "Type": "NoInvoice",
+      "CanIssue": true,
+      "UnverifiedReason": "",
+      "IsDeleted": false,
+      "Items": [],
+      "Brief": ""
+    },
+    "Contact": null,
+    "Person": {
+      "Id": "ffe00a7d-db08-4c11-b6ef-24fcbac9703b",
+      "Code": 115377,
+      "Title": "",
+      "DisplayName": "gbt [حذف شده]",
+      "Type": "Person",
+      "CompanyName": "",
+      "CompanyId": "00000000-0000-0000-0000-000000000000",
+      "HasCompany": false,
+      "CanEdit": true,
+      "LeadType": "General",
+      "LeadStatus": "NotHandle",
+      "ContactType": "Prospect",
+      "CompanyIsCustomer": null,
+      "CompanyIsProspect": null,
+      "MobilePhone": "",
+      "WorkPhone": "",
+      "WorkPhoneExtension": "",
+      "Position": "",
+      "Email": "",
+      "Feedback": 60,
+      "VisibilityType": "OwnerGroup",
+      "Owner": {
+        "UserId": "6958c6d8-55d9-4c71-9d86-1027f94d87da",
+        "DisplayName": "شهره مدرسی",
+        "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/4f0f9c7f-021c-4617-9493-18bb491a243e.jpg",
+        "Email": "sh.modarresy@gmail.com"
+      },
+      "OwnerId": "6958c6d8-55d9-4c71-9d86-1027f94d87da",
+      "OtherPhones": {
+        "KeyValues": []
+      },
+      "OtherEmails": {
+        "KeyValues": []
+      },
+      "CompanyAddress": null,
+      "Fields": {},
+      "LastUpdateTime": "2017-11-05T07:31:31Z"
+    },
+    "Company": null,
+    "Referrer": null,
+    "OtherContacts": [],
+    "RelatedDeals": [],
+    "Fields": {
+      "Field_8783_0_10": "ff"
+    },
+    "Source": null,
+    "KeepInTouchBizdomainId": "00000000-0000-0000-0000-000000000000",
+    "Feedback": 60,
+    "LastUpdateTime": "2023-02-06T11:10:29Z",
+    "PaymentShortLink": "",
+    "CanDeletePayment": true,
+    "CanEditPayment": true
+  }
+}
+```
+
+</ResponseExample>

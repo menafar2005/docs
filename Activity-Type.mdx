@@ -1,0 +1,84 @@
+---
+title: "Activity Type"
+description: "اجرای عملیات «Activity Type — فعالیت» از طریق Open API دیدار"
+tag: "POST"
+sidebarTitle: "Get Activity Type"
+---
+
+# دریافت نوع فعالیت
+
+فعالیت‌های هر کسب‌وکار می‌توانند انواع مختلفی مثل تماس، جلسه یا پیگیری داشته باشند.‎ این Endpoint فهرست انواع فعالیت موجود در بیزدامنه را برمی‌گرداند تا ID نوع موردنظر را پیدا کرده و هنگام ایجاد یا جستجوی فعالیت استفاده کنید.‎
+
+```http
+POST {{baseURL}}/api/activity/GetActivityType?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+> این درخواست بدنه ندارد.
+
+## قواعد و محدودیت‌ها
+
+- مقدار `ID` هر نوع فعالیت را میتوانید در فیلد `ActivityTypeId` ایجاد فعالیت جدید استفاده کنید
+
+<RequestExample>
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/activity/GetActivityType?apikey={{API_KEY}}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+  "Response": [
+    {
+      "Id": "516b387f-0300-4956-81fa-8cf16f078747",
+      "Title": "جلسه",
+      "IsDisabled": false,
+      "ShowInAddTask": true,
+      "IsRecurrable": false,
+      "IsConnection": true,
+      "Icon": "meeting",
+      "Duration": 120,
+      "Index": 1
+    },
+    {
+      "Id": "de0fbb34-ba9c-4af9-b0da-57a92cfb4397",
+      "Title": "تماس ورودی",
+      "IsDisabled": false,
+      "ShowInAddTask": false,
+      "IsRecurrable": false,
+      "IsConnection": true,
+      "Icon": "incommingcall",
+      "Duration": 5,
+      "Index": 2
+    },
+    {
+      "Id": "b9876107-44ea-4dbf-bbfb-2ee9fbcc597c",
+      "Title": "تماس",
+      "IsDisabled": false,
+      "ShowInAddTask": true,
+      "IsRecurrable": false,
+      "IsConnection": true,
+      "Icon": "outgoingcall",
+      "Duration": 5,
+      "Index": 3
+    }
+  ]
+}
+```
+
+</ResponseExample>
+
+## لینک‌های مرتبط
+
+- [Create Activity](/Create-Activity)

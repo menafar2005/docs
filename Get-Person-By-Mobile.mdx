@@ -1,0 +1,65 @@
+---
+title: "Get Person By Mobile"
+tag: "POST"
+sidebarTitle: "Get Person By Mobile"
+---
+
+# دریافت جزئیات شخص توسط شماره تلفن شخص
+
+این Endpoint بررسی می‌کند شماره موبایل ارسال‌شده برای کدام شخص در دیدار ثبت شده است.‎ برای جلوگیری از ساخت مخاطب تکراری یا پیدا‌کردن ID شخص قبل از ایجاد معامله و فعالیت می‌توانید از این درخواست استفاده کنید.‎
+
+```http
+POST {{baseURL}}/api/contact/getbyphonenumber?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="MobilePhone" type="string" required>
+  شماره موبایل شخصی است که می‌خواهید در دیدار پیدا کنید. مقدار را مطابق همان فرمتی بفرستید که برای مخاطب ذخیره شده است.
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "MobilePhone": "09121111111"
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/contact/getbyphonenumber?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "MobilePhone": "09121111111"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": [
+        {
+            "Id": "e6e46ee3-eeaf-4f47-be63-a51e0e91a043",
+            "PhoneNumber": "09121111111",
+            "Code": "14489"
+        }
+    ]
+}
+```
+
+</ResponseExample>

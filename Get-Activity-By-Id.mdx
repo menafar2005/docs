@@ -1,0 +1,106 @@
+---
+title: "Get Activity By Id"
+tag: "POST"
+sidebarTitle: "Get Activity By Id"
+---
+
+## دریافت فعالیت توسط شناسه فعالیت
+
+با ارسال ID یک فعالیت، این Endpoint اطلاعات همان فعالیت را برمی‌گرداند.‎ زمانی از آن استفاده کنید که فعالیت موردنظر را از قبل پیدا کرده‌اید و حالا به جزئیات کامل آن نیاز دارید.‎
+
+```http
+POST {{baseURL}}/api/Activity/GetActivityAndNoteById?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Id" type="string" required>
+  شناسه یکتای فعالیتی است که می‌خواهید اطلاعاتش را دریافت کنید.
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Id": "6d20265f-e555-45cb-bfe4-8090d7db65e2"
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/Activity/GetActivityAndNoteById?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Id": "6d20265f-e555-45cb-bfe4-8090d7db65e2"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "042c9de7-fe4a-49e7-8821-ab4ca456ba6e",
+        "Title": "",
+        "Note": "",
+        "ResultNote": "",
+        "ActivityTypeId": "50fdfab2-273e-49b2-82ea-edc23ea990fb",
+        "IsPrivate": false,
+        "IsDone": false,
+        "IsPinned": false,
+        "DueDateType": "Default",
+        "DueDate": "2026-07-27T13:22:51Z",
+        "FinishDate": "2026-07-27T13:22:51Z",
+        "OriginalDueDate": "2026-07-27T13:22:51Z",
+        "DoneDate": "2026-07-27T13:22:51Z",
+        "RegisterDate": "2026-07-27T13:22:27Z",
+        "LastUpdateTime": "2026-07-27T14:06:11Z",
+        "LastPokeDate": "2026-07-27T13:22:51Z",
+        "Duration": 0,
+        "DealId": "00000000-0000-0000-0000-000000000000",
+        "CaseId": "00000000-0000-0000-0000-000000000000",
+        "CreatorId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+        "OwnerId": "5f9afce8-5f1b-477b-aec5-03eafc8e2c28",
+        "UpdaterId": "00000000-0000-0000-0000-000000000000",
+        "ActivityGroupId": "042c9de7-fe4a-49e7-8821-ab4ca456ba6e",
+        "RecurrenceType": "OneTime",
+        "RecurrenceData": 0,
+        "RecurrenceEndDate": "2026-07-27T13:22:51Z",
+        "FeedbackType": "Neutral",
+        "NextOccurrence": "2026-07-27T13:22:51Z",
+        "Deal": null,
+        "Case": null,
+        "Contacts": [],
+        "Creator": {
+            "UserId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+            "DisplayName": "میلاد مظاهری",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/a727ae10-e9ae-4541-b66a-00781811e5f5.jpg",
+            "Email": "milad@gmail.com"
+        },
+        "Owner": {
+            "UserId": "5f9afce8-5f1b-477b-aec5-03eafc8e2c28",
+            "DisplayName": "تست زهرا",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+            "Email": "zahra.bbb@gmail.com"
+        },
+        "Tags": [],
+        "OwnerId_Old": "5f9afce8-5f1b-477b-aec5-03eafc8e2c28",
+        "ActivityGroupType": "Default"
+    }
+}
+```
+
+</ResponseExample>

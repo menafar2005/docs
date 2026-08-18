@@ -1,0 +1,54 @@
+---
+title: "Case Labels "
+tag: "GET"
+sidebarTitle: "Case Labels"
+---
+
+# برچسب کارت ها — اطلاعات پایه
+
+این Endpoint فهرست برچسب‌هایی را برمی‌گرداند که مخصوص کارت‌ها تعریف شده‌اند.‎ ID برچسب موردنظر را از پاسخ بگیرید و هنگام ایجاد، ویرایش یا جستجوی کارت استفاده کنید.‎ برچسب کارت با برچسب معامله متفاوت است.‎
+
+```http
+GET {{baseURL}}/api/Label/GetCaseLabels?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+> این درخواست بدنه ندارد.
+
+<RequestExample>
+
+```shellscript Request Body (cURL)
+curl --location --request GET '{{baseURL}}/api/Label/GetCaseLabels?apikey={{API_KEY}}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": [
+        {
+            "Id": "048cba4c-c168-421d-949b-4ca2bb84ebb4",
+            "Title": "test",
+            "Code": 1,
+            "Type": "Case"
+        }
+    ]
+}
+```
+
+</ResponseExample>
+
+## لینک های مرتبط
+
+- [Create Case](/untitled-page-29)
+- [Update Case](/Update_Case)
+- [Search Case](/untitled-page-31)

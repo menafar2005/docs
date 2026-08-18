@@ -1,0 +1,60 @@
+---
+title: "Deal Labels"
+tag: "GET"
+sidebarTitle: "Deal Labels"
+---
+
+# برچسب های معامله — اطلاعات پایه
+
+این Endpoint فهرست برچسب‌هایی را برمی‌گرداند که برای معاملات تعریف شده‌اند.‎ می‌توانید ID یک یا چند برچسب را هنگام ایجاد، ویرایش یا جستجوی معامله استفاده کنید.‎ این برچسب‌ها برای کارت‌ها قابل استفاده نیستند.‎
+
+```http
+GET {{baseURL}}/api/Label/GetDealLabels?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+> این درخواست بدنه ندارد.
+
+<RequestExample>
+
+```shellscript Request Body (cURL)
+curl --location --request GET '{{baseURL}}/api/Label/GetDealLabels?apikey={{API_KEY}}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": [
+        {
+            "Id": "5331df30-1f8d-4e0b-914a-26f13876d7e0",
+            "Title": "خیلی مهم",
+            "Code": 3,
+            "Type": "Deal"
+        },
+        {
+            "Id": "4c248ae5-9118-4a70-b183-92a9b5881314",
+            "Title": "مهم",
+            "Code": 1,
+            "Type": "Deal"
+        }
+    ]
+}
+```
+
+</ResponseExample>
+
+## لینک های مرتبط
+
+- [Create Deal](/untitled-page-23)
+- [Update Deal](/untitled-page-25)
+- [Search Deal](/untitled-page-27)

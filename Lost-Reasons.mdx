@@ -1,0 +1,56 @@
+---
+title: "Lost Reasons"
+tag: "POST"
+sidebarTitle: "Lost Reasons"
+---
+
+# دلایل شکست معامله — اطلاعات پایه
+
+وقتی یک معامله ناموفق می‌شود، می‌توان دلیل شکست آن را از میان گزینه‌های تعریف‌شده انتخاب کرد.‎ این Endpoint فهرست همان دلایل را برمی‌گرداند تا ID دلیل موردنظر را در `LostReasonId` معامله قرار دهید.‎
+
+```http
+POST {{baseURL}}/api/Deal/GetLostReasons?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+> این درخواست بدنه ندارد.
+
+<RequestExample>
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/Deal/GetLostReasons?apikey={{API_KEY}}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": [
+        {
+            "Id": "1a73035a-f424-4c7b-b2a2-8ebe154a68a6",
+            "Title": "عدم نیاز مشتری",
+            "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+            "IsDisabled": false,
+            "Color": "",
+            "RegisterTime": "2026-07-29T08:27:32.407Z"
+        }
+    ]
+}
+```
+
+</ResponseExample>
+
+## لینک های مرتبط
+
+- [Create Deal](/untitled-page-23)
+- [Update Deal](/untitled-page-25)
+- [Search Deal](/untitled-page-27)

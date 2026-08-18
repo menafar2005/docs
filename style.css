@@ -1,0 +1,28 @@
+/* محتوای فارسی */
+#content,
+#page-title,
+mdx-content,
+#sidebar-content,
+#table-of-contents-content,
+api-section,
+field {
+  direction: rtl;
+  text-align: right;
+}
+
+/* اصلاح لیست‌ها */
+mdx-content ul,
+mdx-content ol {
+  padding-right: 1.5rem;
+  padding-left: 0;
+}
+
+/* کدها و نمونه‌های API باید چپ‌چین بمانند */
+pre,
+code,
+code-block,
+#request-example,
+#response-example {
+  direction: ltr;
+  text-align: left;
+}

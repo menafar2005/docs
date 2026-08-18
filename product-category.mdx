@@ -1,0 +1,60 @@
+---
+title: "Get Product Categories"
+tag: "POST"
+description: "دریافت فهرست گروه‌های محصول از دیدار از طریق API"
+sidebarTitle: "Get Product Categories"
+---
+
+## دریافت گروه‌های محصول
+
+این Endpoint فهرست گروه‌های محصول تعریف‌شده در دیدار را برمی‌گرداند.‎ قبل از ایجاد یا ویرایش محصول می‌توانید ID گروه موردنظر را از این Endpoint بگیرید و در `ProductCategoryId` قرار دهید.‎
+
+```http
+POST {{didar}}/api/product/categories?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+> این درخواست بدنه ندارد.
+
+<RequestExample>
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{didar}}/api/product/categories?apikey={{API_KEY}}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+  "Response": [
+    {
+      "Id": "2c0ce978-8005-4f01-8c6a-006939f4ce33",
+      "Title": "category1"
+    },
+    {
+      "Id": "19a52b1d-dcbb-4c3f-92c8-084973c25c95",
+      "Title": "category2"
+    },
+    {
+      "Id": "1d34b21e-450e-46c8-91c7-0b11bcbaa934",
+      "Title": "category3"
+    }
+  ]
+}
+```
+
+</ResponseExample>
+
+## لینک‌های مرتبط
+
+- [ایجاد محصول](./create-product)
+- [ویرایش محصول](./update-product)

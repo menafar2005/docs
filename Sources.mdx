@@ -1,0 +1,69 @@
+---
+title: "Sources"
+tag: "POST"
+sidebarTitle: "Sources"
+---
+
+# نحوه آشنایی — اطلاعات پایه
+
+نحوه آشنایی مشخص می‌کند مشتری یا معامله از چه مسیری وارد فرایند فروش شده است؛ مثل سایت، تبلیغات یا معرفی.‎ این Endpoint فهرست گزینه‌های تعریف‌شده را برمی‌گرداند تا ID گزینه موردنظر را در `SourceId` معامله استفاده کنید.‎
+
+```http
+POST {{baseURL}}/api/Source/GetList?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+> این درخواست بدنه ندارد.
+
+<RequestExample>
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/Source/GetList?apikey={{API_KEY}}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": [
+        {
+            "Id": "91ca4fc7-7151-4ee9-abfb-da7181752448",
+            "Title": "اینستاگرام",
+            "Cost": 0,
+            "HasCost": false,
+            "IsOpen": true
+        },
+        {
+            "Id": "c3452493-741c-4718-adcc-f5b157b68bea",
+            "Title": "مراجعه حضوری",
+            "Cost": 0,
+            "HasCost": false,
+            "IsOpen": true
+        },
+        {
+            "Id": "a618fdba-dced-40c0-aae0-93a364135316",
+            "Title": "معرفی دوستان",
+            "Cost": 0,
+            "HasCost": false,
+            "IsOpen": true
+        }
+    ]
+}
+```
+
+</ResponseExample>
+
+## لینک های مرتبط
+
+- [Create Deal](/untitled-page-23)
+- [Update Deal](/untitled-page-25)
+- [Search Deal](/untitled-page-27)

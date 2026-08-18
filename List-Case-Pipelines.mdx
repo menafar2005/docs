@@ -1,0 +1,95 @@
+---
+title: "List Case Pipelines"
+tag: "POST"
+sidebarTitle: "List Case Pipelines"
+---
+
+# فهرست کاریز کارت ها
+
+کارت‌ها از کاریزهای جداگانه‌ای نسبت به معاملات استفاده می‌کنند.‎ این Endpoint فهرست کاریزهای کارت و مراحل هرکدام را برمی‌گرداند تا شناسه مرحله مناسب را هنگام ایجاد، ویرایش یا جستجوی کارت‌ها استفاده کنید.‎
+
+```http
+POST {{baseURL}}/api/pipeline/list/1?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+> این درخواست بدنه ندارد.
+
+## قواعد و محدودیت‌ها
+
+- لیستی از پارامتر کاریز کارت ها را میدهد
+- مقدار `Response[].Id` برابر است با شناسه کاریز کارت
+- مقدار `Response[].Stages[].Id` برابر است با شناسه مرحله یک کاریز مشخص کارت
+
+<RequestExample>
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/pipeline/list/0?apikey={{API_KEY}}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON) highlight={4,9,20,31}
+{
+    "Response": [
+        {
+            "Id": "f7861340-b22c-49b1-bb5a-d96b5cdba979",
+            "Title": "کاریز کارت تست",
+            "Index": 1,
+            "Stages": [
+                {
+                    "Id": "2d34c424-62e5-4fcc-b0f0-bfbd11bf440a",
+                    "Title": "برنامه ریزی شده",
+                    "Color": "#b88d7c",
+                    "Index": 1,
+                    "IdleDay": 0,
+                    "Probability": 100,
+                    "IdleIsActive": false,
+                    "PortalTitle": "",
+                    "Description": null
+                },
+                {
+                    "Id": "cfb05e56-98c7-4a11-bcec-b8f9052419f8",
+                    "Title": "درحال انجام",
+                    "Color": "#23b13a",
+                    "Index": 2,
+                    "IdleDay": 0,
+                    "Probability": 100,
+                    "IdleIsActive": false,
+                    "PortalTitle": "",
+                    "Description": null
+                },
+                {
+                    "Id": "daf0701d-425e-4ce4-a62c-3b6e1d3d98e6",
+                    "Title": "انجام شده",
+                    "Color": "#5d5b55",
+                    "Index": 3,
+                    "IdleDay": 0,
+                    "Probability": 100,
+                    "IdleIsActive": false,
+                    "PortalTitle": "",
+                    "Description": null
+                }
+            ],
+            "Type": "Case"
+        }
+    ]
+}
+```
+
+</ResponseExample>
+
+## لینک های مرتبط
+
+- [Create Case](/untitled-page-29)
+- [Update Case](/Update_Case)
+- [Search Case](/untitled-page-31)

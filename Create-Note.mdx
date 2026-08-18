@@ -1,0 +1,316 @@
+---
+title: "Create Note"
+tag: "POST"
+---
+
+# ایجاد یادداشت
+
+یادداشت یک متن آزاد برای ثبت اطلاعات کنار شخص، شرکت، معامله یا کارت است و برخلاف فعالیت، زمان انجام ندارد.‎ با این Endpoint می‌توانید یک یادداشت جدید ثبت کنید و آن را به رکوردهای مرتبط متصل کنید.‎
+
+```http
+POST {{baseURL}}/api/activity/save?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Activity" type="object" required>
+  اطلاعات Note جدید داخل این آبجکت ارسال می‌شود. متن یادداشت در `ResultNote` قرار می‌گیرد و می‌توانید آن را به مخاطب، معامله یا کارت وصل کنید.
+
+  <ParamField path="Activity.IsDone" type="boolean" required>
+    برای ایجاد یادداشت باید مقدار این فیلد برابر با `true` باشد
+
+    <Expandable title="مقادیر مجاز">
+      - `true` — برای ایجاد Note باید همین مقدار ارسال شود
+    </Expandable>
+  </ParamField>
+
+  <Expandable title="property">
+    <ParamField path="Activity.ActivityTypeId" type="string" required>
+      این فیلد نوع رکورد را برای ایجاد Note مشخص می‌کند و در این Endpoint باید مقدار ثابت نوع یادداشت را بگیرد.
+
+      <Expandable title="مقادیر مجاز">
+        - `00000000-0000-0000-0000-000000000000` — نوع ثابت Note
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.OwnerId" type="string">
+      شناسه User مسئول انجام و پیگیری فعالیت است. فعالیت در فهرست و تقویم همین کاربر نمایش داده می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+        - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+      </Expandable>
+
+      <Expandable title="شرایط ارسال">
+        اگر این فیلد ارسال نشود، مسئول یادداشت مالک بیزدامنه در نظر گرفته می‌شود.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.ResultNote" type="string">
+      متن اصلی یادداشت است؛ هر چیزی که می‌خواهید در متن یادداشت دیده شود اینجا بفرستید.
+    </ParamField>
+
+    <ParamField path="Activity.IsPinned" type="boolean">
+      مشخص می‌کند یادداشت برای دسترسی سریع در رکورد مرتبط سنجاق شود.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — رکورد سنجاق می‌شود
+        - `false` — رکورد سنجاق نمی‌شود
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.IsDeleted" type="boolean">
+      مشخص می‌کند یادداشت در وضعیت حذف‌شده قرار دارد یا فعال است.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — فعالیت یا یادداشت حذف‌شده در نظر گرفته می‌شود
+        - `false` — رکورد حذف‌شده نیست
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.DealId" type="string">
+      شناسه معامله‌ای است که یادداشت باید به آن وصل شود. بعد از اتصال، رکورد در سابقه همان معامله دیده می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        مقدار این فیلد باید `Id` یک معامله موجود در دیدار باشد.
+
+        - [Create Deal](/Create-Deal) — اگر معامله هنوز ساخته نشده است
+        - [Get Deal By Id](/Get-Deal-By-Id) — اگر `Id` معامله را دارید
+        - [Search Deal](/Search-Deal) — برای جست‌وجوی معامله
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.ContactIds[]" type="array">
+      فهرست `Id` اشخاص یا شرکت‌هایی است که این یادداشت به آن‌ها مربوط می‌شود. رکورد در سابقه مخاطبان انتخاب‌شده هم دیده خواهد شد.
+
+      <Expandable title="وابستگی‌ها">
+        هر مقدار باید `Id` یک شخص یا شرکت موجود در دیدار باشد.
+
+        - [Create Person](/Create-Person) — ساخت شخص جدید
+        - [Get Person By Mobile](/Get-Person-By-Mobile) — پیداکردن شخص با موبایل
+        - [Search Person](/Search-Person) — جست‌وجوی شخص
+        - [Create Company](/Create-Company) — ساخت شرکت جدید
+        - [Search Company](/Search-Company) — جست‌وجوی شرکت
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.CaseId" type="string">
+      شناسه کارتی است که فعالیت یا یادداشت باید به آن وصل شود. بعد از اتصال، رکورد در سابقه همان کارت دیده می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        مقدار این فیلد باید `Id` یک کارت موجود در دیدار باشد.
+
+        - [Create Case](/Create-Case) — اگر کارت هنوز ساخته نشده است
+        - [Search Case](/Search-Case) — برای جست‌وجوی کارت
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.Tags[]" type="array">
+      فهرست تگ‌هایی است که برای دسته‌بندی و پیداکردن سریع‌تر فعالیت یا یادداشت به آن وصل می‌شوند.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد باید `Id` تگ موجود در دیدار را بگیرد.
+
+        - [Tags](/Tags) — `Id` تگ موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Activity": {
+    "ActivityTypeId": "00000000-0000-0000-0000-000000000000",
+    "OwnerId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+    "ResultNote": "test note text",
+    "IsDone": true,
+    "IsPinned": false,
+    "IsDeleted": false,
+    "DealId": "{{ test product deal 1 }}",
+    "ContactIds": [
+      "BDFAF004-2AD3-47CB-89B9-0002FE5E5678",
+      "3d92eedd-3a16-4ef0-ad2a-632a477f8e3b"
+    ],
+    "CaseId": "{{ test product case 1 }}",
+    "Tags": [
+      {
+        "TagId": "553655d9-8591-4bdd-b4d4-f3aca19ac5bb"
+      },
+      {
+        "TagId": "161ca98d-b715-4ffe-b9ee-722ce33655f6"
+      },
+      {
+        "TagId": "75aef7d3-6c14-45b5-be46-229081d1bf4c"
+      }
+    ]
+  }
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location 'https://app.didar.me/api/activity/save?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Activity": {
+    "ActivityTypeId": "00000000-0000-0000-0000-000000000000",
+    "OwnerId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+    "ResultNote": "test note text",
+    "IsDone": true,
+    "IsPinned": false,
+    "IsDeleted": false,
+   
+    "ContactIds": [
+      "BDFAF004-2AD3-47CB-89B9-0002FE5E5678",
+      "3d92eedd-3a16-4ef0-ad2a-632a477f8e3b"
+    ],
+   
+    "Tags": [
+      {
+        "TagId": "553655d9-8591-4bdd-b4d4-f3aca19ac5bb"
+      },
+      {
+        "TagId": "161ca98d-b715-4ffe-b9ee-722ce33655f6"
+      },
+      {
+        "TagId": "75aef7d3-6c14-45b5-be46-229081d1bf4c"
+      }
+    ]
+  }
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "0740f0b5-a015-40d2-964d-fc6b4bf86152",
+        "Title": "",
+        "Note": "",
+        "ResultNote": "test note text",
+        "ActivityTypeId": "00000000-0000-0000-0000-000000000000",
+        "IsPrivate": false,
+        "IsDone": true,
+        "IsPinned": false,
+        "IsDeleted": false,
+        "IsKeepInTouch": false,
+        "DueDateType": "Default",
+        "DueDate": "2026-07-27T15:37:42.7509172Z",
+        "FinishDate": "2026-07-27T15:37:42.7509172Z",
+        "OriginalDueDate": "2026-07-27T15:37:42.7509172Z",
+        "DoneDate": "2026-07-27T15:37:42.7509172Z",
+        "RegisterDate": "2026-07-27T15:37:42.7509172Z",
+        "LastUpdateTime": "2026-07-27T15:37:42.7509172Z",
+        "LastPokeDate": "2026-07-27T15:37:42.7509172Z",
+        "Duration": 0,
+        "DealId": "00000000-0000-0000-0000-000000000000",
+        "CaseId": "00000000-0000-0000-0000-000000000000",
+        "TicketId": "00000000-0000-0000-0000-000000000000",
+        "CreatorId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+        "OwnerId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+        "UpdaterId": "00000000-0000-0000-0000-000000000000",
+        "ActivityGroupId": "00000000-0000-0000-0000-000000000000",
+        "RecurrenceType": "OneTime",
+        "RecurrenceData": 0,
+        "RecurrenceEndDate": "2026-07-27T15:37:42.7509172Z",
+        "FeedbackType": "Neutral",
+        "NextOccurrence": "0001-01-01T00:00:00Z",
+        "CanPoke": false,
+        "IsAttended": false,
+        "Deal": null,
+        "Case": null,
+        "Contacts": [
+            {
+                "ContactId": "bdfaf004-2ad3-47cb-89b9-0002fe5e5678",
+                "ActivityId": "0740f0b5-a015-40d2-964d-fc6b4bf86152",
+                "Status": "Accepted",
+                "Message": "",
+                "Contact": {
+                    "Id": "bdfaf004-2ad3-47cb-89b9-0002fe5e5678",
+                    "Title": "جناب آقای",
+                    "FirstName": "سهیل",
+                    "LastName": "شیرازی",
+                    "WorkPhone": "",
+                    "MobilePhone": "",
+                    "Type": "Person",
+                    "DisplayName": "سهیل شیرازی"
+                }
+            },
+            {
+                "ContactId": "3d92eedd-3a16-4ef0-ad2a-632a477f8e3b",
+                "ActivityId": "0740f0b5-a015-40d2-964d-fc6b4bf86152",
+                "Status": "Accepted",
+                "Message": "",
+                "Contact": {
+                    "Id": "3d92eedd-3a16-4ef0-ad2a-632a477f8e3b",
+                    "Title": "",
+                    "FirstName": "12",
+                    "LastName": "",
+                    "WorkPhone": "",
+                    "MobilePhone": "",
+                    "Type": "Company",
+                    "DisplayName": "12"
+                }
+            }
+        ],
+        "Creator": {
+            "UserId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+            "DisplayName": "میلاد مظاهری",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/a727ae10-e9ae-4541-b66a-00781811e5f5.jpg",
+            "Email": "milad@gmail.com"
+        },
+        "Owner": {
+            "UserId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+            "DisplayName": "میلاد مظاهری",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/a727ae10-e9ae-4541-b66a-00781811e5f5.jpg",
+            "Email": "milad@gmail.com"
+        },
+        "Users": [],
+        "Notifies": [],
+        "Comments": [],
+        "Attachments": [],
+        "Voices": [],
+        "Voips": [],
+        "Tags": [
+            {
+                "ActivityId": "00000000-0000-0000-0000-000000000000",
+                "TagId": "553655d9-8591-4bdd-b4d4-f3aca19ac5bb"
+            },
+            {
+                "ActivityId": "00000000-0000-0000-0000-000000000000",
+                "TagId": "161ca98d-b715-4ffe-b9ee-722ce33655f6"
+            },
+            {
+                "ActivityId": "00000000-0000-0000-0000-000000000000",
+                "TagId": "75aef7d3-6c14-45b5-be46-229081d1bf4c"
+            }
+        ],
+        "CanEdit": true,
+        "CanDelete": true,
+        "CanDone": false,
+        "ActivityTicketStatus": "NotAnswered",
+        "IsTicket": false,
+        "OwnerId_Old": "00000000-0000-0000-0000-000000000000",
+        "ActivityGroupType": "Default"
+    }
+}
+```
+
+</ResponseExample>

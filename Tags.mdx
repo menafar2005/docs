@@ -1,0 +1,80 @@
+---
+title: "Tags "
+tag: "POST"
+sidebarTitle: "Tags"
+---
+
+# تگ ها — اطلاعات پایه
+
+این Endpoint فهرست تگ‌های موجود در بیزدامنه را برمی‌گرداند.‎ از ID تگ‌ها می‌توانید برای دسته‌بندی یا فیلترکردن فعالیت‌ها و یادداشت‌ها استفاده کنید.‎
+
+```http
+POST {{baseURL}}/api/Tag/GetTagList?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+> این درخواست بدنه ندارد.
+
+<RequestExample>
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/Tag/GetTagList?apikey={{API_KEY}}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": [
+        {
+            "Id": "736a87b5-be04-404e-b52a-23b87a0aa39c",
+            "Title": "تست یادداشت",
+            "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+            "IsDeleted": false,
+            "IsActive": true,
+            "IsSystemTag": false,
+            "Color": "",
+            "RegisterTime": "2026-07-29T07:49:45.92Z"
+        },
+        {
+            "Id": "7c86067a-3b93-4ec8-b315-269e7da71b67",
+            "Title": "تست2 یادداشت",
+            "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+            "IsDeleted": false,
+            "IsActive": true,
+            "IsSystemTag": false,
+            "Color": "",
+            "RegisterTime": "2026-07-29T07:50:01.857Z"
+        },
+        {
+            "Id": "f53a41ce-4358-42d3-85a4-8db5613ad05d",
+            "Title": "تست فعالیت",
+            "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+            "IsDeleted": false,
+            "IsActive": true,
+            "IsSystemTag": false,
+            "Color": "",
+            "RegisterTime": "2026-07-29T07:51:01.27Z"
+        }
+    ]
+}
+```
+
+</ResponseExample>
+
+## لینک های مرتبط
+
+- [Create Activity](/untitled-page-5)
+- [Update Activity](/untitled-page-6)
+- [Search Activity](/untitled-page-7)
+- [Create Note](/untitled-page-1)
+- [Update Note](/untitled-page-2)

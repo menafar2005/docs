@@ -1,0 +1,341 @@
+---
+title: "وب‌هوک‌های محصول"
+sidebarTitle: "وب هوک محصول"
+description: "مرجع ساختار داده و شرایط ارسال وب‌هوک‌های ایجاد و ویرایش محصول در دیدار"
+---
+
+# وب‌هوک‌های محصول
+
+وب‌هوک‌های محصول اطلاعات یک محصول را پس از ایجاد یا ویرایش آن به آدرس مقصد ارسال می‌کنند. ساختار کلی Payload در هر دو رویداد یکسان است و Object `data` آخرین وضعیت محصول را در زمان ارسال نشان می‌دهد.
+
+تفاوت اصلی دو رویداد در `changes` است؛ در وب‌هوک ایجاد این Array خالی است و در وب‌هوک ویرایش، فیلدهای تغییرکرده همراه با مقدار قبلی و مقدار جدید در آن قرار می‌گیرند.
+
+## ساختار داده ارسالی
+
+<ParamField path="data" type="object">
+  اطلاعات کامل محصولی است که وب‌هوک برای آن ارسال شده است. در وب‌هوک ایجاد، این Object وضعیت محصول تازه ایجادشده را نشان می‌دهد و در وب‌هوک ویرایش، آخرین وضعیت همان محصول را پس از اعمال تغییرات در اختیار شما قرار می‌دهد.
+
+  <Expandable title="property">
+    <ParamField path="data.Id" type="string">
+      شناسه یکتای محصولی است که این وب‌هوک برای آن ارسال شده است. در رویداد ایجاد، این مقدار شناسه محصول تازه ساخته‌شده در دیدار است و در رویداد ویرایش، شناسه همان محصولی است که اطلاعات آن تغییر کرده است. از این مقدار می‌توانید برای اتصال رویدادهای مختلف به یک محصول مشخص در سیستم مقصد استفاده کنید.
+    </ParamField>
+
+    <ParamField path="data.Title" type="string">
+      عنوان محصول است؛ همان نامی که کاربران دیدار هنگام انتخاب محصول در معامله، فاکتور یا پیش‌فاکتور می‌بینند. در وب‌هوک ایجاد، عنوان محصول تازه ثبت‌شده و در وب‌هوک ویرایش، آخرین عنوان ذخیره‌شده محصول ارسال می‌شود.
+    </ParamField>
+
+    <ParamField path="data.Code" type="string">
+      کد اختصاصی محصول است و برای شناسایی دقیق محصول بین دیدار و سیستم‌های متصل استفاده می‌شود. در API ایجاد محصول، این کد باید بین محصولات دیدار غیرتکراری باشد. در وب‌هوک ویرایش، این فیلد آخرین کد ذخیره‌شده برای محصول را نشان می‌دهد.
+    </ParamField>
+
+    <ParamField path="data.Description" type="string">
+      توضیحات تکمیلی ثبت‌شده برای محصول است؛ برای مثال مشخصات بیشتر، شرایط ارائه یا هر اطلاعاتی که فقط از روی عنوان محصول مشخص نمی‌شود. مقدار خالی یعنی توضیحی برای محصول ثبت نشده است.
+    </ParamField>
+
+    <ParamField path="data.ProfitMargin" type="number">
+      این مقدار به‌عنوان یکی از اطلاعات محصول در Responseهای Product و Payload وب‌هوک ارسال می‌شود. نحوه محاسبه و تفسیر دقیق `ProfitMargin` در مستندات فعلی API محصول توضیح داده نشده است؛ بنابراین برای منطق محاسباتی روی این فیلد، فقط به مقدار دریافتی از Payload اتکا کنید و معنی دیگری برای آن فرض نکنید.
+    </ParamField>
+
+    <ParamField path="data.TitleForInvoice" type="string">
+      عنوانی است که برای محصول روی فاکتور و پیش‌فاکتور نمایش داده می‌شود. در API ایجاد محصول، اگر این مقدار مشخص نشود عنوان خود محصول یعنی `Title` برای نمایش در سند مالی استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.Unit" type="string">
+      واحد شمارش یا فروش محصول است؛ برای مثال «عدد»، «بسته»، «کیلوگرم» یا «ساعت». تعداد و قیمت محصول در سناریوهای فروش براساس همین واحد تفسیر می‌شوند.
+    </ParamField>
+
+    <ParamField path="data.UnitPrice" type="number">
+      قیمت پیش‌فرض یک واحد از محصول است. این مقدار همان قیمتی است که دیدار هنگام استفاده از محصول به‌عنوان قیمت اولیه محصول در نظر می‌گیرد. در وب‌هوک ویرایش، تغییر این مقدار یعنی قیمت پیش‌فرض محصول تغییر کرده است.
+    </ParamField>
+
+    <ParamField path="data.Fields" type="string">
+      مقادیر فیلدهای اضافه محصول است. در نمونه Payload وب‌هوک محصول، این مقدار به‌صورت یک رشته JSON مانند `"{}"` ارسال شده است. کلیدهای داخل این ساختار به Custom Fieldهای تعریف‌شده برای Product در همان بیزدامنه مربوط هستند و نباید کلید فیلدهای Entityهای دیگر را برای محصول فرض کنید.
+    </ParamField>
+
+    <ParamField path="data.IsActive" type="boolean">
+      مشخص می‌کند محصول برای استفاده‌های جدید فعال است یا خیر.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — محصول فعال و قابل استفاده است
+        - `false` — محصول غیرفعال است و برای انتخاب‌های جدید در نظر گرفته نمی‌شود
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="data.Category" type="object">
+      اطلاعات گروه محصولی است که این محصول در آن قرار گرفته است. این Object اطلاعات قابل‌خواندن گروه را همراه محصول برمی‌گرداند.
+
+      <Expandable title="property">
+        <ParamField path="data.Category.Id" type="string">
+          شناسه گروه محصولی است که محصول به آن متصل شده است. این مقدار با `data.ProductCategoryId` به همان گروه اشاره می‌کند.
+        </ParamField>
+
+        <ParamField path="data.Category.Title" type="string">
+          عنوان گروه محصول است؛ همان نامی که گروه محصول با آن در دیدار نمایش داده می‌شود.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="data.ProductCategoryId" type="string">
+      شناسه گروه محصولی است که محصول داخل آن قرار دارد. این همان Id یک Product Category موجود در دیدار است و در API ایجاد محصول نیز برای تعیین گروه محصول استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.SaleTypeId" type="string">
+      شناسه نوع فروش مرتبط با محصول است. این فیلد در Responseهای Product و Payload وب‌هوک ارسال می‌شود. جزئیات کامل انواع فروش قابل استفاده برای خود Product در مستندات فعلی محصول توضیح داده نشده است؛ بنابراین مقدار آن را همان‌طور که در Payload دریافت می‌شود نگهداری و تفسیر کنید.
+    </ParamField>
+
+    <ParamField path="data.ProductPrices" type="array">
+      فهرست قیمت‌های ثبت‌شده برای محصول به تفکیک ارز است. هر عضو Array یک رکورد قیمت را برای یک `CurrencyId` مشخص نگه می‌دارد.
+
+      <Expandable title="property">
+        <ParamField path="data.ProductPrices[].Id" type="number">
+          شناسه رکورد قیمت محصول است؛ یعنی شناسه خود رکوردی که قیمت محصول را برای ارز مشخص‌شده نگه می‌دارد، نه شناسه Product.
+        </ParamField>
+
+        <ParamField path="data.ProductPrices[].CurrencyId" type="number">
+          شناسه ارزی است که قیمت این عضو Array براساس آن ثبت شده است. برای تفسیر صحیح قیمت باید این مقدار را در کنار `Price` در نظر بگیرید.
+        </ParamField>
+
+        <ParamField path="data.ProductPrices[].Price" type="number">
+          قیمت یک واحد از محصول در ارزی است که `CurrencyId` همین عضو مشخص کرده است.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="data.Variants" type="array">
+      فهرست زیرمحصول‌های این محصول است. زیرمحصول زمانی کاربرد دارد که یک Product در چند مدل یا حالت جداگانه ارائه شود؛ برای مثال اشتراک سه‌ماهه و یک‌ساله یا رنگ‌های مختلف یک محصول. در نمونه‌های این صفحه محصول زیرمحصول ندارد و این Array خالی ارسال شده است؛ بنابراین ساختار اعضای `Variants` از روی این دو نمونه وب‌هوک قابل تعیین نیست و نباید فقط براساس این نمونه‌ها فیلدهای داخلی آن را فرض کرد.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="changes" type="array">
+  تغییراتی که در عملیات ویرایش محصول انجام شده‌اند در این Array قرار می‌گیرند. در وب‌هوک ایجاد، `changes` خالی است؛ چون محصول تازه ساخته شده و نسخه قبلی‌ای برای مقایسه وجود ندارد. در وب‌هوک ویرایش، هر عضو مشخص می‌کند کدام فیلد محصول تغییر کرده، مقدار آن قبل از ویرایش چه بوده و پس از ویرایش چه مقداری ذخیره شده است. Object `data` وضعیت نهایی محصول را نشان می‌دهد و `changes` فقط تغییرات همان عملیات را گزارش می‌کند.
+
+  <Expandable title="property">
+    <ParamField path="changes[].propertyName" type="string">
+      نام فیلدی از محصول است که در این عملیات ویرایش تغییر کرده است. برای مثال در نمونه ویرایش این صفحه مقدار `UnitPrice` ارسال شده، چون قیمت پیش‌فرض محصول تغییر کرده است.
+    </ParamField>
+
+    <ParamField path="changes[].before" type="string | number | boolean | object | array | null">
+      مقدار فیلد پیش از انجام ویرایش است. نوع این مقدار به فیلدی که در `propertyName` نوشته شده بستگی دارد؛ در نمونه تغییر قیمت، مقدار عددی قبلی `UnitPrice` در این فیلد ارسال شده است.
+    </ParamField>
+
+    <ParamField path="changes[].after" type="string | number | boolean | object | array | null">
+      مقدار فیلد پس از انجام و ذخیره ویرایش است. این مقدار نتیجه نهایی همان تغییر را نشان می‌دهد و باید با مقدار متناظر آن در Object `data` هم‌خوان باشد.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="meta" type="object">
+  اطلاعات فنی مربوط به خود رویداد وب‌هوک است، نه اطلاعات محصول. این Object مشخص می‌کند چه عملیاتی انجام شده، رویداد متعلق به کدام بیزدامنه و محصول است، چه کاربری عملیات را انجام داده، تغییر از چه منبعی آمده و Payload توسط کدام تنظیم وب‌هوک و در چندمین تلاش ارسال شده است.
+
+  <Expandable title="property">
+    <ParamField path="meta.actionType" type="number">
+      کد عددی نوع عملیاتی است که باعث ارسال وب‌هوک شده است. براساس نمونه‌های این صفحه، مقدار `1` یعنی محصول ایجاد شده و مقدار `2` یعنی محصول ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.actionTypeTitle" type="string">
+      عنوان متنی عملیات است. در نمونه ایجاد مقدار `Add` و در نمونه ویرایش مقدار `Change` ارسال شده است.
+    </ParamField>
+
+    <ParamField path="meta.bizDomainId" type="string">
+      شناسه بیزدامنه‌ای است که محصول در آن ایجاد یا ویرایش شده است. این مقدار مشخص می‌کند رویداد متعلق به کدام حساب یا فضای کاری دیدار است.
+    </ParamField>
+
+    <ParamField path="meta.entityId" type="string">
+      شناسه محصولی است که رویداد برای آن ثبت شده است. این مقدار باید به همان محصولی اشاره کند که اطلاعات آن داخل `data` قرار دارد و در نمونه‌ها با `data.Id` یکسان است.
+    </ParamField>
+
+    <ParamField path="meta.entity" type="number">
+      کد عددی داخلی نوع Entity است که رویداد برای آن ثبت شده است. در نمونه‌های این صفحه مقدار `8791` برای Entity محصول ارسال شده است.
+    </ParamField>
+
+    <ParamField path="meta.entityTitle" type="string">
+      عنوان فنی Entity مربوط به این وب‌هوک است. در وب‌هوک‌های این صفحه مقدار `Product` ارسال می‌شود.
+    </ParamField>
+
+    <ParamField path="meta.id" type="number">
+      شناسه رویدادی است که پس از ایجاد یا ویرایش محصول در سیستم ثبت شده و Payload وب‌هوک براساس آن ساخته شده است. این شناسه مربوط به خود Event است، نه شناسه Product.
+    </ParamField>
+
+    <ParamField path="meta.isBulkEdit" type="boolean">
+      مشخص می‌کند تغییر محصول در قالب یک عملیات گروهی انجام شده است یا خیر. مقدار `true` یعنی رویداد نتیجه ویرایش گروهی بوده و مقدار `false` یعنی محصول به‌صورت تکی ایجاد یا ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.timeStamp" type="string">
+      زمانی است که رویداد ایجاد یا ویرایش محصول در دیدار ثبت شده و Payload وب‌هوک براساس آن تولید شده است.
+    </ParamField>
+
+    <ParamField path="meta.userId" type="string">
+      شناسه کاربری است که عملیات منجر به ارسال این وب‌هوک را انجام داده است. در رویداد ایجاد، کاربری را نشان می‌دهد که محصول را ساخته و در رویداد ویرایش، کاربری را مشخص می‌کند که تغییر را انجام داده است.
+    </ParamField>
+
+    <ParamField path="meta.webhookId" type="number">
+      شناسه تنظیم وب‌هوکی است که این Payload را به آدرس مقصد ارسال کرده است. از این مقدار می‌توان برای تشخیص Webhook تعریف‌شده‌ای که Event از طریق آن ارسال شده استفاده کرد.
+    </ParamField>
+
+    <ParamField path="meta.changeSource" type="number">
+      کد عددی منبعی است که عملیات ایجاد یا ویرایش محصول از طریق آن انجام شده است. عنوان قابل‌خواندن همین منبع در `meta.changeSourceTitle` قرار می‌گیرد.
+    </ParamField>
+
+    <ParamField path="meta.changeSourceTitle" type="string">
+      عنوان متنی منبعی است که محصول از طریق آن ایجاد یا ویرایش شده است. در نمونه‌های این صفحه مقدار `Api` ارسال شده، یعنی عملیات از طریق API انجام شده است.
+    </ParamField>
+
+    <ParamField path="meta.attempt" type="number">
+      شماره تلاش برای ارسال همین رویداد وب‌هوک به آدرس مقصد است. مقدار `1` یعنی Payload در اولین تلاش ارسال شده است.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## وب‌هوک ایجاد محصول چه زمانی ارسال می‌شود؟
+
+وب‌هوک ایجاد محصول زمانی ارسال می‌شود که یک محصول جدید با موفقیت در دیدار ثبت شود. Object `data` شامل اطلاعات محصول تازه ایجادشده است و Array `changes` خالی ارسال می‌شود، چون پیش از این عملیات رکوردی وجود نداشته که مقدار قبلی آن با مقدار جدید مقایسه شود.
+
+## وب‌هوک ویرایش محصول چه زمانی ارسال می‌شود؟
+
+وب‌هوک ویرایش محصول زمانی ارسال می‌شود که اطلاعات یک محصول موجود در دیدار ویرایش شود. Object `data` آخرین وضعیت محصول پس از ویرایش را نشان می‌دهد و Array `changes` فیلدهایی را گزارش می‌کند که در همان عملیات تغییر کرده‌اند.
+
+در نمونه ویرایش این صفحه، تغییر `data.UnitPrice` از `200000` به `2050000` باعث ثبت تغییر زیر شده است:
+
+```json
+{
+  "propertyName": "UnitPrice",
+  "before": 200000.0000000,
+  "after": 2050000.0
+}
+```
+
+فیلدهای اطلاعات محصول که در Payload این صفحه در دسترس هستند عبارت‌اند از:
+
+- `data.Id`
+- `data.Title`
+- `data.Code`
+- `data.Description`
+- `data.ProfitMargin`
+- `data.TitleForInvoice`
+- `data.Unit`
+- `data.UnitPrice`
+- `data.Fields`
+- `data.IsActive`
+- `data.Category`
+- `data.ProductCategoryId`
+- `data.SaleTypeId`
+- `data.ProductPrices`
+- `data.Variants`
+
+Array `changes` عامل Trigger نیست؛ این Array تغییرات همان عملیات را گزارش می‌کند و `data` وضعیت نهایی محصول پس از ویرایش را نشان می‌دهد.
+
+## نمونه داده ارسالی
+
+<CodeGroup>
+
+```json وب‌هوک ایجاد محصول
+{
+  "data": {
+    "Id": "658e0d3a-3379-4682-a422-628d56371790",
+    "Title": "test5",
+    "Code": "7091",
+    "Description": "",
+    "ProfitMargin": 0.0,
+    "TitleForInvoice": "test5",
+    "Unit": "عدد",
+    "UnitPrice": 200000.0,
+    "Fields": "{}",
+    "IsActive": true,
+    "Category": {
+      "Id": "477b478c-a9da-4bcc-839e-90d18b440236",
+      "Title": "محصولات گپسل2 (اکانت تست لطفا تماس نگیرید)"
+    },
+    "ProductCategoryId": "477b478c-a9da-4bcc-839e-90d18b440236",
+    "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+    "ProductPrices": [
+      {
+        "Id": 4495655,
+        "CurrencyId": 259726,
+        "Price": 200000.0
+      }
+    ],
+    "Variants": []
+  },
+  "changes": [],
+  "meta": {
+    "actionType": 1,
+    "actionTypeTitle": "Add",
+    "bizDomainId": "67c7954d-1db7-41f5-8ed2-3bd055566636",
+    "entityId": "658e0d3a-3379-4682-a422-628d56371790",
+    "entity": 8791,
+    "entityTitle": "Product",
+    "id": 639224157275725518,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-15T18:35:27.5725518Z",
+    "userId": "8bb84640-c11c-4349-97ab-d8f563c2f871",
+    "webhookId": 32545,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+```json وب‌هوک ویرایش محصول
+{
+  "data": {
+    "Id": "658e0d3a-3379-4682-a422-628d56371790",
+    "Title": "test5",
+    "Code": "7091",
+    "Description": "",
+    "ProfitMargin": 0.0,
+    "TitleForInvoice": "test5",
+    "Unit": "عدد",
+    "UnitPrice": 2050000.0,
+    "Fields": "{}",
+    "IsActive": true,
+    "Category": {
+      "Id": "477b478c-a9da-4bcc-839e-90d18b440236",
+      "Title": "محصولات گپسل2 (اکانت تست لطفا تماس نگیرید)"
+    },
+    "ProductCategoryId": "477b478c-a9da-4bcc-839e-90d18b440236",
+    "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+    "ProductPrices": [
+      {
+        "Id": 4495655,
+        "CurrencyId": 259726,
+        "Price": 2050000.0
+      }
+    ],
+    "Variants": []
+  },
+  "changes": [
+    {
+      "propertyName": "UnitPrice",
+      "before": 200000.0000000,
+      "after": 2050000.0
+    }
+  ],
+  "meta": {
+    "actionType": 2,
+    "actionTypeTitle": "Change",
+    "bizDomainId": "67c7954d-1db7-41f5-8ed2-3bd055566636",
+    "entityId": "658e0d3a-3379-4682-a422-628d56371790",
+    "entity": 8791,
+    "entityTitle": "Product",
+    "id": 639224158063864573,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-15T18:36:46.3864573Z",
+    "userId": "8bb84640-c11c-4349-97ab-d8f563c2f871",
+    "webhookId": 32546,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+</CodeGroup>
+
+## لینک‌های مرتبط
+
+- [Create Product](/Create_product)
+- [Search Products](/Search_Products)
+- [Get Product Categories](/product-category)
+- [Get Product By Codes](/get-product-by-code)

@@ -1,0 +1,87 @@
+---
+title: "User List"
+tag: "POST"
+sidebarTitle: "User List"
+---
+
+{/*  Endpoint: User List | /untitled-page-13  */}
+
+##  (مسئول ها) کاربران
+
+این Endpoint فهرست کاربرانی را برمی‌گرداند که داخل بیزدامنه دیدار فعالیت می‌کنند؛ مثل مدیر فروش یا کارشناسان فروش.‎ از `UserId` کاربران برای مشخص‌کردن مسئول، ایجادکننده یا کاربران مرتبط با رکوردها در فیلدهایی مثل `OwnerId` و `CreatorId` استفاده می‌شود.‎ کاربران دیدار را با اشخاص و مشتریان ثبت‌شده در CRMمتفاوت است.‎
+
+```http
+POST {{baseURL}}/api/User/List?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+> این درخواست بدنه ندارد.
+
+## قواعد و محدودیت‌ها
+
+- این اندپوینت تمام کاربران زیرمجموعه بیزدامنه شما را در پاسخ برمیگرداند
+- در درخواست هایی که نیاز به ارسال فیلد `ownerId `هست باید با کال کردن این درخواست مقدار فیلد `userId `کاربر مدنظر رو برداشته و در فیلد `ownerId `درخواست اولیه قرار بدهید
+
+<RequestExample>
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/User/List?apikey={{API_KEY}}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+  "Response": [
+    {
+      "Id": "355de67e-b5fc-417b-9ff5-15c229f5f2eb",
+      "Code": 0,
+      "UserName": "user@email.com",
+      "FirstName": "کاربر 1",
+      "LastName": "کاربر 1",
+      "HasPicture": false,
+      "PictureUrl": "",
+      "InvitationUrl": "https://app.didar.me/account/accept/355de67e-b5fc-417b-9ff5-15c229f5f2eb",
+      "InvitationAccepted": false,
+      "DisplayName": "کاربر 1",
+      "UserId": "00000000-0000-0000-0000-000000000000",
+      "PermissionId": "7401a518-d035-4bc3-afec-36f0c66a5c31",
+      "VisibilityId": "c97e942c-b830-4c70-b383-046c70241f37",
+      "Permissions": null,
+      "LastAccessTime": "2021-02-20T16:10:29Z",
+      "IsOwner": false,
+      "IsDisabled": false
+    },
+    {
+      "Id": "03df6a43-8479-47d5-b933-34183820f657",
+      "Code": 0,
+      "UserName": "user2@email.com",
+      "FirstName": "user2",
+      "LastName": "user2",
+      "HasPicture": false,
+      "PictureUrl": "",
+      "InvitationUrl": "https://app.didar.me/account/accept/03df6a43-8479-47d5-b933-34183820f657",
+      "InvitationAccepted": false,
+      "DisplayName": "user2",
+      "UserId": "00000000-0000-0000-0000-000000000000",
+      "PermissionId": "7401a518-d035-4bc3-afec-36f0c66a5c31",
+      "VisibilityId": "c97e942c-b830-4c70-b383-046c70241f37",
+      "Permissions": null,
+      "LastAccessTime": "2021-02-20T16:10:29Z",
+      "IsOwner": false,
+      "IsDisabled": false
+    }
+  ]
+}
+```
+
+</ResponseExample>

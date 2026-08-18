@@ -1,0 +1,137 @@
+---
+title: "Search Products"
+description: "جستجوی محصولات دیدار با عبارت جستجو و صفحه‌بندی"
+tag: "POST"
+sidebarTitle: "Search Products"
+---
+
+# جستجوی محصولات
+
+با این Endpoint می‌توانید محصولات دیدار را براساس عنوانشان جستجو کنید.‎ این درخواست زمانی کاربرد دارد که ID یا کد محصول را ندارید و می‌خواهید محصول موردنظر را از روی نام آن پیدا کنید.‎ با `From` و `Limit` نیز می‌توانید نتایج را صفحه‌بندی کنید.‎
+
+```http
+POST {{didar}}/api/product/search?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Criteria" type="object" required>
+  معیارهای جستجوی محصول
+
+  <Expandable title="property">
+    <ParamField path="Criteria.Keywords" type="string" required>
+      عبارتی است که جست‌وجو براساس آن انجام می‌شود. نتیجه فقط رکوردهایی را برمی‌گرداند که عنوان محصول با این عبارت تطبیق داشته باشد.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="From" type="number">
+  اندیس شروع نتایج برای صفحه‌بندی است. مثلا `0` یعنی دریافت از اولین نتیجه و `20` یعنی ۲۰ نتیجه اول رد شوند.
+</ParamField>
+
+<ParamField path="Limit" type="number">
+  حداکثر تعداد رکوردی است که در همین پاسخ برگردانده می‌شود.
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Criteria": {
+    "Keywords": "تست"
+  },
+  "From": 0,
+  "Limit": 10
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location '{{didar}}/api/product/search?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Criteria": {
+    "Keywords": "اشتراک"
+  },
+  "From": 0,
+  "Limit": 10
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+  "Response": [
+        {
+            "Id": "412c14f0-aef9-41b7-b186-53032c8e1e2b",
+            "Title": "عنوان تست محصول",
+            "Code": "12023544",
+            "Description": "test description",
+            "ProfitMargin": 0.0,
+            "TitleForInvoice": "عنوان تست محصول",
+            "Unit": "تعداد",
+            "UnitPrice": 200000.0000000,
+            "Fields": {
+                "Field_6_0_26": "10"
+            },
+            "TitleSepidyar": "",
+            "ExistInSepidyar": false,
+            "itemStockSummary": [],
+            "IsActive": true,
+            "Category": {
+                "Id": "2c0ce978-8005-4f01-8c6a-006939f4ce33",
+                "Title": "پکیج زبان فرانسوی "
+            },
+            "ProductCategoryId": "2c0ce978-8005-4f01-8c6a-006939f4ce33",
+            "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+            "ProductPrices": [
+                {
+                    "Id": 4370799,
+                    "CurrencyId": 96107,
+                    "Price": "200000",
+                    "ProductId": "412c14f0-aef9-41b7-b186-53032c8e1e2b",
+                    "IsDeleted": false
+                }
+            ],
+            "Variants": [
+                {
+                    "Id": "4364ffa6-5b8e-486f-8732-7b902f208f47",
+                    "ProductId": "412c14f0-aef9-41b7-b186-53032c8e1e2b",
+                    "Title": "عنوان تست متغیر",
+                    "TitleForInvoice": "عنوان تست متغیر",
+                    "IsDeleted": false,
+                    "IsDefault": true,
+                    "UnitPrice": 250000.0000000,
+                    "VariantCode": "10",
+                    "TitleSepidyar": "",
+                    "itemStockSummary": [],
+                    "VariantPrices": [
+                        {
+                            "Id": 2572466,
+                            "CurrencyId": 96107,
+                            "Price": "0",
+                            "VariantId": "4364ffa6-5b8e-486f-8732-7b902f208f47",
+                            "IsDeleted": false
+                        }
+                    ]
+                }
+            ]
+        },  ]
+}
+```
+
+</ResponseExample>

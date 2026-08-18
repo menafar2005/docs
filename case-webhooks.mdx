@@ -1,0 +1,384 @@
+---
+title: "وب‌هوک‌های کارت"
+description: "مرجع ساختار داده و شرایط ارسال وب‌هوک‌های ایجاد و ویرایش کارت در دیدار"
+sidebarTitle: "وب هوک کارت"
+---
+
+# وب‌هوک‌های کارت
+
+وب‌هوک‌های کارت اطلاعات کارت را پس از ایجاد یا ویرایش آن به آدرس مقصد ارسال می‌کنند. ساختار کلی Payload در هر دو رویداد یکسان است؛ با این تفاوت که در وب‌هوک ویرایش، آرایه `changes` مشخص می‌کند کدام اطلاعات کارت در همان عملیات تغییر کرده‌اند.
+
+## ساختار داده ارسالی
+
+<ParamField path="data" type="object">
+  اطلاعات کامل کارتی است که وب‌هوک برای آن ارسال شده است. در وب‌هوک ایجاد، این Object وضعیت کارتی تازه ایجادشده را نشان می‌دهد و در وب‌هوک ویرایش، آخرین وضعیت همان کارت را پس از اعمال تغییرات در اختیار شما قرار می‌دهد.
+
+  <Expandable title="property">
+    <ParamField path="data.Id" type="string">
+      شناسه کارتی است که این وب‌هوک برای آن ارسال شده است. اگر رویداد از نوع ایجاد باشد، این مقدار شناسه کارتی است که تازه در دیدار ایجاد شده و اگر رویداد از نوع ویرایش باشد، شناسه همان کارتی است که اطلاعات آن تغییر کرده است.
+    </ParamField>
+
+    <ParamField path="data.OwnerId" type="string">
+      شناسه کاربری است که در حال حاضر مسئول رسیدگی به این کارت است. این همان کاربری است که کارت به او واگذار شده و باید موضوع ثبت‌شده در کارت را پیگیری کند.
+    </ParamField>
+
+    <ParamField path="data.CreatorId" type="string">
+      شناسه کاربری است که این کارت را برای اولین بار در دیدار ایجاد کرده است. این مقدار ایجادکننده اصلی کارت را نشان می‌دهد و لزوماً با مسئول فعلی کارت یکسان نیست.
+    </ParamField>
+
+    <ParamField path="data.Title" type="string">
+      عنوان کارتی است که ایجاد یا ویرایش شده است. کاربران دیدار کارت را در فهرست کارت‌ها، کاریز کارت و صفحه جزئیات با همین عنوان تشخیص می‌دهند.
+    </ParamField>
+
+    <ParamField path="data.Description" type="string">
+      توضیحاتی است که درباره موضوع این کارت ثبت شده است. این متن می‌تواند شرح درخواست، مشکل، کار موردنیاز یا اطلاعاتی باشد که مسئول کارت برای رسیدگی به آن لازم دارد.
+    </ParamField>
+
+    <ParamField path="data.CompanyId" type="string">
+      شناسه شرکتی است که این کارت به آن متصل شده است. این مقدار مشخص می‌کند موضوع کارت مربوط به کدام شرکت یا مشتری سازمانی است.
+    </ParamField>
+
+    <ParamField path="data.PersonId" type="string">
+      شناسه شخصی است که این کارت به او مرتبط شده است. این شخص مخاطب اصلی کارت است و موضوع کارت برای پیگیری وضعیت یا درخواست او ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.Status" type="number">
+      وضعیت فعلی کارت را در فرایند رسیدگی مشخص می‌کند؛ برای مثال نشان می‌دهد کارت هنوز در حال انجام است یا تکمیل شده است.
+    </ParamField>
+
+    <ParamField path="data.CreateTime" type="string">
+      زمانی است که این کارت برای اولین بار در دیدار ایجاد و ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.DueDate" type="string">
+      زمان سررسید کارت است؛ یعنی تاریخی که انتظار می‌رود رسیدگی به کارت تا آن زمان انجام یا تعیین تکلیف شود.
+    </ParamField>
+
+    <ParamField path="data.InProgressTime" type="string">
+      زمانی است که کارت وارد وضعیت در حال انجام شده است. این مقدار نشان می‌دهد رسیدگی عملی به کارت از چه زمانی آغاز شده است.
+    </ParamField>
+
+    <ParamField path="data.DoneTime" type="string">
+      زمانی است که کارت در دیدار به‌عنوان انجام‌شده یا بسته‌شده ثبت شده است. این مقدار زمان پایان واقعی رسیدگی را نشان می‌دهد.
+    </ParamField>
+
+    <ParamField path="data.CaseType" type="number">
+      کد نوع کارت است و مشخص می‌کند کارت در دیدار برای چه نوع فرایند یا موضوعی استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.DealId" type="string">
+      شناسه معامله‌ای است که این کارت به آن متصل شده است. با این مقدار می‌توانید بفهمید موضوع کارت در ارتباط با کدام فرصت فروش ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.Code" type="number">
+      کد نمایشی کارت در دیدار است که برای ارجاع، جست‌وجو و تشخیص سریع‌تر کارت استفاده می‌شود و با شناسه فنی `data.Id` متفاوت است.
+    </ParamField>
+
+    <ParamField path="data.Priority" type="number">
+      کد اولویت کارت است و میزان فوریت رسیدگی به آن را مشخص می‌کند. هرچه اولویت بالاتر باشد، کارت باید زودتر در صف پیگیری قرار بگیرد.
+    </ParamField>
+
+    <ParamField path="data.UserIds" type="array">
+      فهرست شناسه کاربرانی است که علاوه بر مسئول اصلی، به این کارت مرتبط شده‌اند. هر عضو Array یک کاربر دیدار را مشخص می‌کند که در پیگیری یا مشاهده موضوع کارت نقش دارد.
+    </ParamField>
+
+    <ParamField path="data.PipelineStageId" type="string">
+      شناسه مرحله‌ای از کاریز کارت است که کارت در زمان ارسال وب‌هوک داخل آن قرار دارد. این مقدار مرحله فعلی رسیدگی به کارت را مشخص می‌کند.
+    </ParamField>
+
+    <ParamField path="data.PipelineId" type="string">
+      شناسه کاریزی است که این کارت در آن مدیریت می‌شود. این مقدار مشخص می‌کند کارت متعلق به کدام فرایند کاری تعریف‌شده در دیدار است.
+    </ParamField>
+
+    <ParamField path="data.PipelineChangeTime" type="string">
+      زمان آخرین جابه‌جایی کارت بین مراحل کاریز است. این مقدار نشان می‌دهد موقعیت کارت در فرایند رسیدگی چه زمانی تغییر کرده است.
+    </ParamField>
+
+    <ParamField path="data.CaseCategoryId" type="string">
+      شناسه دسته بندی برای این کارت است. این مقدار مشخص می‌کند کارت در کدام دسته‌بندی کارت ها قرار دارد؛ برای مثال کارت فعالیت محور، کارت کانبان یا کارت تیکت.
+    </ParamField>
+
+    <ParamField path="data.OtherContactIds" type="string">
+      فهرست شناسه سایر اشخاصی است که علاوه بر شخص اصلی، با این کارت ارتباط دارند. این افراد می‌توانند ذی‌نفعان یا مخاطبان دیگری باشند که موضوع کارت به آن‌ها مربوط است.
+    </ParamField>
+
+    <ParamField path="data.ResultNote" type="string">
+      نتیجه یا جمع‌بندی ثبت‌شده پس از رسیدگی به کارت است. این متن توضیح می‌دهد موضوع کارت چگونه حل شده یا خروجی نهایی پیگیری چه بوده است.
+    </ParamField>
+
+    <ParamField path="data.VisibilityType" type="number">
+      کد سطح مشاهده کارت است و تعیین می‌کند این کارت براساس قوانین دسترسی دیدار برای چه کاربرانی قابل مشاهده باشد.
+    </ParamField>
+
+    <ParamField path="data.CategoryType" type="number">
+      کد نوع دسته‌بندی کارت است و مشخص می‌کند دسته انتخاب‌شده در ساختار داخلی دیدار از چه نوعی است.
+    </ParamField>
+
+    <ParamField path="data.Fields" type="object">
+      مقادیر فیلدهای اضافه‌ای است که برای کارت تعریف شده و روی همین کارت ثبت شده‌اند. نام هر property کلید فنی فیلد اضافه و مقدار آن داده ثبت‌شده در همان فیلد است.
+    </ParamField>
+
+    <ParamField path="data.LabelIds" type="array">
+      فهرست شناسه برچسب‌هایی است که به این کارت متصل شده‌اند. هر برچسب برای دسته‌بندی، فیلتر و تشخیص سریع‌تر نوع یا شرایط کارت استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.IdleStatus" type="string">
+      این فیلد وضعیت راکد بودن کارت را نشان میدهد که کارت راکد شده است یا خیر
+    </ParamField>
+
+    <ParamField path="data.RottenInPipelineStatus" type="string">
+      این فیلد وضعیت فاسد شدن کارت در آن کاریز نمایش می دهد (منظور فاسد کلی است و اگر کارت فاسد کلی شده باشد در این فیلد نمایش داده می شود)
+    </ParamField>
+
+    <ParamField path="data.RottenInStageStatus" type="string">
+      این فیلد وضعیت فاسد شدن کارت در یک مرحله از کاریز کارت را نمایش می دهد (منظور فاسد روی مرحله است نه فاسد کلی)
+    </ParamField>
+
+    <ParamField path="data.CaseRating" type="string">
+      امتیاز ثبت‌شده برای این کارت است و می‌تواند برای سنجش کیفیت نتیجه، اهمیت موضوع یا ارزیابی رسیدگی به کارت استفاده شود.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="changes" type="array">
+  تغییراتی که باعث ارسال وب‌هوک ویرایش کارت شده‌اند در این Array قرار می‌گیرند. در وب‌هوک ایجاد، `changes` خالی است؛ چون کارت تازه ساخته شده و نسخه قبلی‌ای برای مقایسه وجود ندارد. در وب‌هوک ویرایش، هر عضو مشخص می‌کند کدام فیلد تغییر کرده، مقدار آن پیش از ویرایش چه بوده و پس از ویرایش به چه مقداری تبدیل شده است. Object `data` وضعیت نهایی کارت را نشان می‌دهد و `changes` فقط تغییرات همان عملیات را گزارش می‌کند.
+
+  <Expandable title="property">
+    <ParamField path="changes[].propertyName" type="string">
+      نام فیلدی از کارت است که در این عملیات ویرایش تغییر کرده است. این مقدار مشخص می‌کند `before` و `after` مربوط به کدام بخش از اطلاعات کارت هستند.
+    </ParamField>
+
+    <ParamField path="changes[].before" type="string">
+      مقدار فیلد پیش از انجام این ویرایش است. با مقایسه آن با `changes[].after` می‌توانید دقیقاً تشخیص دهید اطلاعات کارت از چه مقداری تغییر کرده است. نوع مقدار به فیلد نوشته‌شده در `propertyName` بستگی دارد و می‌تواند رشته، عدد، Boolean، Object، Array یا `null` باشد.
+    </ParamField>
+
+    <ParamField path="changes[].after" type="string">
+      مقدار فیلد پس از انجام و ذخیره ویرایش است. این مقدار نتیجه نهایی همان تغییر را نشان می‌دهد و باید با مقدار متناظر آن در Object `data` هم‌خوان باشد.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="meta" type="object">
+  اطلاعات فنی مربوط به خود رویداد وب‌هوک است، نه اطلاعات کارت. این Object مشخص می‌کند چه عملیاتی انجام شده، رویداد متعلق به کدام بیزدامنه و کارت است، چه کاربری آن را ایجاد کرده، تغییر از چه منبعی آمده و Payload توسط کدام تنظیم وب‌هوک و در چندمین تلاش ارسال شده است.
+
+  <Expandable title="property">
+    <ParamField path="meta.actionType" type="number">
+      کد عددی نوع عملیاتی است که باعث ارسال این وب‌هوک شده است. براساس نمونه‌ها، مقدار `1` یعنی کارت ایجاد شده و مقدار `2` یعنی کارت ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.actionTypeTitle" type="string">
+      عنوان متنی همان عملیاتی است که در `meta.actionType` به‌صورت عددی مشخص شده است. در نمونه ایجاد مقدار `Add` و در نمونه ویرایش مقدار `Change` ارسال می‌شود.
+    </ParamField>
+
+    <ParamField path="meta.bizDomainId" type="string">
+      شناسه بیزدامنه‌ای است که کارت در آن ایجاد یا ویرایش شده است. این مقدار مشخص می‌کند رویداد وب‌هوک متعلق به کدام حساب یا فضای کاری دیدار است.
+    </ParamField>
+
+    <ParamField path="meta.entityId" type="string">
+      شناسه کارتی است که رویداد وب‌هوک برای آن ثبت شده است. این مقدار باید به همان رکوردی اشاره کند که اطلاعات کامل آن داخل `data` قرار گرفته و معمولاً با `data.Id` یکسان است.
+    </ParamField>
+
+    <ParamField path="meta.entity" type="number">
+      کد عددی داخلی نوع موجودیتی است که رویداد برای آن ثبت شده است. در Payload این صفحه، این کد به موجودیت کارت اشاره می‌کند.
+    </ParamField>
+
+    <ParamField path="meta.entityTitle" type="string">
+      عنوان فنی موجودیتی است که این وب‌هوک به آن مربوط می‌شود و نشان می‌دهد رکورد داخل `data` از نوع کارت است.
+    </ParamField>
+
+    <ParamField path="meta.id" type="number">
+      شناسه رویدادی است که پس از ایجاد یا ویرایش کارت در سیستم ثبت شده و این Payload براساس آن ساخته شده است. این شناسه مربوط به خود رویداد است، نه شناسه کارت.
+    </ParamField>
+
+    <ParamField path="meta.isBulkEdit" type="boolean">
+      مشخص می‌کند تغییر کارت در قالب یک عملیات گروهی انجام شده است یا خیر. مقدار `true` یعنی این رویداد نتیجه ویرایش گروهی بوده و مقدار `false` یعنی کارت به‌صورت تکی ایجاد یا ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.timeStamp" type="string">
+      زمانی است که رویداد ایجاد یا ویرایش کارت در دیدار ثبت شده و Payload وب‌هوک براساس آن تولید شده است. این زمان لزوماً با تاریخ‌های داخل خود کارت یکسان نیست.
+    </ParamField>
+
+    <ParamField path="meta.userId" type="string">
+      شناسه کاربری است که عملیات منجر به ارسال این وب‌هوک را انجام داده است. در رویداد ایجاد، کاربری را نشان می‌دهد که کارت را ساخته و در رویداد ویرایش، کاربری را مشخص می‌کند که تغییر را انجام داده است.
+    </ParamField>
+
+    <ParamField path="meta.webhookId" type="number">
+      شناسه تنظیم وب‌هوکی است که این Payload را به آدرس مقصد ارسال کرده است. این مقدار برای تشخیص وب‌هوک تعریف‌شده‌ای که رویداد از طریق آن ارسال شده کاربرد دارد.
+    </ParamField>
+
+    <ParamField path="meta.changeSource" type="number">
+      کد عددی منبعی است که عملیات ایجاد یا ویرایش از طریق آن انجام شده است. عنوان قابل‌خواندن همین منبع در `meta.changeSourceTitle` قرار می‌گیرد.
+    </ParamField>
+
+    <ParamField path="meta.changeSourceTitle" type="string">
+      عنوان متنی منبعی است که کارت از طریق آن ایجاد یا ویرایش شده است. برای مثال مقدار `Api` یعنی عملیات از طریق API انجام شده است.
+    </ParamField>
+
+    <ParamField path="meta.attempt" type="number">
+      شماره تلاش برای ارسال همین رویداد وب‌هوک به آدرس مقصد است. مقدار `1` یعنی Payload در اولین تلاش ارسال شده است.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## وب‌هوک ایجاد کارت چه زمانی ارسال می‌شود؟
+
+وب‌هوک ایجاد کارت زمانی ارسال می‌شود که یک کارت جدید با موفقیت در دیدار ثبت شود. آبجکت `data` شامل اطلاعات کارت تازه ایجادشده است و آرایه `changes` خالی ارسال می‌شود، چون پیش از این عملیات رکوردی وجود نداشته که فیلدی از آن تغییر کرده باشد.
+
+## وب‌هوک ویرایش کارت چه زمانی ارسال می‌شود؟
+
+وب‌هوک ویرایش کارت زمانی ارسال می‌شود که حداقل یکی از اطلاعات موجود در `data` تغییر کند. فیلدهایی که تغییر آن‌ها می‌تواند باعث ارسال این وب‌هوک شود عبارت‌اند از:
+
+- `data.Id`
+- `data.OwnerId`
+- `data.CreatorId`
+- `data.Title`
+- `data.Description`
+- `data.CompanyId`
+- `data.PersonId`
+- `data.Status`
+- `data.CreateTime`
+- `data.DueDate`
+- `data.InProgressTime`
+- `data.DoneTime`
+- `data.CaseType`
+- `data.DealId`
+- `data.Code`
+- `data.Priority`
+- `data.UserIds`
+- `data.PipelineStageId`
+- `data.PipelineId`
+- `data.PipelineChangeTime`
+- `data.CaseCategoryId`
+- `data.OtherContactIds`
+- `data.ResultNote`
+- `data.VisibilityType`
+- `data.CategoryType`
+- `data.LabelIds`
+- `data.IdleStatus`
+- `data.RottenInPipelineStatus`
+- `data.RottenInStageStatus`
+- `data.CaseRating`
+
+اگر هیچ‌کدام از فیلدهای موجود در `data` تغییر نکنند، وب‌هوک ویرایش کارت ارسال نمی‌شود. آرایه `changes` عامل Trigger نیست؛ این آرایه نتیجه تغییرات انجام‌شده را گزارش می‌کند و `data` آخرین وضعیت کارت را پس از ویرایش نشان می‌دهد.
+
+## نمونه داده ارسالی
+
+<CodeGroup>
+
+```json وب‌هوک ایجاد کارت
+{
+  "data": {
+    "Id": "fa9a6d68-95e2-4ca9-9c7f-7666adebcff2",
+    "OwnerId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "Title": "کارت nafari",
+    "Description": "",
+    "CompanyId": "00000000-0000-0000-0000-000000000000",
+    "PersonId": "6ad47606-db70-441a-a799-f204a8dc8794",
+    "Status": 1,
+    "CreateTime": "2026-08-02T13:25:48.5890755+00:00",
+    "DueDate": "9999-12-01T00:00:00Z",
+    "InProgressTime": "2026-08-02T13:25:48.5890755+00:00",
+    "DoneTime": "2026-08-02T13:25:48.5890755+00:00",
+    "CaseType": 0,
+    "DealId": "00000000-0000-0000-0000-000000000000",
+    "Code": 8,
+    "Priority": -2,
+    "UserIds": [],
+    "PipelineStageId": "2d34c424-62e5-4fcc-b0f0-bfbd11bf440a",
+    "PipelineId": "f7861340-b22c-49b1-bb5a-d96b5cdba979",
+    "PipelineChangeTime": "2026-08-02T13:25:48.5890755+00:00",
+    "CaseCategoryId": "00000000-0000-0000-0000-000000000000",
+    "OtherContactIds": null,
+    "ResultNote": null,
+    "VisibilityType": 1,
+    "CategoryType": 0,
+    "Fields": {},
+    "LabelIds": [],
+    "IdleStatus": null,
+    "RottenInPipelineStatus": null,
+    "RottenInStageStatus": null,
+    "CaseRating": null
+  },
+  "changes": [],
+  "meta": {
+    "actionType": 1,
+    "actionTypeTitle": "Add",
+    "bizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "entityId": "fa9a6d68-95e2-4ca9-9c7f-7666adebcff2",
+    "entity": 8785,
+    "entityTitle": "Case",
+    "id": 639212739486252782,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-02T13:25:48.6252782Z",
+    "userId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "webhookId": 32486,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+```json وب‌هوک ویرایش کارت
+{
+  "data": {
+    "Id": "a17cb338-15e1-415b-9de0-186cddb78ced",
+    "OwnerId": "00000000-0000-0000-0000-000000000000",
+    "CreatorId": "00000000-0000-0000-0000-000000000000",
+    "Title": "وبهوک جدید",
+    "Description": "\nسلام\n\n",
+    "CompanyId": "00000000-0000-0000-0000-000000000000",
+    "PersonId": "00000000-0000-0000-0000-000000000000",
+    "Status": 1,
+    "CreateTime": "2026-08-02T07:14:52",
+    "DueDate": "2026-08-02T07:14:52",
+    "InProgressTime": "2026-08-02T07:14:52",
+    "DoneTime": "2026-08-02T07:14:52",
+    "CaseType": 0,
+    "DealId": "00000000-0000-0000-0000-000000000000",
+    "Code": 7,
+    "Priority": 0,
+    "UserIds": [],
+    "PipelineStageId": "2d34c424-62e5-4fcc-b0f0-bfbd11bf440a",
+    "PipelineId": "f7861340-b22c-49b1-bb5a-d96b5cdba979",
+    "PipelineChangeTime": "2026-08-02T07:14:52",
+    "CaseCategoryId": "00000000-0000-0000-0000-000000000000",
+    "OtherContactIds": "",
+    "ResultNote": "",
+    "VisibilityType": 0,
+    "CategoryType": 0,
+    "Fields": {},
+    "LabelIds": [],
+    "IdleStatus": null,
+    "RottenInPipelineStatus": null,
+    "RottenInStageStatus": null,
+    "CaseRating": null
+  },
+  "changes": [
+    {
+      "propertyName": "Description",
+      "before": "",
+      "after": "\nسلام\n\n"
+    }
+  ],
+  "meta": {
+    "actionType": 2,
+    "actionTypeTitle": "Change",
+    "bizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "entityId": "a17cb338-15e1-415b-9de0-186cddb78ced",
+    "entity": 8785,
+    "entityTitle": "Case",
+    "id": 639212787602224487,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-02T14:46:00.2224487Z",
+    "userId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "webhookId": 32487,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+</CodeGroup>

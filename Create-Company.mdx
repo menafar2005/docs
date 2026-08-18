@@ -1,0 +1,792 @@
+---
+title: "Create Company"
+tag: "POST"
+sidebarTitle: "Create Company"
+---
+
+{/*  Endpoint: Create Company | /untitled-page-19  */}
+
+## ایجاد شرکت
+
+شرکت در دیدار یعنی یک سازمان یا کسب‌وکاری که به‌عنوان مشتری، با آن در ارتباط هستید؛ نه شرکتی که اکانت دیدار را خریده است.‎ با این Endpoint می‌توانید اطلاعات تماس، اطلاعات ثبتی و اقتصادی، مسئول، آدرس و فیلدهای اضافه یک شرکت را ثبت کنید.‎
+
+```http
+POST {{baseURL}}/api/contact/save?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Contact" type="object" required>
+  اطلاعات شرکت جدید داخل این آبجکت ارسال می‌شود. شرکت در اینجا یکی از مشتریان یا طرف‌های تجاری ثبت‌شده در CRM است، نه شرکت صاحب اکانت دیدار.
+
+  <Expandable title="property">
+    <ParamField path="Contact.Type" type="string" required>
+      نوع مخاطب؛ تعیین می‌کند داده ارسالی به‌عنوان شخص یا شرکت ذخیره و اعتبارسنجی شود. در ایجاد شخص باید مقدار این فیلد برابر با مقدار زیر باشد: `Company`
+
+      <Expandable title="مقادیر مجاز">
+        - `company` — رکورد به‌عنوان شرکت ساخته می‌شود
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.FirstName" type="string" required>
+      نام شرکت را در این فیلد باید وارد کنید مثلا دیدار
+    </ParamField>
+
+    <ParamField path="Contact.Title" type="string">
+      عنوانی که قبل از عنوان شرکت نمایش داده می شود، مثلا شرکت
+    </ParamField>
+
+    <ParamField path="Contact.OwnerId" type="string" required>
+      شناسه User مسئول پیگیری این شخص یا شرکت است.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+        - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.BirthDate" type="string">
+      تاریخ تولد شخص؛ برای اطلاعات پروفایل و برنامه‌های یادآوری تولد استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="Contact.BirthDateMessageId" type="string">
+      شناسه پیام یا الگوی مرتبط با یادآوری تولد مخاطب.
+    </ParamField>
+
+    <ParamField path="Contact.MobilePhone" type="string">
+      شماره تلفن همراه اصلی شرکت که برای جست‌وجو، تماس و شناسایی مخاطب استفاده می‌شود. این مقدار باید منحصر به فرد باشد و تکراری نباشد
+    </ParamField>
+
+    <ParamField path="Contact.WorkPhone" type="string">
+      شماره تلفن ثابت یا محل کار.
+    </ParamField>
+
+    <ParamField path="Contact.WorkPhoneExtension" type="string">
+      عنوان یا داخلی ثبت‌شده کنار شماره محل کار است؛ مثلا «دفتر» یا شماره داخلی واحد مربوط.
+    </ParamField>
+
+    <ParamField path="Contact.Fax" type="string">
+      شماره فکس شخص یا شرکت.
+    </ParamField>
+
+    <ParamField path="Contact.Email" type="string">
+      نشانی ایمیل اصلی مخاطب برای ارتباط و جست‌وجو.
+    </ParamField>
+
+    <ParamField path="Contact.IsVIP" type="boolean">
+      مشخص می‌کند مخاطب به‌عنوان مشتری ویژه علامت‌گذاری شود یا خیر.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — مخاطب به‌عنوان مشتری ویژه علامت می‌خورد
+        - `false` — مخاطب ویژه نیست
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.BackgroundInfo" type="string">
+      یادداشت زمینه‌ای درباره شخص یا شرکت؛ برای ثبت اطلاعات مهمی که در فیلدهای ساختاریافته قرار نمی‌گیرند.
+    </ParamField>
+
+    <ParamField path="Contact.Position" type="string">
+      عنوان شغلی یا سمت شخص در شرکت مرتبط.
+    </ParamField>
+
+    <ParamField path="Contact.CustomerCode" type="string">
+      کد مشتری در سیستم یا فرایند مالی کسب‌وکار؛ برای تطبیق مخاطب با رکوردهای خارجی نیز قابل استفاده است.
+    </ParamField>
+
+    <ParamField path="Contact.EconomicIssue" type="string">
+      کد اقتصادی مخاطب برای اطلاعات مالیاتی و صدور فاکتور رسمی.
+    </ParamField>
+
+    <ParamField path="Contact.RegistrationNumber" type="string">
+      شماره ثبت شرکت یا شخص حقوقی.
+    </ParamField>
+
+    <ParamField path="Contact.NationalID" type="string">
+      شناسه ملی شرکت برای اطلاعات حقوقی و صدور اسناد رسمی.
+    </ParamField>
+
+    <ParamField path="Contact.ZipCode" type="string">
+      کد پستی نشانی اصلی مخاطب.
+    </ParamField>
+
+    <ParamField path="Contact.CityId" type="string">
+      شناسه شهر مخاطب است و باید از فهرست مکان‌های دیدار انتخاب شود.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه را از فهرست استان‌ها و شهرهای دیدار بردارید.
+
+        - [Get Locations](/Get-Locations) — `Id` استان یا شهر موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.ProvinceId" type="string">
+      شناسه استان مخاطب است و باید از فهرست مکان‌های دیدار انتخاب شود.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه را از فهرست استان‌ها و شهرهای دیدار بردارید.
+
+        - [Get Locations](/Get-Locations) — `Id` استان یا شهر موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.VisibilityType" type="string">
+      سطح مشاهده مخاطب؛ تعیین می‌کند چه کاربران یا گروه‌هایی بر اساس دسترسی‌ها امکان مشاهده رکورد را دارند.
+
+      <Expandable title="مقادیر مجاز">
+        - `0 / Owner` — فقط مسئول رکورد
+        - `1 / OwnerGroup` — مسئول و گروه او
+        - `2 / OwnerSubGroup` — مسئول، گروه و زیرگروه او
+        - `3 / All` — همه کاربران مجاز
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.Fields" type="object">
+      مقدار Custom Fieldهای شخص یا شرکت است. هر کلید باید متعلق به فیلد اضافه مخاطب باشد.
+
+      <Expandable title="وابستگی‌ها">
+        فقط از کلید Custom Fieldهایی استفاده کنید که `FieldType` آن‌ها مربوط به Contact است.
+
+        - [Get Custom Fields](/Get-Custom-Fields) — کلید فنی فیلد متناسب با Entity را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.OtherPhones" type="object">
+      مجموعه شماره‌های تلفن فرعی مخاطب، همراه با عنوان هر شماره مانند خانه یا پشتیبانی.
+
+      <Expandable title="property">
+        <ParamField path="Contact.OtherPhones.KeyValues[]" type="array">
+          فهرست شماره‌های تلفن فرعی مخاطب؛ هر عضو عنوان و مقدار یک شماره را نگهداری می‌کند.
+
+          <Expandable title="property">
+            <ParamField path="Contact.OtherPhones.KeyValues[].Key" type="string">
+              کلید داخلی این شماره تلفن فرعی برای تطبیق آن در زمان ویرایش مخاطب.
+            </ParamField>
+
+            <ParamField path="Contact.OtherPhones.KeyValues[].Value" type="string">
+              شماره تلفن فرعی مخاطب.
+            </ParamField>
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.OtherEmails" type="object">
+      مجموعه ایمیل‌های فرعی مخاطب، همراه با عنوان کاربرد هر ایمیل.
+
+      <Expandable title="property">
+        <ParamField path="Contact.OtherEmails.KeyValues[]" type="array">
+          فهرست ایمیل‌های فرعی مخاطب؛ هر عضو عنوان و نشانی یک ایمیل را نگهداری می‌کند.
+
+          <Expandable title="property">
+            <ParamField path="Contact.OtherEmails.KeyValues[].Key" type="string">
+              کلید داخلی این ایمیل فرعی برای تطبیق آن در زمان ویرایش مخاطب.
+            </ParamField>
+
+            <ParamField path="Contact.OtherEmails.KeyValues[].Value" type="string">
+              نشانی ایمیل فرعی مخاطب.
+            </ParamField>
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.Websites" type="object">
+      مجموعه نشانی‌های وب مرتبط با مخاطب، همراه با عنوان هر نشانی.
+
+      <Expandable title="property">
+        <ParamField path="Contact.Websites.KeyValues[]" type="array">
+          فهرست وب‌سایت‌های مرتبط با مخاطب؛ هر عضو عنوان و نشانی یک وب‌سایت را نگهداری می‌کند.
+
+          <Expandable title="property">
+            <ParamField path="Contact.Websites.KeyValues[].Key" type="string">
+              کلید داخلی این وب‌سایت برای تطبیق آن در زمان ویرایش مخاطب.
+            </ParamField>
+
+            <ParamField path="Contact.Websites.KeyValues[].Value" type="string">
+              نشانی وب‌سایت مرتبط با مخاطب.
+            </ParamField>
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.BankAccounts" type="object">
+      اطلاعات حساب‌های بانکی مخاطب برای استفاده در فرایندهای مالی.
+
+      <Expandable title="property">
+        <ParamField path="Contact.BankAccounts.Values[]" type="array">
+          فهرست حساب‌های بانکی مخاطب؛ اجزای هر عضو، اطلاعات یک حساب را در ساختار داخلی دیدار نگهداری می‌کنند.
+
+          <Expandable title="property">
+            <ParamField path="Contact.BankAccounts.Values[].Value1" type="string">
+              بخش اول اطلاعات حساب بانکی در ساختار داخلی دیدار؛ جایگاه دقیق آن مانند شماره حساب یا شبا باید با قرارداد Backend تطبیق داده شود.
+            </ParamField>
+
+            <ParamField path="Contact.BankAccounts.Values[].Value2" type="string">
+              بخش دوم اطلاعات حساب بانکی؛ معنای دقیق آن به ساختار حساب بانکی Backend وابسته است.
+            </ParamField>
+
+            <ParamField path="Contact.BankAccounts.Values[].Value3" type="string">
+              بخش سوم اطلاعات حساب بانکی؛ معنای دقیق آن به ساختار حساب بانکی Backend وابسته است.
+            </ParamField>
+
+            <ParamField path="Contact.BankAccounts.Values[].Value4" type="string">
+              بخش چهارم اطلاعات حساب بانکی؛ معنای دقیق آن به ساختار حساب بانکی Backend وابسته است.
+            </ParamField>
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Contact.Addresses" type="object">
+      مجموعه نشانی‌های پستی مخاطب، همراه با عنوان هر نشانی.
+
+      <Expandable title="property">
+        <ParamField path="Contact.Addresses.KeyValues[]" type="array">
+          فهرست نشانی‌های مخاطب؛ هر عضو عنوان و متن کامل یک نشانی را نگهداری می‌کند.
+
+          <Expandable title="property">
+            <ParamField path="Contact.Addresses.KeyValues[].Key" type="string">
+              کلید داخلی این نشانی برای تطبیق آن در زمان ویرایش مخاطب.
+            </ParamField>
+
+            <ParamField path="Contact.Addresses.KeyValues[].Value" type="string">
+              متن کامل یکی از نشانی‌های مخاطب.
+            </ParamField>
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="SegmentIds[]" type="array">
+  فهرست شناسه گروه‌هایی است که شخص یا شرکت باید عضو آن‌ها شود.
+
+  <Expandable title="وابستگی‌ها">
+    این فیلد باید `Id` یک گروه موجود در دیدار را بگیرد.
+
+    - [Segments](/Segments) — `Id` گروه موردنظر را بردارید
+  </Expandable>
+
+  <Expandable title="property">
+    <ParamField path="SegmentIds[]" type="string">
+      فهرست شناسه گروه‌هایی است که شخص یا شرکت باید عضو آن‌ها شود.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد باید `Id` یک گروه موجود در دیدار را بگیرد.
+
+        - [Segments](/Segments) — `Id` گروه موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+    "Contact": {
+        "Type": "Company", 
+        "FirstName": "12", 
+        "Title": "جناب آقای",
+        "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+        "BirthDate": "2025-08-31T08:02:06.5247888Z",
+        "BirthDateMessageId": "88356367-c004-4263-98e5-6b4e8bbc9852",
+        "MobilePhone": "تلفن منشی 09344454323",
+        "WorkPhone": "تلفن منشی 09344454323",
+        "WorkPhoneExtension": "تلفن منشی",
+        "Fax": "فکس منشی 09344454323",
+        "Email": "ایمیل منشی mad@sdf.com",
+        "IsVIP": true, 
+        "BackgroundInfo": "12312",
+        "Position": "مدیر واحد",
+        "CustomerCode": "123-site",
+        "EconomicIssue": "sdaf23",
+        "RegistrationNumber": "asdf2134",
+        "NationalID": "safdasdf12",
+        "ZipCode": "123asdf",
+        "CityId": "314409ce-ee7f-424e-ab88-c578d0ca187f",
+        "ProvinceId": "c990e86b-a13a-40f4-b21d-79bf09e6e579",
+        "VisibilityType": "Owner", 
+        "Fields": {
+            "Field_996_0_7": "sdf"
+        },
+        "OtherPhones": {
+            "KeyValues": [
+                {
+                "Key": "همراه",
+                "Value": "تلفن 0123"
+                },
+                {
+                "Key": "محل کار",
+                "Value": "موبایل 09123"
+                },
+                {
+                "Key": "منزل",
+                "Value": "موبایل 09123"
+                },
+                {
+                "Key": "سایر",
+                "Value": "موبایل 09123"
+                }
+            ]
+        },
+        "OtherEmails": {
+            "KeyValues": [
+                {
+                    "Key": "کاری",
+                    "Value": "mamo@sd.comsd"
+                },
+                {
+                    "Key": "شخصی",
+                    "Value": "masmo@sd.com"
+                },
+                {
+                    "Key": "سایر",
+                    "Value": "msdfamo@sd.com"
+                }
+            ]
+        },
+        "Websites": {
+            "KeyValues": [
+                {
+                    "Key": "asdf",
+                    "Value": "asdfasdfasdf"
+                },
+                {
+                    "Key": "asdf",
+                    "Value": "asdfasdfasdf"
+                }
+            ]
+        },
+        "BankAccounts": {
+            "Values": [
+                {
+                    "Value1": "",
+                    "Value2": "asdf",
+                    "Value3": "asdf",
+                    "Value4": "asdf"
+                },
+                {
+                    "Value1": "Card",
+                    "Value2": "asdfasfd",
+                    "Value3": "asdfasdf",
+                    "Value4": "asdfasdf"
+                },
+                {
+                    "Value1": "Account",
+                    "Value2": "sadfasdf",
+                    "Value3": "asdfasdf",
+                    "Value4": "asdfasdf"
+                }
+            ]
+        },
+        "Addresses": {
+            "KeyValues": [
+                {
+                    "Key": "",
+                    "Value": "ASasdfasdfDF"
+                },
+                {
+                    "Key": "محل کار",
+                    "Value": "ASDF"
+                },
+                {
+                    "Key": "منزل",
+                    "Value": "ASDFASDF"
+                },
+                {
+                    "Key": "سایر",
+                    "Value": "ASDFSDF"
+                }
+            ]
+        },
+    },
+    "SegmentIds": [
+        "e09a05a9-bf99-4f8b-9017-e06b42480078",
+        "0837c9fc-2018-4834-82f8-b505a5a51de6"
+    ],
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location 'https://app.didar.me/api/contact/save?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "Contact": {
+        "Type": "Company", 
+        "FirstName": "12", 
+        "Title": "جناب آقای",
+        "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+        "BirthDate": "2025-08-31T08:02:06.5247888Z",
+        "BirthDateMessageId": "88356367-c004-4263-98e5-6b4e8bbc9852",
+        "MobilePhone": "تلفن منشی 09344454323",
+        "WorkPhone": "تلفن منشی 09344454323",
+        "WorkPhoneExtension": "تلفن منشی",
+        "Fax": "فکس منشی 09344454323",
+        "Email": "ایمیل منشی mad@sdf.com",
+        "IsVIP": true, 
+        "BackgroundInfo": "12312",
+        "Position": "مدیر واحد",
+        "CustomerCode": "123-site",
+        "EconomicIssue": "sdaf23",
+        "RegistrationNumber": "asdf2134",
+        "NationalID": "safdasdf12",
+        "ZipCode": "123asdf",
+        "CityId": "314409ce-ee7f-424e-ab88-c578d0ca187f",
+        "ProvinceId": "c990e86b-a13a-40f4-b21d-79bf09e6e579",
+        "VisibilityType": "Owner", 
+        "Fields": {
+            "Field_996_0_7": "sdf"
+        },
+        "OtherPhones": {
+            "KeyValues": [
+                {
+                "Key": "همراه",
+                "Value": "تلفن 0123"
+                },
+                {
+                "Key": "محل کار",
+                "Value": "موبایل 09123"
+                },
+                {
+                "Key": "منزل",
+                "Value": "موبایل 09123"
+                },
+                {
+                "Key": "سایر",
+                "Value": "موبایل 09123"
+                }
+            ]
+        },
+        "OtherEmails": {
+            "KeyValues": [
+                {
+                    "Key": "کاری",
+                    "Value": "mamo@sd.comsd"
+                },
+                {
+                    "Key": "شخصی",
+                    "Value": "masmo@sd.com"
+                },
+                {
+                    "Key": "سایر",
+                    "Value": "msdfamo@sd.com"
+                }
+            ]
+        },
+        "Websites": {
+            "KeyValues": [
+                {
+                    "Key": "asdf",
+                    "Value": "asdfasdfasdf"
+                },
+                {
+                    "Key": "asdf",
+                    "Value": "asdfasdfasdf"
+                }
+            ]
+        },
+        "BankAccounts": {
+            "Values": [
+                {
+                    "Value1": "",
+                    "Value2": "asdf",
+                    "Value3": "asdf",
+                    "Value4": "asdf"
+                },
+                {
+                    "Value1": "Card",
+                    "Value2": "asdfasfd",
+                    "Value3": "asdfasdf",
+                    "Value4": "asdfasdf"
+                },
+                {
+                    "Value1": "Account",
+                    "Value2": "sadfasdf",
+                    "Value3": "asdfasdf",
+                    "Value4": "asdfasdf"
+                }
+            ]
+        },
+        "Addresses": {
+            "KeyValues": [
+                {
+                    "Key": "",
+                    "Value": "ASasdfasdfDF"
+                },
+                {
+                    "Key": "محل کار",
+                    "Value": "ASDF"
+                },
+                {
+                    "Key": "منزل",
+                    "Value": "ASDFASDF"
+                },
+                {
+                    "Key": "سایر",
+                    "Value": "ASDFSDF"
+                }
+            ]
+        },
+    },
+    "SegmentIds": [
+        "e09a05a9-bf99-4f8b-9017-e06b42480078",
+        "0837c9fc-2018-4834-82f8-b505a5a51de6"
+    ],
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "5a0b0303-4b21-4144-9576-d5f1504c3573",
+        "Code": 14504,
+        "Title": "",
+        "FirstName": "12",
+        "LastName": "",
+        "DisplayName": "12",
+        "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+        "CompanyId": "00000000-0000-0000-0000-000000000000",
+        "BirthDate": "2025-08-31T08:02:06.5247888Z",
+        "BirthDateMessageId": "88356367-c004-4263-98e5-6b4e8bbc9852",
+        "BirthDateisValid": false,
+        "MobilePhone": "تلفن منشی 09344454323",
+        "WorkPhone": "تلفن منشی 09344454323",
+        "WorkPhoneExtension": "تلفن منشی",
+        "Fax": "فکس منشی 09344454323",
+        "Email": "ایمیل منشی mad@sdf.com",
+        "CanDelete": true,
+        "CanEdit": true,
+        "IsDeleted": false,
+        "IsVIP": true,
+        "IsMine": true,
+        "HasAccess": true,
+        "LeadGenerationType": "Manual",
+        "LeadStatus": "None",
+        "LeadType": "General",
+        "ContactType": "General",
+        "IsCustomer": false,
+        "IsProspect": false,
+        "Type": "Company",
+        "BackgroundInfo": "12312",
+        "RegisterTime": "2026-07-28T11:12:03.2546375Z",
+        "Position": "مدیر واحد",
+        "CustomerCode": "123-site",
+        "EconomicIssue": "sdaf23",
+        "NationalCode": "",
+        "RegistrationNumber": "asdf2134",
+        "NationalID": "safdasdf12",
+        "ZipCode": "123asdf",
+        "CityTitle": "اسکو",
+        "ProvinceTitle": "آذربایجان شرقی",
+        "ProvinceId": "c990e86b-a13a-40f4-b21d-79bf09e6e579",
+        "CityId": "314409ce-ee7f-424e-ab88-c578d0ca187f",
+        "HasCompany": false,
+        "CompanyName": "",
+        "CompanyIsCustomer": null,
+        "CompanyIsProspect": null,
+        "CompanyCode": null,
+        "CompanyAndPosition": " - مدیر واحد",
+        "Feedback": 0.0,
+        "VisibilityType": "Owner",
+        "OtherPhones": {
+            "KeyValues": [
+                {
+                    "Key": "همراه",
+                    "Value": "تلفن 0123",
+                    "Title": "همراه"
+                },
+                {
+                    "Key": "محل کار",
+                    "Value": "موبایل 09123",
+                    "Title": "محل کار"
+                },
+                {
+                    "Key": "منزل",
+                    "Value": "موبایل 09123",
+                    "Title": "منزل"
+                },
+                {
+                    "Key": "سایر",
+                    "Value": "موبایل 09123",
+                    "Title": "سایر"
+                }
+            ]
+        },
+        "OtherEmails": {
+            "KeyValues": [
+                {
+                    "Key": "کاری",
+                    "Value": "mamo@sd.comsd",
+                    "Title": "کاری"
+                },
+                {
+                    "Key": "شخصی",
+                    "Value": "masmo@sd.com",
+                    "Title": "شخصی"
+                },
+                {
+                    "Key": "سایر",
+                    "Value": "msdfamo@sd.com",
+                    "Title": "سایر"
+                }
+            ]
+        },
+        "Websites": {
+            "KeyValues": [
+                {
+                    "Key": "asdf",
+                    "Value": "asdfasdfasdf",
+                    "Title": "asdf"
+                },
+                {
+                    "Key": "asdf",
+                    "Value": "asdfasdfasdf",
+                    "Title": "asdf"
+                }
+            ]
+        },
+        "Addresses": {
+            "KeyValues": [
+                {
+                    "Key": "",
+                    "Value": "ASasdfasdfDF",
+                    "Title": ""
+                },
+                {
+                    "Key": "محل کار",
+                    "Value": "ASDF",
+                    "Title": "محل کار"
+                },
+                {
+                    "Key": "منزل",
+                    "Value": "ASDFASDF",
+                    "Title": "منزل"
+                },
+                {
+                    "Key": "سایر",
+                    "Value": "ASDFSDF",
+                    "Title": "سایر"
+                }
+            ]
+        },
+        "BankAccounts": {
+            "Values": [
+                {
+                    "Values": [
+                        "",
+                        "asdf",
+                        "asdf",
+                        "asdf",
+                        ""
+                    ],
+                    "Value1": "",
+                    "Value2": "asdf",
+                    "Value3": "asdf",
+                    "Value4": "asdf",
+                    "Value5": "",
+                    "Value6": "",
+                    "Value7": "",
+                    "Value8": "",
+                    "Value9": "",
+                    "Value10": "",
+                    "Value11": "",
+                    "Value12": "",
+                    "Value13": "",
+                    "Value14": "",
+                    "Value15": ""
+                },
+                {
+                    "Values": [
+                        "Card",
+                        "asdfasfd",
+                        "asdfasdf",
+                        "asdfasdf",
+                        ""
+                    ],
+                    "Value1": "Card",
+                    "Value2": "asdfasfd",
+                    "Value3": "asdfasdf",
+                    "Value4": "asdfasdf",
+                    "Value5": "",
+                    "Value6": "",
+                    "Value7": "",
+                    "Value8": "",
+                    "Value9": "",
+                    "Value10": "",
+                    "Value11": "",
+                    "Value12": "",
+                    "Value13": "",
+                    "Value14": "",
+                    "Value15": ""
+                },
+                {
+                    "Values": [
+                        "Account",
+                        "sadfasdf",
+                        "asdfasdf",
+                        "asdfasdf",
+                        ""
+                    ],
+                    "Value1": "Account",
+                    "Value2": "sadfasdf",
+                    "Value3": "asdfasdf",
+                    "Value4": "asdfasdf",
+                    "Value5": "",
+                    "Value6": "",
+                    "Value7": "",
+                    "Value8": "",
+                    "Value9": "",
+                    "Value10": "",
+                    "Value11": "",
+                    "Value12": "",
+                    "Value13": "",
+                    "Value14": "",
+                    "Value15": ""
+                }
+            ]
+        },
+        "Owner": {
+            "UserId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+            "DisplayName": " محمد علی مزینی",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/52c406aa-ae3d-4699-b253-6c5af7648549.jpg",
+            "Email": "mamozayyani@gmail.com"
+        },
+        "ContactStatus": {},
+        "Fields": {
+            "Field_996_0_7": "sdf"
+        },
+        "Segments": [],
+        "KeepInTouch": null,
+        "LastUpdateTime": "2026-07-28T11:12:03.2546375Z",
+        "OwnerId_Old": "00000000-0000-0000-0000-000000000000"
+    }
+}
+```
+
+</ResponseExample>
+
+## لینک های مرتبط
+
+- [Get Custom Fields](/untitled-page-12)
+- [User List ](/untitled-page-13)

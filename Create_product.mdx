@@ -1,0 +1,342 @@
+---
+title: "Create Product"
+tag: "POST"
+---
+
+# ایجاد محصول
+
+این Endpoint برای ثبت یک محصول یا خدمت جدید در دیدار استفاده می‌شود.‎ اطلاعاتی مثل عنوان، کد، واحد، گروه محصول، قیمت و زیرمحصول‌ها را می‌توانید هنگام ایجاد محصول مشخص کنید
+
+```http
+POST {{baseURL}}/api/product/save?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Product" type="object" required>
+  تمام اطلاعات محصول جدید داخل این آبجکت ارسال می‌شود. عنوان، کد، واحد و گروه محصول مشخص می‌کنند چه محصولی در دیدار ساخته شود و اطلاعاتی مثل قیمت، توضیحات، قیمت چندارزی و زیرمحصول‌ها هم داخل همین آبجکت قرار می‌گیرند.
+
+  <Expandable title="property">
+    <ParamField path="Product.Title" type="string" required>
+      اسمی است که محصول با آن داخل دیدار نمایش داده می‌شود؛ مثلا «اشتراک یک‌ساله» یا «لپ‌تاپ مدل X». کاربرها هنگام اضافه‌کردن محصول به معامله، فاکتور یا پیش‌فاکتور این عنوان را می‌بینند.
+    </ParamField>
+
+    <ParamField path="Product.Code" type="number">
+      کد اختصاصی محصول است و برای شناسایی دقیق آن بین سیستم شما و دیدار استفاده می‌شود. این کد باید بین محصولات دیدار تکراری نباشد.
+
+      <Expandable title="شرایط ارسال">
+        کدی بفرستید که قبلا برای محصول دیگری در همین اکانت استفاده نشده باشد.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Product.Unit" type="string" required>
+      واحدی است که تعداد و قیمت محصول براساس آن محاسبه می‌شود؛ مثلا «عدد»، «بسته»، «کیلوگرم» یا «ساعت».
+    </ParamField>
+
+    <ParamField path="Product.ProductCategoryId" type="string" required>
+      مشخص می‌کند محصول داخل کدام گروه محصول قرار بگیرد؛ مثلا محصول «اشتراک یک‌ساله» می‌تواند در گروه «نرم‌افزار» قرار بگیرد.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد عنوان گروه را نمی‌پذیرد؛ باید `Id` گروه محصول موجود در دیدار را بفرستید.
+
+        - [Get Product Categories](/product-category) — `Id` گروه محصول را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Product.TitleForInvoice" type="string">
+      عنوانی است که برای این محصول روی فاکتور و پیش‌فاکتور نمایش داده می‌شود. اگر این فیلد ارسال نشود، عنوان خود محصول یعنی `Product.Title` استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="Product.Description" type="string">
+      توضیح تکمیلی محصول است؛ مثلا مشخصات و جزئیات بیشتر، شرایط ارائه یا هر نکته‌ای که فقط از روی عنوان محصول معلوم نمی‌شود.
+    </ParamField>
+
+    <ParamField path="Product.UnitPrice" type="number">
+      قیمت پیش‌فرض یک واحد از محصول است. دیدار هنگام اضافه‌شدن محصول به معامله یا سند مالی، این عدد را به‌عنوان قیمت اولیه در نظر می‌گیرد. مثلا اگر واحد محصول تعداد باشد و مقدار این فیلد هم برابر با 100000 باشد یعنی هر 1 عدد از این محصول ارزشی برابر با 100000 واحد دارد
+    </ParamField>
+
+    <ParamField path="Product.IsActive" type="boolean">
+      مشخص می‌کند محصول برای استفاده‌های جدید فعال باشد یا نه. اگر این فیلد ارسال نشود، مقدار پیش‌فرض `true` است.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — محصول فعال و قابل انتخاب است
+        - `false` — محصول برای انتخاب‌های جدید غیرفعال است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Product.Fields" type="object">
+      مقدار Custom Fieldهایی است که برای محصول ساخته‌اید. کلید هر پراپرتی، کلید فیلد و مقدار آن، دیتایی است که باید در همان فیلد ذخیره شود.
+
+      <Expandable title="وابستگی‌ها">
+        فقط از کلید Custom Fieldهایی استفاده کنید که برای محصول تعریف شده‌اند و مقدار را متناسب با نوع همان فیلد بفرستید.
+
+        - [Get Custom Fields](/untitled-page-12) — کلید فنی فیلد متناسب با Entity را بردارید
+      </Expandable>
+
+      <Expandable title="property">
+        <ParamField path="Product.Fields.Field_Key" type="string" required>
+          `Field_Key` نام ثابت نیست؛ آن را با کلید فنی واقعی Custom Field محصول، مثل `Field_6_0_26`، جایگزین کنید و مقدار موردنظر را روبه‌روی آن بفرستید.
+
+          <Expandable title="وابستگی‌ها">
+            فقط از کلید Custom Fieldهایی استفاده کنید که برای محصول تعریف شده‌اند و مقدار را متناسب با نوع همان فیلد بفرستید.
+
+            - [Get Custom Fields](/untitled-page-12) — کلید فنی فیلد متناسب با Entity را بردارید
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Product.ProductPrices[]" type="array">
+      قیمت پیش‌فرض محصول را برای ارزهای مختلف نگه می‌دارد. اگر با چند ارز کار می‌کنید، برای هر ارز یک آیتم جدا داخل این آرایه بفرستید.
+
+      <Expandable title="شرایط ارسال">
+        اگر فقط از `Product.UnitPrice` استفاده می‌کنید و قیمت جداگانه‌ای برای ارزهای دیگر ندارید، لازم نیست این آرایه را بفرستید.
+      </Expandable>
+
+      <Expandable title="property">
+        <ParamField path="Product.ProductPrices[].CurrencyId" type="string" required>
+          شناسه ارزی است که قیمت این آیتم براساس آن تعریف شده؛ عنوان یا علامت ارز را نفرستید و دقیقا `Id` ارز موجود در دیدار را قرار دهید.
+        </ParamField>
+
+        <ParamField path="Product.ProductPrices[].Price" type="number" required>
+          قیمت یک واحد از محصول در ارزی است که `CurrencyId` همین آیتم مشخص کرده است.
+        </ParamField>
+
+        <ParamField path="Product.ProductPrices[].decimalLength" type="number">
+          تعداد رقم‌های بخش اعشاری قیمت است؛ مثلا `0` یعنی بدون اعشار و `2` یعنی قیمت تا دو رقم اعشار نگه داشته شود.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Product.Variants[]" type="array">
+      زیرمحصول‌های محصول را مشخص می‌کند. زیرمحصول زمانی کاربرد دارد که یک محصول را در چند مدل یا حالت می‌فروشید؛ مثلا اشتراک سه‌ماهه و یک‌ساله.
+
+      <Expandable title="شرایط ارسال">
+        اگر محصول مدل یا حالت جداگانه ندارد، این فیلد را ارسال نکنید یا آرایه خالی بفرستید.
+      </Expandable>
+
+      <Expandable title="property">
+        <ParamField path="Product.Variants[].Title" type="string" required>
+          نامی است که این زیرمحصول با آن داخل دیدار نمایش داده می‌شود؛ مثلا «اشتراک یک‌ساله» یا «رنگ مشکی».
+        </ParamField>
+
+        <ParamField path="Product.Variants[].TitleForInvoice" type="string" required>
+          عنوانی است که برای همین زیرمحصول روی فاکتور و پیش‌فاکتور نمایش داده می‌شود.
+        </ParamField>
+
+        <ParamField path="Product.Variants[].IsDeleted" type="boolean">
+          مشخص می‌کند زیرمحصول حذف‌شده در نظر گرفته شود یا نه. مقدار پیش‌فرض `false` است.
+
+          <Expandable title="مقادیر مجاز">
+            - `true` — زیرمحصول حذف‌شده در نظر گرفته می‌شود
+            - `false` — زیرمحصول حذف‌شده نیست
+          </Expandable>
+        </ParamField>
+
+        <ParamField path="Product.Variants[].IsDefault" type="boolean" required>
+          مشخص می‌کند این زیرمحصول انتخاب پیش‌فرض محصول باشد یا نه.
+
+          <Expandable title="مقادیر مجاز">
+            - `true` — این زیرمحصول انتخاب پیش‌فرض است
+            - `false` — این زیرمحصول انتخاب پیش‌فرض نیست
+          </Expandable>
+        </ParamField>
+
+        <ParamField path="Product.Variants[].UnitPrice" type="number" required>
+          قیمت پیش‌فرض یک واحد از همین زیرمحصول است و می‌تواند با قیمت محصول اصلی یا زیرمحصول‌های دیگر فرق داشته باشد.
+        </ParamField>
+
+        <ParamField path="Product.Variants[].VariantCode" type="string" required>
+          کد اختصاصی زیرمحصول است و برای شناسایی آن بین زیرمحصول‌های همان محصول و سیستم‌های متصل استفاده می‌شود.
+
+          <Expandable title="شرایط ارسال">
+            کد هر زیرمحصول باید اختصاصی باشد و برای زیرمحصول دیگری تکرار نشود.
+          </Expandable>
+        </ParamField>
+
+        <ParamField path="Product.Variants[].Fields" type="object">
+          مقدار Custom Fieldهای مربوط به همین زیرمحصول را نگه می‌دارد. ساختارش مثل `Product.Fields` است.
+
+          <Expandable title="وابستگی‌ها">
+            فقط از کلید Custom Fieldهایی استفاده کنید که برای محصول تعریف شده‌اند و مقدار را متناسب با نوع همان فیلد بفرستید.
+
+            - [Get Custom Fields](/untitled-page-12) — کلید فنی فیلد متناسب با Entity را بردارید
+          </Expandable>
+
+          <Expandable title="property">
+            <ParamField path="Product.Variants[].Fields.Field_Key" type="string">
+              `Field_Key` را با کلید فنی واقعی Custom Field محصول جایگزین کنید و مقدار موردنظر برای همین زیرمحصول را روبه‌روی آن بفرستید.
+
+              <Expandable title="وابستگی‌ها">
+                فقط از کلید Custom Fieldهایی استفاده کنید که برای محصول تعریف شده‌اند و مقدار را متناسب با نوع همان فیلد بفرستید.
+
+                - [Get Custom Fields](/untitled-page-12) — کلید فنی فیلد متناسب با Entity را بردارید
+              </Expandable>
+            </ParamField>
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## قواعد و محدودیت‌ها
+
+- مقدار `Product.Code` باید برای هر محصول اختصاصی و غیرتکراری باشد.
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+    "Product": {
+        "Title": "عنوان تست محصول",
+         "Code": "120235",
+        "Unit": "تعداد",
+         "UnitPrice": 200000,
+         "Description": "test description",
+         "IsActive": true, 
+        "ProductCategoryId": "2c0ce978-8005-4f01-8c6a-006939f4ce33", 
+        "Variants": [
+            {
+                "Title": "عنوان تست متغیر",
+                "TitleForInvoice": "عنوان تست متغیر", 
+                "IsDeleted": false, 
+                "IsDefault": true, 
+                "UnitPrice": 250000,
+                "VariantCode": "10",
+            }
+        ],
+        "Fields": {
+            "Field_6_0_26": "10"
+        },
+        "ProductPrices": [
+            {
+                "CurrencyId": "96107",
+                "Price": 100000,
+                "decimalLength": 0
+            },
+            {
+                "CurrencyId": "221243",
+                "Price": 2,
+                "decimalLength": 2
+            }
+        ]
+    }
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location 'https://app.didar.me/api/product/save?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+    "Product": {
+         
+        "Title": "عنوان تست محصول",
+         "Code": "120235",
+        "Unit": "تعداد",
+         "UnitPrice": 200000,
+         "Description": "test description",
+         "IsActive": true, 
+        "ProductCategoryId": "2c0ce978-8005-4f01-8c6a-006939f4ce33", 
+        "Variants": [
+            {
+                
+                
+                "Title": "عنوان تست متغیر",
+                "TitleForInvoice": "عنوان تست متغیر", 
+                "IsDeleted": false, 
+                "IsDefault": true, 
+                "UnitPrice": 250000,
+                "VariantCode": "10",
+            }
+        ],
+        "Fields": {
+            "Field_6_0_26": "10"
+        },
+        "ProductPrices": [
+            {
+                "CurrencyId": "96107",
+                "Price": 100000,
+                "decimalLength": 0
+            },
+            {
+                "CurrencyId": "221243",
+                "Price": 2,
+                "decimalLength": 2
+            }
+        ]
+    }
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "412c14f0-aef9-41b7-b186-53032c8e1e2b",
+        "Title": "عنوان تست محصول",
+        "Code": "120235",
+        "DidarId": 5027894,
+        "Description": "test description",
+        "ProfitMargin": 0.0,
+        "TitleForInvoice": "عنوان تست محصول",
+        "Unit": "تعداد",
+        "UnitPrice": 200000.0,
+        "Fields": "{\"Field_6_0_26\":\"10\"}",
+        "IsActive": true,
+        "Category": null,
+        "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+        "ProductPrices": [
+            {
+                "Id": 4370799,
+                "ProductId": "412c14f0-aef9-41b7-b186-53032c8e1e2b",
+                "CurrencyId": 96107,
+                "Price": 200000.0
+            }
+        ],
+        "Variants": [
+            {
+                "Id": "4364ffa6-5b8e-486f-8732-7b902f208f47",
+                "ProductId": "412c14f0-aef9-41b7-b186-53032c8e1e2b",
+                "Title": "عنوان تست متغیر",
+                "DidarId": 2569686,
+                "TitleForInvoice": "عنوان تست متغیر",
+                "IsDeleted": false,
+                "IsDefault": true,
+                "UnitPrice": 250000.0,
+                "VariantCode": "10",
+                "VariantPrices": [
+                    {
+                        "Id": 2572466,
+                        "CurrencyId": 96107,
+                        "Price": 0.0,
+                        "VariantId": "4364ffa6-5b8e-486f-8732-7b902f208f47"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+</ResponseExample>
+
+## لینک‌های مرتبط
+
+- [Get Product Categories](/product-category)
+- [Get Custom Fields](/untitled-page-12)

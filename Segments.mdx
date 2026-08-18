@@ -1,0 +1,137 @@
+---
+title: "Segments "
+tag: "POST"
+sidebarTitle: "Segments"
+---
+
+# گروه بندی ها  — اطلاعات پایه
+
+گروه‌بندی‌ها برای دسته‌بندی اشخاص و شرکت‌ها استفاده می‌شوند و می‌توانند ساختار چندسطحی داشته باشند.‎ این Endpoint گروه‌های موجود یا زیرگروه‌های یک گروه مشخص را برمی‌گرداند تا ID آن‌ها را برای مخاطبان استفاده کنید.‎
+
+```http
+POST {{baseURL}}/api/Segment/GetList?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="ParentId" type="string">
+  .شناسه رکورد گروه برای دریافت لیست زیرگروه های مرتبط با این گروه <br />اگر این فیلد را ارسال کنید فقط زیرگروه های مرتبط با شناسه گروهی که ارسال کردید در پاسخ
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "ParentId": "e381080f-14fe-4335-b211-7187aae983fa"
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/Segment/GetList?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "ParentId": "e381080f-14fe-4335-b211-7187aae983fa"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON-with parentId)
+{
+    "Response": [
+        {
+            "Id": "00058fe3-3838-464f-8ed8-c952b7fff243",
+            "Title": "sub-test1",
+            "ParentId": "e381080f-14fe-4335-b211-7187aae983fa",
+            "ParentTitle": "test1",
+            "BackgroundColor": "#080808",
+            "FullTitle": "test1 / sub-test1",
+            "ShowInAddContactForm": false,
+            "ShowInAddDealForm": false,
+            "ShowInAddCaseForm": false,
+            "Segments": []
+        },
+        {
+            "Id": "2000fc65-443f-4c9f-8b87-a0cfef798a66",
+            "Title": "زیر مجموعه test1",
+            "ParentId": "e381080f-14fe-4335-b211-7187aae983fa",
+            "ParentTitle": "test1",
+            "BackgroundColor": "#080808",
+            "FullTitle": "test1 / زیر مجموعه test1",
+            "ShowInAddContactForm": true,
+            "ShowInAddDealForm": true,
+            "ShowInAddCaseForm": true,
+            "Segments": []
+        }
+    ]
+}
+```
+
+```json Request Response (JSON-without parentId)
+{
+    "Response": [
+        {
+            "Id": "e381080f-14fe-4335-b211-7187aae983fa",
+            "Title": "test1",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "ParentTitle": "",
+            "BackgroundColor": "#080808",
+            "FullTitle": " / test1",
+            "ShowInAddContactForm": true,
+            "ShowInAddDealForm": true,
+            "ShowInAddCaseForm": true,
+            "Segments": [
+                {
+                    "Id": "00058fe3-3838-464f-8ed8-c952b7fff243",
+                    "Title": "sub-test1",
+                    "ParentId": "e381080f-14fe-4335-b211-7187aae983fa",
+                    "ParentTitle": "test1",
+                    "BackgroundColor": "#080808",
+                    "FullTitle": "test1 / sub-test1",
+                    "ShowInAddContactForm": false,
+                    "ShowInAddDealForm": false,
+                    "ShowInAddCaseForm": false,
+                    "Segments": []
+                },
+                {
+                    "Id": "2000fc65-443f-4c9f-8b87-a0cfef798a66",
+                    "Title": "زیر مجموعه test1",
+                    "ParentId": "e381080f-14fe-4335-b211-7187aae983fa",
+                    "ParentTitle": "test1",
+                    "BackgroundColor": "#080808",
+                    "FullTitle": "test1 / زیر مجموعه test1",
+                    "ShowInAddContactForm": true,
+                    "ShowInAddDealForm": true,
+                    "ShowInAddCaseForm": true,
+                    "Segments": []
+                }
+            ]
+        }
+    ]
+}
+```
+
+</ResponseExample>
+
+## لینک های مرتبط
+
+- [Create Person](/untitled-page-14)
+- [Update Person](/untitled-page-15)
+- [Search Person](/untitled-page-18)
+- [Create Company](/untitled-page-19)
+- [Update Company](/untitled-page-20)
+- [Search Company](/untitled-page-22)

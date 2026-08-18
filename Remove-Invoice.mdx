@@ -1,0 +1,71 @@
+---
+title: "Remove Invoice"
+sidebarTitle: "Remove Invoice"
+description: "حذف یک فاکتور موجود در دیدار با استفاده از شناسه فاکتور"
+tag: "POST"
+---
+
+# حذف فاکتور
+
+این Endpoint برای حذف یک فاکتور موجود در دیدار استفاده می‌شود. برای مشخص کردن فاکتوری که باید حذف شود، شناسه همان فاکتور را در فیلد `id` داخل بدنه درخواست ارسال کنید.
+
+```http
+POST {{baseURL}}/api/AccountingInvoice/Remove?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="id" type="number" required>
+  شناسه فاکتوری است که می‌خواهید حذف کنید. این مقدار باید `Id` همان فاکتور موجود در دیدار باشد.
+</ParamField>
+
+## قواعد و محدودیت‌ها
+
+- تنها فیلد الزامی در بدنه درخواست `id` است.
+- مقدار `id` باید شناسه فاکتوری باشد که قصد حذف آن را دارید.
+- در پاسخ موفق این Endpoint، مقدار `Response` برابر `null` برگردانده می‌شود.
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "id": 2377534
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location '{{baseURL}}/api/AccountingInvoice/Remove?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "id": 2377534
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+  "Response": null
+}
+```
+
+</ResponseExample>
+
+## لینک‌های مرتبط
+
+- [Create Invoice](/Create-Invoice)
+- [Update Invoice](/Update-Invoice)

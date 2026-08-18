@@ -1,0 +1,436 @@
+---
+title: "Create Case"
+tag: "POST"
+sidebarTitle: "Create Case"
+---
+
+{/*  Endpoint: Create Case | /untitled-page-29  */}
+
+## ایجاد کارت
+
+کارت برای پیگیری فرایندهایی استفاده می‌شود که الزاماً فروش نیستند؛ مثل تیکت پشتیبانی، راه‌اندازی مشتری یا یک کار در کانبان.‎ با این Endpoint می‌توانید کارت جدیدی بسازید و نوع، مرحله، مسئول، مخاطبان، معامله مرتبط، اولویت، سررسید و فیلدهای اضافه آن را مشخص کنید.‎
+
+```http
+POST {{baseURL}}/api/Case/Save_v2?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Case" type="object">
+  اطلاعات کارت داخل این آبجکت ارسال می‌شود؛ از عنوان و نوع کارت گرفته تا مسئول، کاریز، مرحله و رکوردهای مرتبط.
+
+  <Expandable title="property">
+    <ParamField path="Case.Title" type="string" required>
+      عنوان کارت که در نمای کاریز و فهرست کارت‌ها نمایش داده می‌شود.
+    </ParamField>
+
+    <ParamField path="Case.PipelineStageId" type="string" required>
+      شناسه مرحله کاریز کارت است و مشخص می‌کند کارت الان در کدام مرحله فرایند قرار دارد.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه مرحله باید متعلق به یکی از کاریزهای کارت در همین اکانت باشد.
+
+        - [List Case Pipelines](/List-Case-Pipelines) — `Response[].Stages[].Id` شناسه مرحله کاریز کارت است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.OwnerId" type="string">
+      شناسه User مسئول رسیدگی و پیگیری کارت است.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+        - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.Description" type="string">
+      توضیحات تکمیلی کارت برای ثبت موضوع، نیاز یا جزئیات پیگیری.
+    </ParamField>
+
+    <ParamField path="Case.CompanyId" type="string">
+      شناسه شرکت مرتبط با کارت است. برای زمانی که میخواهید کارت به یک شرکت هم متصل باشد
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام شرکت را نمی‌پذیرد؛ باید `Id` شرکت موجود در دیدار را بفرستید.
+
+        - [Create Company](/Create-Company) — اگر شرکت هنوز ساخته نشده است
+        - [Get Company By Id](/Get-Company-By-Id) — اگر `Id` شرکت را دارید
+        - [Search Company](/Search-Company) — برای جست‌وجوی شرکت
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.PersonId" type="string">
+      شناسه شخص اصلی مرتبط با کارت است؛ یعنی کارتی که فرایند یا پیگیری آن برای این شخص انجام می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام یا موبایل شخص را نمی‌پذیرد؛ باید `Id` شخص موجود در دیدار را بفرستید.
+
+        - [Create Person](/Create-Person) — اگر شخص هنوز در دیدار ساخته نشده است
+        - [Get Person By Id](/Get-Person-By-Id) — اگر `Id` شخص را دارید
+        - [Get Person By Mobile](/Get-Person-By-Mobile) — اگر شماره موبایل شخص را دارید
+        - [Search Person](/Search-Person) — برای جست‌وجوی شخص
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.CaseCategoryId" type="string" required>
+      شناسه دسته‌بندی کارت که نوع یا فرایند کارت را مشخص می‌کند.
+
+      <Expandable title="مقادیر مجاز">
+        - `00000000-0000-0000-0000-000000000000` — کارت فعالیت‌محور؛ امکان اتصال فعالیت دارد
+        - `cd06853c-35df-4d9b-b124-9556474d84a1` — کارت کانبان؛ برای حرکت در مراحل فرایند و بدون افزودن فعالیت
+        - `37375848-a403-4186-8460-d45754f49e4c` — کارت تیکت؛ برای پیگیری ارتباط تیکتی با مشتری
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.DealId" type="string">
+      شناسه معامله‌ای است که این کارت از آن ایجاد شده یا باید به آن مرتبط باشد.
+
+      <Expandable title="وابستگی‌ها">
+        مقدار این فیلد باید `Id` یک معامله موجود در دیدار باشد.
+
+        - [Create Deal](/Create-Deal) — اگر معامله هنوز ساخته نشده است
+        - [Get Deal By Id](/Get-Deal-By-Id) — اگر `Id` معامله را دارید
+        - [Search Deal](/Search-Deal) — برای جست‌وجوی معامله
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.IsDeleted" type="boolean">
+      مشخص می‌کند کارت حذف شده است یا همچنان فعال است.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — کارت حذف‌شده در نظر گرفته می‌شود
+        - `false` — کارت فعال است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.Status" type="string">
+      وضعیت جاری کارت در چرخه انجام کار.
+
+      <Expandable title="مقادیر مجاز">
+        - `InProgress` — کارت در حال انجام است
+        - `Done` — کار کارت تمام شده است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.DueDate" type="string">
+      تاریخ سررسید کارت؛ زمانی که انتظار می‌رود کار تا آن انجام شود.
+    </ParamField>
+
+    <ParamField path="Case.Priority" type="number">
+      اولویت کارت برای مرتب‌سازی و تعیین تقدم رسیدگی.
+
+      <Expandable title="مقادیر مجاز">
+        - `-2` — کمترین اهمیت و مقدار پیش‌فرض
+        - `-1` — اهمیت کم
+        - `0` — اهمیت متوسط
+        - `1` — اهمیت بالا
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.UserIds[]" type="array">
+      فهرست شناسه مسئول های دیگری است که باید به کارت مرتبط باشند. برای زمانی که بیش از یک مسئول به کارت مرتبط هستند
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+        - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+      </Expandable>
+
+      <Expandable title="property">
+        <ParamField path="Case.UserIds[]" type="string">
+          فهرست شناسه Userهای دیگری است که باید به کارت مرتبط باشند.
+
+          <Expandable title="وابستگی‌ها">
+            این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+            - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.OtherContactIds" type="string">
+      شناسه سایر مخاطبان مرتبط با کارت است؛ یعنی افراد یا شرکت‌هایی غیر از مخاطب اصلی که باید به کارت وصل باشند.
+
+      <Expandable title="وابستگی‌ها">
+        هر مقدار باید `Id` یک شخص یا شرکت موجود در دیدار باشد.
+
+        - [Create Person](/Create-Person) — ساخت شخص جدید
+        - [Get Person By Mobile](/Get-Person-By-Mobile) — پیداکردن شخص با موبایل
+        - [Search Person](/Search-Person) — جست‌وجوی شخص
+        - [Create Company](/Create-Company) — ساخت شرکت جدید
+        - [Search Company](/Search-Company) — جست‌وجوی شرکت
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.ResultNote" type="string">
+      نتیجه یا جمع‌بندی ثبت‌شده پس از تکمیل کارت.
+    </ParamField>
+
+    <ParamField path="Case.VisibilityType" type="string">
+      سطح مشاهده کارت؛ تعیین می‌کند چه کاربران یا گروه‌هایی امکان دیدن آن را دارند.
+
+      <Expandable title="مقادیر مجاز">
+        - `0 / Owner` — فقط مسئول کارت
+        - `1 / OwnerGroup` — مسئول و گروه او
+        - `2 / OwnerSubGroup` — مسئول، گروه و زیرگروه او
+        - `3 / All` — همه کاربران مجاز
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.Fields[]" type="object">
+      مقدار Custom Fieldهای کارت است. کلید هر پراپرتی، کلید فنی فیلد و مقدار آن، دیتایی است که باید در همان فیلد ذخیره شود.
+
+      <Expandable title="وابستگی‌ها">
+        فقط از کلید Custom Fieldهایی استفاده کنید که `FieldType` آن‌ها مربوط به Case است.
+
+        - [Get Custom Fields](/Get-Custom-Fields) — کلید فنی فیلد متناسب با Entity را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.CanDelete" type="boolean">
+      مشخص می‌کند کاربر فعلی اجازه حذف کارت را دارد یا خیر.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — کاربر اجازه حذف کارت دارد
+        - `false` — کاربر اجازه حذف کارت ندارد
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.CanEdit" type="boolean">
+      مشخص می‌کند کاربر فعلی اجازه ویرایش کارت را دارد یا خیر.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — کاربر اجازه ویرایش کارت دارد
+        - `false` — کاربر اجازه ویرایش کارت ندارد
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.IsCaseCategoryActive" type="boolean">
+      مشخص می‌کند دسته‌بندی فعلی کارت فعال و قابل استفاده است یا خیر.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — نوع فعلی کارت فعال است
+        - `false` — نوع فعلی کارت غیرفعال است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.InProgressTime" type="string">
+      تاریخ و زمان ورود کارت به وضعیت در حال انجام.
+    </ParamField>
+
+    <ParamField path="Case.NextActivityDate" type="string">
+      تاریخ نزدیک‌ترین فعالیت باز مرتبط با کارت.
+    </ParamField>
+
+    <ParamField path="Case.LastActivityUpdateTime">
+      تاریخ و زمان آخرین تغییر در فعالیت‌های مرتبط با کارت.
+    </ParamField>
+
+    <ParamField path="Case.DoneTime" type="string">
+      تاریخ و زمان تکمیل کارت.
+    </ParamField>
+
+    <ParamField path="Case.PipelineChangeTime" type="string">
+      تاریخ و زمان آخرین انتقال کارت بین کاریزها یا مراحل.
+
+      <ParamField path="Case.LabelIds" type="array">
+        فهرست شناسه برچسب‌هایی است که باید به کارت وصل شوند.
+
+        <Expandable title="وابستگی‌ها">
+          هر مقدار باید `Id` یکی از برچسب‌های کارت باشد.
+
+          - [Case Labels](/Case-Labels) — `Id` برچسب کارت را بردارید
+        </Expandable>
+      </ParamField>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Case": {
+    "Title": " 1231 123123123 تست",
+    "PipelineStageId": "422dfd72-549e-4443-9c32-6336e2275059",
+    "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+    "Description": "asdfas asdf adfs asdf",
+    "CompanyId": "c867d72d-a5ca-47dd-8e0c-e65db830dea6",
+    "PersonId": "c86978d0-7d19-45ad-9c54-bfb270b97c07",
+    "CaseCategoryId": "37375848-a403-4186-8460-d45754f49e4c",
+    "DealId": "16d952cc-2321-4680-a951-957c3eb21423",
+    "IsDeleted": false,
+    "Status": "InProgress",
+    "DueDate": "2025-08-31T11:19:58.4577817Z",
+    "Priority": -2,
+    "UserIds": [
+      "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+      "04c4f658-64a5-4231-8850-36089c8a77d5"
+    ],
+    "OtherContactIds": "b868fc4c-f8bc-460e-ac4e-a302cae45a1a,c8968598-9720-494c-8894-cbf728f40255",
+    "ResultNote": "sdfasd  asdf a asdf",
+    "VisibilityType": "OwnerSubGroup",
+    "Fields": {
+      "Field_8785_0_13": "123123"
+    },
+    "CanDelete": true,
+    "CanEdit": true,
+    "IsCaseCategoryActive": null,
+    "InProgressTime": "2025-08-31T11:19:58.4577817Z",
+    "NextActivityDate": "2000-08-31T11:19:58.4577817Z",
+    "LastActivityUpdateTime": null,
+    "DoneTime": "2025-08-31T11:19:58.4577817Z",
+    "PipelineChangeTime": "2025-08-31T11:19:58.4577817Z",
+    "Category": null,
+    "IdleStatus": null,
+    "RottenInPipelineStatus": null,
+    "RottenInStageStatus": null,
+    "CaseRating": null
+  },
+    "LabelIds": [
+      "196d9122-3547-4386-b316-06a792e78958",
+      "19c80b4f-6b4a-4bdc-ab06-76d891406d2f"
+    ]
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/Case/Save_v2?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Case": {
+    "Title": " 1231 123123123 تست",
+    "PipelineStageId": "422dfd72-549e-4443-9c32-6336e2275059",
+    "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+    "Description": "asdfas asdf adfs asdf",
+    "CompanyId": "c867d72d-a5ca-47dd-8e0c-e65db830dea6",
+    "PersonId": "c86978d0-7d19-45ad-9c54-bfb270b97c07",
+    "CaseCategoryId": "37375848-a403-4186-8460-d45754f49e4c",
+    "DealId": "16d952cc-2321-4680-a951-957c3eb21423",
+    "IsDeleted": false,
+    "Status": "InProgress",
+    "DueDate": "2025-08-31T11:19:58.4577817Z",
+    "Priority": -2,
+    "UserIds": [
+      "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+      "04c4f658-64a5-4231-8850-36089c8a77d5"
+    ],
+    "OtherContactIds": "b868fc4c-f8bc-460e-ac4e-a302cae45a1a,c8968598-9720-494c-8894-cbf728f40255",
+    "ResultNote": "sdfasd  asdf a asdf",
+    "VisibilityType": "OwnerSubGroup",
+    "Fields": {
+      "Field_8785_0_13": "123123"
+    },
+    "CanDelete": true,
+    "CanEdit": true,
+    "IsCaseCategoryActive": null,
+    "InProgressTime": "2025-08-31T11:19:58.4577817Z",
+    "NextActivityDate": "2000-08-31T11:19:58.4577817Z",
+    "LastActivityUpdateTime": null,
+    "DoneTime": "2025-08-31T11:19:58.4577817Z",
+    "PipelineChangeTime": "2025-08-31T11:19:58.4577817Z",
+    "Category": null,
+    "IdleStatus": null,
+    "RottenInPipelineStatus": null,
+    "RottenInStageStatus": null,
+    "CaseRating": null
+  },
+  "SetLabelDto": {
+    "UpdatedLabels": [],
+    "AddedLabels": [],
+    "LabelIds": [
+      "196d9122-3547-4386-b316-06a792e78958",
+      "19c80b4f-6b4a-4bdc-ab06-76d891406d2f"
+    ]
+  }
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "b83965ac-5a28-4be2-a844-e783ba2f254c",
+        "OwnerId": "00000000-0000-0000-0000-000000000000",
+        "OwnerId_Old": "00000000-0000-0000-0000-000000000000",
+        "Title": " 1231  تست",
+        "CanDelete": true,
+        "CanEdit": true,
+        "IsCaseCategoryActive": true,
+        "Description": "",
+        "CompanyId": "00000000-0000-0000-0000-000000000000",
+        "PersonId": "00000000-0000-0000-0000-000000000000",
+        "ContactId": "00000000-0000-0000-0000-000000000000",
+        "IsDeleted": false,
+        "Status": "InProgress",
+        "CreateTime": "2026-07-28T16:35:51.9663563Z",
+        "DueDate": "2026-07-28T16:35:51.9663563Z",
+        "InProgressTime": "2026-07-28T16:35:51.9663563Z",
+        "DoneTime": "2026-07-28T16:35:51.9663563Z",
+        "CaseType": "Simple",
+        "DealId": "00000000-0000-0000-0000-000000000000",
+        "LabelId": "048cba4c-c168-421d-949b-4ca2bb84ebb4",
+        "Code": 4,
+        "Color": "",
+        "Priority": 0,
+        "UserIds": [],
+        "PipelineStageId": "2d34c424-62e5-4fcc-b0f0-bfbd11bf440a",
+        "PipelineId": "f7861340-b22c-49b1-bb5a-d96b5cdba979",
+        "PipelineChangeTime": "2026-07-28T16:35:51.9663563Z",
+        "CaseCategoryId": "00000000-0000-0000-0000-000000000000",
+        "OtherContactIds": null,
+        "ResultNote": null,
+        "NextActivityDate": null,
+        "LastActivityUpdateTime": null,
+        "VisibilityType": "Owner",
+        "CategoryType": "ActivityOriented",
+        "CreatorId": "00000000-0000-0000-0000-000000000000",
+        "Creator": {
+            "UserId": "00000000-0000-0000-0000-000000000000",
+            "DisplayName": "کاربر میهمان ",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+            "Email": ""
+        },
+        "Owner": {
+            "UserId": "00000000-0000-0000-0000-000000000000",
+            "DisplayName": "کاربر میهمان ",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+            "Email": ""
+        },
+        "Category": null,
+        "Fields": {},
+        "Contact": null,
+        "Person": null,
+        "Company": null,
+        "OtherContacts": [],
+        "Deal": null,
+        "_Type": null,
+        "LabelIds": [
+            "048cba4c-c168-421d-949b-4ca2bb84ebb4"
+        ],
+        "IdleStatus": null,
+        "RottenInPipelineStatus": null,
+        "RottenInStageStatus": null,
+        "CaseRating": null
+    }
+}
+```
+
+</ResponseExample>

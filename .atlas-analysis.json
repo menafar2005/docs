@@ -1,0 +1,120 @@
+{
+  "projectType": "api-service",
+  "projectName": "Didar CRM",
+  "projectDescription": "A REST API for integrating external services with Didar CRM — enabling developers to manage contacts, deals, activities, products, and more programmatically.",
+  "theme": "luma",
+  "primaryColor": "#ef7025",
+  "lightColor": "#eec9bc",
+  "darkColor": "#4fa1ab",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "authentication"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/data-format",
+              "concepts/pagination",
+              "concepts/custom-fields"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "integrations/webhooks",
+              "integrations/wordpress-woocommerce",
+              "integrations/sms-panel",
+              "integrations/voip"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/overview",
+              "api-reference/errors"
+            ]
+          },
+          {
+            "group": "Contacts",
+            "pages": [
+              "api-reference/contacts/save",
+              "api-reference/contacts/search"
+            ]
+          },
+          {
+            "group": "Deals",
+            "pages": [
+              "api-reference/deals/save",
+              "api-reference/deals/search",
+              "api-reference/deals/change-status"
+            ]
+          },
+          {
+            "group": "Activities & Notes",
+            "pages": [
+              "api-reference/activities/save",
+              "api-reference/activities/search",
+              "api-reference/activities/get",
+              "api-reference/notes/save"
+            ]
+          },
+          {
+            "group": "Lookups",
+            "pages": [
+              "api-reference/lookups/pipelines",
+              "api-reference/lookups/activity-types",
+              "api-reference/lookups/users",
+              "api-reference/lookups/products",
+              "api-reference/lookups/custom-fields",
+              "api-reference/lookups/tags-loss-reasons"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "API Key authentication via query string",
+    "Create, update, and search Contacts (persons and companies)",
+    "Create, update, search, and change status of Deals",
+    "Log and query Activities and Notes linked to contacts and deals",
+    "Rich custom field filtering with AND/OR logic and 10+ condition types",
+    "Pagination support for all list/search endpoints",
+    "Lookup endpoints for Pipelines, Activity Types, Users, Products, Tags, and Loss Reasons",
+    "Webhook support for real-time event notifications",
+    "Integration plugins for WordPress/WooCommerce, VoIP, SMS panels, and accounting software"
+  ],
+  "publicApiSurface": [
+    "POST /api/contact/save",
+    "POST /api/contact/search",
+    "POST /api/deal/save",
+    "POST /api/deal/search",
+    "POST /api/deal/changestatus",
+    "POST /api/activity/save",
+    "POST /api/activity/search",
+    "GET  /api/activity/get",
+    "POST /api/note/save",
+    "GET  /api/pipeline/list",
+    "GET  /api/activitytype/list",
+    "GET  /api/user/list",
+    "GET  /api/product/list",
+    "POST /api/product/search",
+    "GET  /api/customfield/list",
+    "GET  /api/tag/list",
+    "GET  /api/lossreason/list"
+  ]
+}

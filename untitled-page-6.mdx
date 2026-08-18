@@ -1,0 +1,330 @@
+---
+title: "Update Activity"
+tag: "POST"
+sidebarTitle: "Update Activity"
+---
+
+# ویرایش فعالیت
+
+این Endpoint یک فعالیت موجود را با استفاده از `Activity.Id` به‌روزرسانی می‌کند. می‌توان اطلاعات اصلی فعالیت، وضعیت انجام، نتیجه، زمان‌بندی، مسئول، یادآورها و ارتباط آن با سایر رکوردها را تغییر داد.
+
+```http
+POST {{baseURL}}/api/activity/save?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Activity" type="object" required>
+  اطلاعات فعالیتی که باید ایجاد یا ویرایش شود. فیلدهای داخل این آبجکت زمان‌بندی، مسئول، ارتباط با سایر رکوردها و وضعیت انجام فعالیت را تعیین می‌کنند.
+
+  <Expandable title="property">
+    <ParamField path="Activity.Id" type="string" required>
+      شناسه یکتای فعالیتی که باید ویرایش شود؛ Backend با این شناسه فعالیت موجود را از عملیات ایجاد تشخیص می‌دهد.
+    </ParamField>
+
+    <ParamField path="Activity.ActivityTypeId" type="string" required>
+      شناسه نوع فعالیت؛ مشخص می‌کند فعالیت از چه نوعی مانند تماس، جلسه یا پیگیری است و باید از فهرست نوع‌های فعالیت دریافت شود.
+    </ParamField>
+
+    <ParamField path="Activity.Title" type="string">
+      عنوان کوتاه فعالیت که در تقویم، فهرست فعالیت‌ها و رکورد مرتبط به کاربر نمایش داده می‌شود.
+    </ParamField>
+
+    <ParamField path="Activity.OwnerId" type="string">
+      شناسه کاربری که مسئول انجام و پیگیری فعالیت است. فعالیت در فهرست و تقویم این کاربر قرار می‌گیرد. شناسه کاربران را می توانید از اندپوینت زیر دریافت کنید: <br />[User List ](/untitled-page-13)
+    </ParamField>
+
+    <ParamField path="Activity.Note" type="string">
+      توضیحات و جزئیات لازم برای انجام فعالیت؛ این متن پیش از انجام فعالیت در اختیار مسئول آن قرار می‌گیرد.
+    </ParamField>
+
+    <ParamField path="Activity.IsDone" type="boolean">
+      مشخص می‌کند فعالیت انجام شده است یا هنوز باز است؛ `true` برای انجام‌شده و `false` برای انجام‌نشده.
+    </ParamField>
+
+    <ParamField path="Activity.ResultNote" type="string">
+      متن نتیجه فعالیت؛ برای ثبت خروجی تماس، جلسه یا پیگیری پس از انجام فعالیت استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="Activity.IsDeleted" type="boolean">
+      مشخص می‌کند فعالیت در وضعیت حذف‌شده قرار دارد یا فعال است.
+    </ParamField>
+
+    <ParamField path="Activity.IsPinned" type="boolean">
+      مشخص می‌کند فعالیت برای دسترسی سریع در رکورد مرتبط سنجاق شود.
+    </ParamField>
+
+    <ParamField path="Activity.DueDate" type="string">
+      تاریخ و زمان برنامه‌ریزی‌شده برای شروع یا سررسید فعالیت.
+    </ParamField>
+
+    <ParamField path="Activity.Duration" type="number">
+      مدت زمان پیش‌بینی‌شده یا ثبت‌شده برای فعالیت برحسب دقیقه؛ برای تعیین بازه زمانی فعالیت استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="Activity.DoneDate" type="string">
+      تاریخ و زمانی که فعالیت عملاً انجام شده است؛ معمولاً هنگام ثبت نتیجه فعالیت استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="Activity.DealId" type="null">
+      شناسه معامله مرتبط با فعالیت؛ با ارسال آن، فعالیت در سوابق و برنامه پیگیری همان معامله نمایش داده می‌شود. شناسه معامله مربوطه را می توانید از یکی از اندپوینت های زیر دریافت کنید:<br />[ <u>Create Deal</u>](https://didar-crm.mintlify.site/untitled-page-23)<br />[<u>Search Deal</u>](https://didar-crm.mintlify.site/untitled-page-27)
+    </ParamField>
+
+    <ParamField path="Activity.CaseId" type="string">
+      شناسه کارت مرتبط با فعالیت؛ برای اتصال فعالیت به یک کارت استفاده می‌شود. شناسه کارت مربوطه را می توانید از یکی از اندپوینت های زیر دریافت کنید:<br />[ <u>Create Case</u>](https://didar-crm.mintlify.site/untitled-page-29)<br />[<u>Search Case</u>](https://didar-crm.mintlify.site/untitled-page-31)
+    </ParamField>
+
+    <ParamField path="Activity.ContactIds[]" type="array">
+      فهرست شناسه اشخاص یا شرکت‌های مرتبط با فعالیت؛ فعالیت در سابقه مخاطبان انتخاب‌شده نیز قابل مشاهده خواهد بود. شناسه مخاطبان مرتبط را می توانید از یک از اندپوینت های زیر دریافت کنید:<br />[ <u>Get Person By Mobile</u>](https://didar-crm.mintlify.site/untitled-page-17)<br />[<u>Search Person</u>](https://didar-crm.mintlify.site/untitled-page-18)<br />[<u>Create Person</u>](https://didar-crm.mintlify.site/untitled-page-14)<br /><br />[<u>Create Company</u>](https://didar-crm.mintlify.site/untitled-page-19)<br />[<u>Search Company</u>](https://didar-crm.mintlify.site/untitled-page-22)
+
+      <Expandable title="property">
+        <ParamField path="Activity.ContactIds[]" type="string">
+          فهرست شناسه اشخاص یا شرکت‌های مرتبط با فعالیت؛ فعالیت در سابقه مخاطبان انتخاب‌شده نیز قابل مشاهده خواهد بود.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.CreatorId" type="string">
+      شناسه کاربری که فعالیت را برای اولین‌بار ایجاد کرده است.
+    </ParamField>
+
+    <ParamField path="Activity.RecurrenceType" type="string">
+      الگوی تکرار فعالیت؛ مشخص می‌کند فعالیت یک‌باره یا با تناوب زمانی مشخص تکرار شود.
+    </ParamField>
+
+    <ParamField path="Activity.RecurrenceData" type="number">
+      مقدار عددی تنظیمات تکرار که در کنار `RecurrenceType` فاصله یا تعداد واحدهای تکرار را تعیین می‌کند.
+    </ParamField>
+
+    <ParamField path="Activity.RecurrenceEndDate" type="string">
+      آخرین تاریخ مجاز برای تکرار فعالیت؛ پس از این تاریخ رخداد جدیدی از فعالیت دوره‌ای ساخته نمی‌شود.
+    </ParamField>
+
+    <ParamField path="Activity.DueDateType" type="string">
+      نوع دقت زمانی سررسید فعالیت؛ تعیین می‌کند مقدار `DueDate` دارای تاریخ و ساعت، فقط تاریخ یا بدون زمان مشخص است.
+    </ParamField>
+
+    <ParamField path="Activity.DoneDateType" type="string">
+      نوع دقت زمانی تاریخ انجام فعالیت؛ نحوه تفسیر مقدار `DoneDate` را مشخص می‌کند.
+    </ParamField>
+
+    <ParamField path="Activity.Tags[]" type="array">
+      لیست تگ های مرتبط با فعالیت. برای دریافت شناسه تگ ها می توانید از اندپوینت زیر استفاده کنید: <br />[Tags ](/Tags)
+
+      <Expandable title="property">
+        <ParamField path="Activity.Tags[].TagId" type="string">
+          شناسه تگ مرتبط با فعالیت
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.Notifies[]" type="array">
+      فهرست یادآوری‌های فعالیت؛ هر عضو مشخص می‌کند اعلان برای چه گروهی و چه مدت پیش از فعالیت ارسال شود.
+
+      <Expandable title="property">
+        <ParamField path="Activity.Notifies[].Type" type="string">
+          نوع اعلان فعالیت؛ کانال یا شیوه یادآوری را مشخص می‌کند.
+        </ParamField>
+
+        <ParamField path="Activity.Notifies[].Group" type="string">
+          گروه دریافت‌کننده یادآوری؛ مشخص می‌کند اعلان برای مسئول یا گروه دیگری از کاربران ایجاد شود.
+        </ParamField>
+
+        <ParamField path="Activity.Notifies[].NotifyOffset" type="number">
+          فاصله زمانی ارسال یادآوری تا موعد فعالیت؛ واحد پایه در نمونه ورودی دقیقه است.
+        </ParamField>
+
+        <ParamField path="Activity.Notifies[]._offsetType" type="string">
+          ضریب واحد فاصله یادآوری؛ در نمونه ورودی `1` دقیقه، `60` ساعت و `1440` روز را نمایش می‌دهد.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Activity": {
+    "Id": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+    "ActivityTypeId": "9c691370-f294-4e6b-aad0-b19b3696a0ad",
+    "Title": "323232",
+    "OwnerId": "4db21997-a5f7-4e52-83dc-403c3b29c3ef",
+    "Note": "توضیحات فاکتور و پیش فاکتور در این جا است ",
+    "IsDone": true,
+    "ResultNote": "متن یاداشت را وارد کنید",
+    "IsDeleted": false,
+    "IsPinned": true,
+    "DueDate": "2024-05-14T07:30:00.000Z",
+    "Duration": 0,
+    "DoneDate": "2025-05-14T07:30:00.000Z",
+    "DealId": null,
+    "CaseId": "00000000-0000-0000-0000-000000000000",
+    "ContactIds": [
+      "56620317-b415-4673-a2a5-6d20a7d12b00",
+      "44cb2f3f-9a52-4f16-a6e3-e0d725349647"
+    ],
+    "CreatorId": "c167f254-cf59-47df-b166-8398fc3864bf",
+    "RecurrenceType": "OneTime",
+    "RecurrenceData": 1,
+    "RecurrenceEndDate": "2023-03-14T07:30:00.000Z"
+  }
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location 'https://app.didar.me/api/activity/save?apikey=5xk2y6ua5vswf5d6a6ig1vk3vw8ee3ur' \
+--header 'Content-Type: application/json' \
+--header 'Cookie: LocoAuthCookie=9bead3da-a0d6-4670-8336-bd2d0b9a6615' \
+--data '{
+  "Activity": {
+    "Id": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+    "ActivityTypeId": "9c691370-f294-4e6b-aad0-b19b3696a0ad",
+    "Title": "323232",
+    "OwnerId": "4db21997-a5f7-4e52-83dc-403c3b29c3ef",
+    "Note": "توضیحات فاکتور و پیش فاکتور در این جا است ",
+    "IsDone": true,
+    "ResultNote": "متن یاداشت را وارد کنید",
+    "IsDeleted": false,
+    "IsPinned": true,
+    "DueDate": "2024-05-14T07:30:00.000Z",
+    "Duration": 0,
+    "DoneDate": "2025-05-14T07:30:00.000Z",
+    "DealId": null,
+    "CaseId": "00000000-0000-0000-0000-000000000000",
+    "ContactIds": [
+      "56620317-b415-4673-a2a5-6d20a7d12b00",
+      "44cb2f3f-9a52-4f16-a6e3-e0d725349647"
+    ],
+    "CreatorId": "c167f254-cf59-47df-b166-8398fc3864bf",
+    "RecurrenceType": "OneTime",
+    "RecurrenceData": 1,
+    "RecurrenceEndDate": "2023-03-14T07:30:00.000Z"
+  }
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+        "Title": "323232",
+        "Note": "توضیحات فاکتور و پیش فاکتور در این جا است ",
+        "ResultNote": "متن یاداشت را وارد کنید",
+        "ActivityTypeId": "9c691370-f294-4e6b-aad0-b19b3696a0ad",
+        "IsPrivate": false,
+        "IsDone": true,
+        "IsPinned": true,
+        "IsDeleted": false,
+        "IsKeepInTouch": false,
+        "DueDateType": "Default",
+        "DueDate": "2024-05-14T07:30:00Z",
+        "FinishDate": "2024-05-14T07:30:00Z",
+        "OriginalDueDate": "2026-07-27T13:25:09.9593749Z",
+        "DoneDate": "2025-05-14T07:30:00Z",
+        "RegisterDate": "2026-07-27T13:25:09.9593749Z",
+        "LastUpdateTime": "2026-07-27T13:25:09.9593749Z",
+        "LastPokeDate": "2026-07-27T13:25:09.9593749Z",
+        "Duration": 0,
+        "DealId": "00000000-0000-0000-0000-000000000000",
+        "CaseId": "00000000-0000-0000-0000-000000000000",
+        "TicketId": "00000000-0000-0000-0000-000000000000",
+        "CreatorId": "c167f254-cf59-47df-b166-8398fc3864bf",
+        "OwnerId": "4db21997-a5f7-4e52-83dc-403c3b29c3ef",
+        "UpdaterId": "00000000-0000-0000-0000-000000000000",
+        "ActivityGroupId": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+        "RecurrenceType": "OneTime",
+        "RecurrenceData": 1,
+        "RecurrenceEndDate": "2023-03-14T07:30:00Z",
+        "FeedbackType": "Neutral",
+        "NextOccurrence": "0001-01-01T00:00:00Z",
+        "CanPoke": false,
+        "IsAttended": false,
+        "Deal": null,
+        "Case": null,
+        "Contacts": [
+            {
+                "ContactId": "56620317-b415-4673-a2a5-6d20a7d12b00",
+                "ActivityId": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+                "Status": "Accepted",
+                "Message": "",
+                "Contact": {
+                    "Id": "56620317-b415-4673-a2a5-6d20a7d12b00",
+                    "Title": "",
+                    "FirstName": "12",
+                    "LastName": "",
+                    "WorkPhone": "",
+                    "MobilePhone": "",
+                    "Type": "Company",
+                    "DisplayName": "12 [حذف شده] "
+                }
+            },
+            {
+                "ContactId": "44cb2f3f-9a52-4f16-a6e3-e0d725349647",
+                "ActivityId": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+                "Status": "Accepted",
+                "Message": "",
+                "Contact": {
+                    "Id": "44cb2f3f-9a52-4f16-a6e3-e0d725349647",
+                    "Title": "",
+                    "FirstName": "",
+                    "LastName": "آشنا",
+                    "WorkPhone": "",
+                    "MobilePhone": "",
+                    "Type": "Person",
+                    "DisplayName": "آشنا"
+                }
+            }
+        ],
+        "Creator": {
+            "UserId": "c167f254-cf59-47df-b166-8398fc3864bf",
+            "DisplayName": "ایمان بهبودی",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/b1c6c56c-44a1-4d81-8a5f-a07d5620d007.jpg",
+            "Email": "behboudi@yahoo.com"
+        },
+        "Owner": {
+            "UserId": "4db21997-a5f7-4e52-83dc-403c3b29c3ef",
+            "DisplayName": " ناصر ابراهیمی",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+            "Email": "iransd.com@gmail.com"
+        },
+        "Users": [],
+        "Notifies": [],
+        "Comments": [],
+        "Attachments": [],
+        "Voices": [],
+        "Voips": [],
+        "Tags": [],
+        "CanEdit": true,
+        "CanDelete": true,
+        "CanDone": false,
+        "ActivityTicketStatus": "NotAnswered",
+        "IsTicket": false,
+        "OwnerId_Old": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+        "ActivityGroupType": "Default"
+    }
+}
+```
+
+</ResponseExample>
+
+## <br />**قواعد و محدودیت‌ها**
+
+- آپدیت به این صورت است که فقط فیلد Id اجباری است و مابقی فیلد ها اگر ارسال نشوند به مقدار اولیه و پیشفرض خود برمیگردند. (هر فیلدی که قصد دارید ویرایش نشود باید مقدار آن فیلد را دقیقا طبق مقداری که در حالت قبل از ویرایش بوده پر بکنید)

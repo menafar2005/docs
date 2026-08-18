@@ -1,0 +1,402 @@
+---
+title: "Search Activity"
+tag: "POST"
+sidebarTitle: "Search Activity"
+---
+
+{/*  Endpoint: Search Activity | /untitled-page-7  */}
+
+## جستجوی فعالیت
+
+با این Endpoint می‌توانید فعالیت‌ها را براساس بازه زمانی، نوع فعالیت، مخاطب، مسئول، تگ، وضعیت انجام یا رکورد مرتبط پیدا کنید.‎ این درخواست برای ساخت لیست فعالیت‌ها، دریافت برنامه کاری کاربران یا پیدا‌کردن فعالیت‌های مرتبط با یک معامله یا کارت مناسب است.‎
+
+```http
+POST {{baseURL}}/api/activity/search?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="FromDate" type="string">
+  ابتدای بازه زمانی با قالب تاریخ و زمان مورد انتظار Endpoint.
+</ParamField>
+
+<ParamField path="ToDate" type="string">
+  انتهای بازه زمانی با قالب تاریخ و زمان مورد انتظار Endpoint.
+</ParamField>
+
+<ParamField path="SortType" type="number">
+  معیار یا روش مرتب‌سازی نتایج.
+</ParamField>
+
+<ParamField path="From" type="number">
+  اندیس شروع نتایج برای صفحه‌بندی است. مثلا `0` یعنی دریافت از اولین نتیجه و `20` یعنی ۲۰ نتیجه اول رد شوند.
+</ParamField>
+
+<ParamField path="Limit" type="number">
+  حداکثر تعداد رکوردی است که در همین پاسخ برگردانده می‌شود.
+</ParamField>
+
+<ParamField path="ActivityTypeIds[]" type="array">
+  فهرست شناسه نوع‌های فعالیت است و نتایج را به همین نوع‌ها محدود می‌کند.
+
+  <Expandable title="وابستگی‌ها">
+    این فیلد باید `Id` یکی از نوع‌های فعالیت موجود در دیدار را بگیرد.
+
+    - [Activity Type](/Activity-Type) — `Id` نوع فعالیت موردنظر را بردارید
+  </Expandable>
+</ParamField>
+
+<ParamField path="ContactIds[]" type="array">
+  فهرست شناسه اشخاص یا شرکت‌های مرتبط است.
+
+  <Expandable title="وابستگی‌ها">
+    هر مقدار باید `Id` یک شخص یا شرکت موجود در دیدار باشد.
+
+    - [Create Person](/Create-Person) — ساخت شخص جدید
+    - [Get Person By Mobile](/Get-Person-By-Mobile) — پیداکردن شخص با موبایل
+    - [Search Person](/Search-Person) — جست‌وجوی شخص
+    - [Create Company](/Create-Company) — ساخت شرکت جدید
+    - [Search Company](/Search-Company) — جست‌وجوی شرکت
+  </Expandable>
+</ParamField>
+
+<ParamField path="TagIds[]" type="array">
+  فهرست شناسه تگ‌ها است و نتایج را به رکوردهای دارای این تگ‌ها محدود می‌کند.
+
+  <Expandable title="وابستگی‌ها">
+    این فیلد باید `Id` تگ موجود در دیدار را بگیرد.
+
+    - [Tags](/Tags) — `Id` تگ موردنظر را بردارید
+  </Expandable>
+</ParamField>
+
+<ParamField path="OwnerId" type="string">
+  شناسه User مسئول رکورد است و نتایج یا مسئولیت رکورد براساس همین کاربر تعیین می‌شود.
+
+  <Expandable title="وابستگی‌ها">
+    این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+    - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+  </Expandable>
+</ParamField>
+
+<ParamField path="CreatorId" type="string">
+  شناسه Userی است که به‌عنوان ایجادکننده رکورد ثبت می‌شود.
+
+  <Expandable title="وابستگی‌ها">
+    این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+    - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+  </Expandable>
+</ParamField>
+
+<ParamField path="IsDone" type="boolean">
+  فیلتر یا وضعیت انجام‌شدن رکورد؛ مقدار آن تعیین می‌کند رکورد انجام‌شده محسوب شود یا خیر.
+
+  <Expandable title="مقادیر مجاز">
+    - `true` — فقط رکوردهای انجام‌شده
+    - `false` — فقط رکوردهای انجام‌نشده
+  </Expandable>
+</ParamField>
+
+<ParamField path="IsDeleted" type="boolean">
+  مشخص می‌کند رکورد حذف شده است یا همچنان فعال است.
+
+  <Expandable title="مقادیر مجاز">
+    - `true` — فقط رکوردهای حذف‌شده
+    - `false` — فقط رکوردهای حذف‌نشده
+  </Expandable>
+</ParamField>
+
+<ParamField path="DealId" type="string">
+  شناسه معامله‌ای است که فاکتور، پیش‌فاکتور یا فیلتر باید به آن مرتبط باشد.
+
+  <Expandable title="وابستگی‌ها">
+    مقدار این فیلد باید `Id` یک معامله موجود در دیدار باشد.
+
+    - [Create Deal](/Create-Deal) — اگر معامله هنوز ساخته نشده است
+    - [Get Deal By Id](/Get-Deal-By-Id) — اگر `Id` معامله را دارید
+    - [Search Deal](/Search-Deal) — برای جست‌وجوی معامله
+  </Expandable>
+</ParamField>
+
+<ParamField path="CaseId" type="string">
+  شناسه کارت مرتبط است و نتایج یا رکورد را به همان کارت محدود یا متصل می‌کند.
+
+  <Expandable title="وابستگی‌ها">
+    مقدار این فیلد باید `Id` یک کارت موجود در دیدار باشد.
+
+    - [Create Case](/Create-Case) — اگر کارت هنوز ساخته نشده است
+    - [Search Case](/Search-Case) — برای جست‌وجوی کارت
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "FromDate": "1800-01-01T00:00:00.000Z",
+  "ToDate": "9999-12-28T20:30:00.000Z",
+  "SortType": 1,
+  "From": 0,
+  "Limit": 10,
+  "ActivityTypeIds": [
+    "9c691370-f294-4e6b-aad0-b19b3696a0ad"
+  ],
+  "ContactIds": [
+    "56620317-b415-4673-a2a5-6d20a7d12b00",
+    "44cb2f3f-9a52-4f16-a6e3-e0d725349647"
+  ],
+  "TagIds": [
+    "ade4bd5b-b7eb-45a3-a068-b44a3759fe05"
+  ],
+  "OwnerId": "{{ test product user 1 }}",
+  "CreatorId": "096bee7a-d1bb-4e03-8948-cc8b2dcf9395",
+  "IsDone": false,
+  "IsDeleted": true,
+  "DealId": "b96eeffe-9baa-4fac-99d2-772415957ff0",
+  "CaseId": "348d182c-8311-4abf-aa92-a1f2248f1192"
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/activity/search?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "FromDate": "1800-01-01T00:00:00.000Z",
+  "ToDate": "9999-12-28T20:30:00.000Z",
+  "SortType": 1,
+  "From": 0,
+  "Limit": 10,
+  "ActivityTypeIds": [
+    "9c691370-f294-4e6b-aad0-b19b3696a0ad"
+  ],
+  "ContactIds": [
+    "56620317-b415-4673-a2a5-6d20a7d12b00",
+    "44cb2f3f-9a52-4f16-a6e3-e0d725349647"
+  ],
+  "TagIds": [
+    "ade4bd5b-b7eb-45a3-a068-b44a3759fe05"
+  ],
+  "OwnerId": "{{ test product user 1 }}",
+  "CreatorId": "096bee7a-d1bb-4e03-8948-cc8b2dcf9395",
+  "IsDone": false,
+  "IsDeleted": true,
+  "DealId": "b96eeffe-9baa-4fac-99d2-772415957ff0",
+  "CaseId": "348d182c-8311-4abf-aa92-a1f2248f1192"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "List": [
+            {
+                "Id": "35a2ea9b-f4dc-4536-9864-3e9b2f663823",
+                "Title": "مشاوره رایگان تست یادداشت",
+                "Note": "این تست یادداشت است.",
+                "ResultNote": "<p>جهت تست </p>",
+                "ActivityTypeId": "9231f6d5-622a-48a8-81ba-7f0fbd55b4a8",
+                "IsPrivate": false,
+                "IsDone": true,
+                "IsPinned": true,
+                "IsDeleted": false,
+                "IsKeepInTouch": false,
+                "DueDateType": "NoTime",
+                "DueDate": "2023-05-14T00:00:00Z",
+                "FinishDate": "2023-05-14T20:30:00Z",
+                "OriginalDueDate": "2023-05-14T13:30:00Z",
+                "DoneDate": "2026-06-18T12:13:27Z",
+                "RegisterDate": "2023-05-14T14:22:04Z",
+                "LastUpdateTime": "2026-06-18T12:13:27Z",
+                "LastPokeDate": "2026-06-18T12:13:11Z",
+                "Duration": 5,
+                "DealId": "00000000-0000-0000-0000-000000000000",
+                "CaseId": "00000000-0000-0000-0000-000000000000",
+                "TicketId": "00000000-0000-0000-0000-000000000000",
+                "CreatorId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "OwnerId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "UpdaterId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "ActivityGroupId": "35a2ea9b-f4dc-4536-9864-3e9b2f663823",
+                "RecurrenceType": "OneTime",
+                "RecurrenceData": 1,
+                "RecurrenceEndDate": "2023-05-14T00:00:00Z",
+                "FeedbackType": "None",
+                "NextOccurrence": "2023-05-14T00:00:00Z",
+                "CanPoke": false,
+                "IsAttended": false,
+                "Deal": null,
+                "Case": null,
+                "Contacts": [
+                    {
+                        "ContactId": "016837d3-54d4-4a25-aff4-e10e8ec7ca9f",
+                        "ActivityId": "35a2ea9b-f4dc-4536-9864-3e9b2f663823",
+                        "Status": "Accepted",
+                        "Message": "",
+                        "Contact": {
+                            "Id": "016837d3-54d4-4a25-aff4-e10e8ec7ca9f",
+                            "Title": "",
+                            "FirstName": "",
+                            "LastName": "تامی 5",
+                            "WorkPhone": "",
+                            "MobilePhone": "",
+                            "Type": "Person",
+                            "DisplayName": "تامی 5"
+                        }
+                    }
+                ],
+                "Creator": {
+                    "UserId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                    "DisplayName": "زهرا بسطامی",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/8bc0e0b5-9d2d-432a-abe1-7e55bcd2cae1.jpg",
+                    "Email": "zahra.bst1994@gmail.com"
+                },
+                "Owner": {
+                    "UserId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                    "DisplayName": "زهرا بسطامی",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/8bc0e0b5-9d2d-432a-abe1-7e55bcd2cae1.jpg",
+                    "Email": "zahra.bst1994@gmail.com"
+                },
+                "Users": [],
+                "Notifies": [],
+                "Comments": [],
+                "Attachments": [],
+                "Voices": [],
+                "Voips": [],
+                "Tags": [],
+                "CanEdit": true,
+                "CanDelete": true,
+                "CanDone": false,
+                "ActivityTicketStatus": "NotAnswered",
+                "IsTicket": false,
+                "OwnerId_Old": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "ActivityGroupType": "Default"
+            },
+            {
+                "Id": "a39e3dd3-5501-4515-9e9a-22514997007f",
+                "Title": "مشاوره رایگان",
+                "Note": "اول",
+                "ResultNote": "<p><span class=\"mention\" mentionkey=\"987b13a7-0147-4395-85b5-1e58a0384f8f\" data-mention=\"@ علی حیدری\" id=\"mention-987b13a7-0147-4395-85b5-1e58a0384f8f\"> علی حیدری </span> اااااااآ </p>",
+                "ActivityTypeId": "9231f6d5-622a-48a8-81ba-7f0fbd55b4a8",
+                "IsPrivate": false,
+                "IsDone": true,
+                "IsPinned": true,
+                "IsDeleted": false,
+                "IsKeepInTouch": false,
+                "DueDateType": "Default",
+                "DueDate": "2026-06-18T13:00:00Z",
+                "FinishDate": "2026-06-18T13:10:00Z",
+                "OriginalDueDate": "2026-06-18T12:05:53Z",
+                "DoneDate": "2026-06-18T12:08:30Z",
+                "RegisterDate": "2026-06-18T12:05:53Z",
+                "LastUpdateTime": "2026-06-18T12:09:17Z",
+                "LastPokeDate": "2026-06-18T12:07:10Z",
+                "Duration": 10,
+                "DealId": "00000000-0000-0000-0000-000000000000",
+                "CaseId": "00000000-0000-0000-0000-000000000000",
+                "TicketId": "00000000-0000-0000-0000-000000000000",
+                "CreatorId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "OwnerId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "UpdaterId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "ActivityGroupId": "00000000-0000-0000-0000-000000000000",
+                "RecurrenceType": "OneTime",
+                "RecurrenceData": 1,
+                "RecurrenceEndDate": "2026-06-18T13:00:00Z",
+                "FeedbackType": "None",
+                "NextOccurrence": "2026-06-18T13:00:00Z",
+                "CanPoke": false,
+                "IsAttended": false,
+                "Deal": null,
+                "Case": null,
+                "Contacts": [],
+                "Creator": {
+                    "UserId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                    "DisplayName": "زهرا بسطامی",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/8bc0e0b5-9d2d-432a-abe1-7e55bcd2cae1.jpg",
+                    "Email": "zahra.bst1994@gmail.com"
+                },
+                "Owner": {
+                    "UserId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                    "DisplayName": "زهرا بسطامی",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/8bc0e0b5-9d2d-432a-abe1-7e55bcd2cae1.jpg",
+                    "Email": "zahra.bst1994@gmail.com"
+                },
+                "Users": [],
+                "Notifies": [],
+                "Comments": [
+                    {
+                        "Id": "d2d1a19d-f089-4438-8656-1afa70d9ce98",
+                        "ActivityId": "a39e3dd3-5501-4515-9e9a-22514997007f",
+                        "UserId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                        "Body": "<p><span class=\"mention\" mentionkey=\"86ddf0dc-38d5-4c5e-ae12-0673f87b0925\" mention=\"@ محمد مهدی وکیل آبادی\" id=\"mention-86ddf0dc-38d5-4c5e-ae12-0673f87b0925\"> محمد مهدی وکیل آبادی </span>تست </p>",
+                        "RegisterDate": "2026-06-18T12:08:01Z",
+                        "User": {
+                            "UserId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                            "DisplayName": "زهرا بسطامی",
+                            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/8bc0e0b5-9d2d-432a-abe1-7e55bcd2cae1.jpg",
+                            "Email": "zahra.bst1994@gmail.com"
+                        },
+                        "TicketingAttachments": [],
+                        "BizdomainId": "00000000-0000-0000-0000-000000000000"
+                    }
+                ],
+                "Attachments": [
+                    {
+                        "Id": "9172a2ee-7eef-468d-8409-0e7d0f3be179",
+                        "ActivityId": "a39e3dd3-5501-4515-9e9a-22514997007f",
+                        "Title": "Screenshot_20260614_105546_Chrome.jpg",
+                        "Type": "Image",
+                        "Name": "9172a2ee-7eef-468d-8409-0e7d0f3be179.jpg",
+                        "Length": 256162
+                    },
+                    {
+                        "Id": "811e74a9-1d85-4751-a429-38cff604935f",
+                        "ActivityId": "a39e3dd3-5501-4515-9e9a-22514997007f",
+                        "Title": "voice_record_1781784416243.webm",
+                        "Type": "Video",
+                        "Name": "811e74a9-1d85-4751-a429-38cff604935f.webm",
+                        "Length": 0
+                    },
+                    {
+                        "Id": "a5491005-9460-4e8e-8354-a8f6cb5abcd6",
+                        "ActivityId": "a39e3dd3-5501-4515-9e9a-22514997007f",
+                        "Title": "IMG_20260615_122410_902.jpg",
+                        "Type": "Image",
+                        "Name": "a5491005-9460-4e8e-8354-a8f6cb5abcd6.jpg",
+                        "Length": 0
+                    }
+                ],
+                "Voices": [],
+                "Voips": [],
+                "Tags": [],
+                "CanEdit": true,
+                "CanDelete": true,
+                "CanDone": false,
+                "ActivityTicketStatus": "NotAnswered",
+                "IsTicket": false,
+                "OwnerId_Old": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "ActivityGroupType": "Default"
+            }
+        ],
+        "Total": 16066
+    }
+}
+```
+
+</ResponseExample>

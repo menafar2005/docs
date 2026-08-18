@@ -1,0 +1,613 @@
+---
+title: "Search deal"
+tag: "POST"
+sidebarTitle: "Search Deal"
+---
+
+## جست‌وجوی معامله
+
+این Endpoint برای پیدا‌کردن معاملات با ترکیبی از فیلترها استفاده می‌شود؛ مثل مخاطب، مسئول، وضعیت، کاریز، مرحله، منبع، برچسب، دلیل شکست یا زمان فعالیت بعدی.‎ علاوه بر لیست صفحه‌بندی‌شده معاملات، اطلاعات تجمیعی مثل تعداد و مجموع مبلغ نتایج نیز در پاسخ قرار می‌گیرد.‎
+
+```http
+POST {{baseURL}}/api/deal/search_v2?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Criteria" type="object">
+  مجموعه فیلترهایی که برای محدودکردن نتایج جست‌وجوی معاملات استفاده می‌شوند.
+
+  <Expandable title="property">
+    <ParamField path="Criteria.SearchFromTime" type="string">
+      ابتدای بازه زمانی جست‌وجو. مقدار نمونه با فرمت تاریخ و زمان UTC ارسال شده است.
+    </ParamField>
+
+    <ParamField path="Criteria.SearchToTime" type="string">
+      انتهای بازه زمانی جست‌وجو. مقدار نمونه با فرمت تاریخ و زمان UTC ارسال شده است.
+    </ParamField>
+
+    <ParamField path="Criteria.Sort" type="number">
+      نوع مرتب‌سازی نتایج. مقادیر `0` تا `10` به‌ترتیب برای تاریخ ثبت، آخرین زمان پیگیری، زمان پیگیری بعدی، دارای پیش‌فاکتور، دارای فاکتور، بدون فاکتور، دارای فاکتور باطل‌شده، دارای پیش‌فاکتور با قیمت، دارای پیش‌فاکتور بدون قیمت، زمان موفق‌شدن و زمان فعالیت بعدی استفاده می‌شوند.
+
+      <Expandable title="مقادیر مجاز">
+        - `0` — تاریخ ثبت
+        - `1` — آخرین زمان پیگیری
+        - `2` — زمان پیگیری بعدی
+        - `3` — دارای پیش‌فاکتور
+        - `4` — دارای فاکتور
+        - `5` — بدون فاکتور
+        - `6` — دارای فاکتور باطل‌شده
+        - `7` — دارای پیش‌فاکتور با قیمت
+        - `8` — دارای پیش‌فاکتور بدون قیمت
+        - `9` — زمان موفق‌شدن
+        - `10` — زمان فعالیت بعدی
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.ContactIds[]" type="array">
+      فهرست شناسه اشخاص اصلی است و فقط معامله‌های مرتبط با این اشخاص را برمی‌گرداند.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام یا موبایل شخص را نمی‌پذیرد؛ باید `Id` شخص موجود در دیدار را بفرستید.
+
+        - [Create Person](/Create-Person) — اگر شخص هنوز در دیدار ساخته نشده است
+        - [Get Person By Id](/Get-Person-By-Id) — اگر `Id` شخص را دارید
+        - [Get Person By Mobile](/Get-Person-By-Mobile) — اگر شماره موبایل شخص را دارید
+        - [Search Person](/Search-Person) — برای جست‌وجوی شخص
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.CompanyIds[]" type="array">
+      فهرست شناسه شرکت‌ها است و فقط معامله‌های مرتبط با این شرکت‌ها را برمی‌گرداند.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام شرکت را نمی‌پذیرد؛ باید `Id` شرکت موجود در دیدار را بفرستید.
+
+        - [Create Company](/Create-Company) — اگر شرکت هنوز ساخته نشده است
+        - [Get Company By Id](/Get-Company-By-Id) — اگر `Id` شرکت را دارید
+        - [Search Company](/Search-Company) — برای جست‌وجوی شرکت
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.OtherContactIds[]" type="array">
+      فهرست شناسه سایر مخاطبان است و فقط معامله‌هایی را برمی‌گرداند که این مخاطبان به آن‌ها مرتبط‌اند.
+
+      <Expandable title="وابستگی‌ها">
+        هر مقدار باید `Id` یک شخص یا شرکت موجود در دیدار باشد.
+
+        - [Create Person](/Create-Person) — ساخت شخص جدید
+        - [Get Person By Mobile](/Get-Person-By-Mobile) — پیداکردن شخص با موبایل
+        - [Search Person](/Search-Person) — جست‌وجوی شخص
+        - [Create Company](/Create-Company) — ساخت شرکت جدید
+        - [Search Company](/Search-Company) — جست‌وجوی شرکت
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.Keywords" type="string">
+      عبارتی است که جست‌وجو براساس آن انجام می‌شود. نتیجه فقط رکوردهایی را برمی‌گرداند که فیلد متنی مرتبط با این عبارت تطبیق داشته باشد.
+    </ParamField>
+
+    <ParamField path="Criteria.LabelIds[]" type="array">
+      فهرست شناسه برچسب‌ها است و نتایج را به رکوردهای دارای این برچسب‌ها محدود می‌کند.
+
+      <Expandable title="وابستگی‌ها">
+        هر مقدار باید `Id` یکی از برچسب‌های معامله باشد.
+
+        - [Deal Labels](/Deal-Labels) — `Id` برچسب معامله را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.Status" type="string">
+      وضعیت معامله. مقادیر ارائه‌شده عبارت‌اند از `Pending`، `Won` و `Lost`.
+
+      <Expandable title="مقادیر مجاز">
+        - `Pending` — فقط معامله‌های در جریان
+        - `Won` — فقط معامله‌های موفق
+        - `Lost` — فقط معامله‌های شکست‌خورده
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.CustomFields[]" type="array">
+      شروط جست‌وجو روی فیلدهای اضافه معامله. هر عضو، شناسه یک فیلد اضافه و یک یا چند شرط جایگزین در آرایه `OR` را مشخص می‌کند.
+
+      <Expandable title="property">
+        <ParamField path="Criteria.CustomFields[].CustomFieldId" type="string">
+          شناسه Custom Fieldی است که شرط جست‌وجو باید روی آن اعمال شود.
+
+          <Expandable title="وابستگی‌ها">
+            فقط از کلید Custom Fieldهایی استفاده کنید که برای معامله تعریف شده‌اند.
+
+            - [Get Custom Fields](/Get-Custom-Fields) — کلید فنی فیلد متناسب با Entity را بردارید
+          </Expandable>
+        </ParamField>
+
+        <ParamField path="Criteria.CustomFields[].OR[]" type="array">
+          شروط جایگزین برای همان فیلد اضافه. ساختار ورودی نشان می‌دهد اعضای این آرایه با رابطه `OR` ارزیابی می‌شوند.
+
+          <Expandable title="property">
+            <ParamField path="Criteria.CustomFields[].OR[].Type" type="string">
+              عملگر شرط فیلد اضافه. مقادیر ارائه‌شده عبارت‌اند از `NotSet`، `Set`، `EqualToAny`، `NotEqualAny`، `ContainsAnyString`، `NotContainsAnyString`، `StartsWith`، `LessThan`، `GreaterThan` و `Between`.
+            </ParamField>
+
+            <ParamField path="Criteria.CustomFields[].OR[].Value[]" type="array">
+              مقدار یا مقادیر مورد مقایسه. در نمونه `Between` دو مقدار و سایر عملگرهای نمونه یک مقدار دریافت می‌کنند.
+            </ParamField>
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.PipelineId" type="string">
+      شناسه کاریز است و نتایج را به رکوردهای همان کاریز محدود می‌کند.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه کاریز و مرحله باید متعلق به ساختار کاریزهای معامله در همین اکانت باشد.
+
+        - [List Deal Pipelines](/untitled-page-32) — `Response[].Id` شناسه کاریز و `Response[].Stages[].Id` شناسه مرحله است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.PipelineStageId" type="string">
+      شناسه یک مرحله کاریز است و فقط رکوردهای داخل همان مرحله را برمی‌گرداند.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه کاریز و مرحله باید متعلق به ساختار کاریزهای معامله در همین اکانت باشد.
+
+        - [List Deal Pipelines](/List-Deal-Pipelines) — `Response[].Id` شناسه کاریز و `Response[].Stages[].Id` شناسه مرحله است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.SourceId" type="string">
+      شناسه منبع جذب است و نتایج را به معامله‌های ثبت‌شده از همان منبع محدود می‌کند.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد باید `Id` یکی از منابع تعریف‌شده در دیدار را بگیرد.
+
+        - [Sources](/Sources) — `Id` منبع موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.IsDeleted" type="boolean">
+      وضعیت حذف‌شدن معامله برای فیلترکردن نتایج. مقادیر مجاز: `true` `false`
+    </ParamField>
+
+    <ParamField path="Criteria.HasActivity" type="boolean">
+      مشخص می‌کند نتایج براساس داشتن یا نداشتن فعالیت مرتبط فیلتر شوند. مقادیر مجاز: `true` `false`
+    </ParamField>
+
+    <ParamField path="Criteria.LostReasonId" type="string">
+      شناسه دلیل شکست است و فقط معامله‌های ناموفق با همین دلیل را برمی‌گرداند.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد باید `Id` یکی از دلایل شکست تعریف‌شده در دیدار را بگیرد.
+
+        - [Lost Reasons](/Lost-Reasons) — `Id` دلیل شکست موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.NextActivityFrom" type="string">
+      ابتدای بازه زمانی فعالیت بعدی معامله.
+    </ParamField>
+
+    <ParamField path="Criteria.NextActivityTo" type="string">
+      انتهای بازه زمانی فعالیت بعدی معامله.
+    </ParamField>
+
+    <ParamField path="Criteria.IsIdle" type="boolean">
+      وضعیت راکد بودن معامله برای فیلترکردن نتایج. این فیلد اگر true باشد فقط معاملات راکد کلی را برمیگرداند نه معاملاتی که در یک مرحله راکد شده اند
+    </ParamField>
+
+    <ParamField path="Criteria.IsRotten" type="boolean">
+      وضعیت فاسدبودن معامله برای فیلترکردن نتایج. این فیلد اگر true باشد فقط معاملات فاسد کلی را برمیگرداند نه معاملاتی که در یک مرحله فاسد شده اند
+    </ParamField>
+
+    <ParamField path="Criteria.Probability" type="string">
+      مقدار احتمال موفقیت معامله. در نمونه ورودی این مقدار به‌صورت رشته عددی ارسال شده است.
+    </ParamField>
+
+    <ParamField path="Criteria.OwnerIds[]" type="array">
+      فهرست شناسه Userهای مسئول است و نتایج را به رکوردهای تحت مسئولیت این کاربران محدود می‌کند.
+    </ParamField>
+
+    <ParamField path="Criteria.PipelineStageIds[]" type="array">
+      فهرست شناسه مراحل کاریز است و فقط رکوردهای داخل این مراحل را برمی‌گرداند.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه کاریز و مرحله باید متعلق به ساختار کاریزهای معامله در همین اکانت باشد.
+
+        - [List Deal Pipelines](/List-Deal-Pipelines) — `Response[].Id` شناسه کاریز و `Response[].Stages[].Id` شناسه مرحله است
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="From" type="number">
+  اندیس شروع نتایج برای صفحه‌بندی است. مثلا `0` یعنی دریافت از اولین نتیجه و `20` یعنی ۲۰ نتیجه اول رد شوند.
+</ParamField>
+
+<ParamField path="Limit" type="number">
+  حداکثر تعداد رکوردی است که در همین پاسخ برگردانده می‌شود.
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Criteria": {
+    "SearchFromTime": "1000-01-01T00:00:00.000Z",
+    "SearchToTime": "9999-12-01T00:00:00.000Z",
+    "Sort": 0,
+    "ContactIds": [
+      "f4ffcdb7-eaac-4834-af80-cdff2d674bca",
+      "3f9240de-6aa0-4801-a30a-f233333299e5"
+    ],
+    "CompanyIds": [
+      "f4ffcdb7-eaac-4834-af80-cdff2d674bca",
+      "3f9240de-6aa0-4801-a30a-f233333299e5"
+    ],
+    "OtherContactIds": [
+      "3f9240de-6aa0-4801-a30a-f233333299e5",
+      "f4ffcdb7-eaac-4834-af80-cdff2d674bca"
+    ],
+    "Keywords": "خرید نرم‌افزار CRM",
+    "LabelIds": [
+      "093c518e-9984-4660-ae3e-416099ef32cc",
+      "5553f31b-e5dc-4301-bf2c-7de5a7b7fd0f"
+    ],
+    "Status": "Pending",
+    "CustomFields": [
+      {
+        "CustomFieldId": "b845931c-8eb6-494e-80fe-356405c0f3c1",
+        "OR": [
+          {
+            "Type": "ContainsAnyString",
+            "Value": [
+              "3"
+            ]
+          },
+          {
+            "Type": "NotContainsAnyString",
+            "Value": [
+              "9"
+            ]
+          },
+          {
+            "Type": "StartsWith",
+            "Value": [
+              "1"
+            ]
+          }
+        ]
+      },
+      {
+        "CustomFieldId": "1576b6d8-1add-4d57-9ba9-c34588579da5",
+        "OR": [
+          {
+            "Type": "GreaterThan",
+            "Value": [
+              "11"
+            ]
+          },
+          {
+            "Type": "LessThan",
+            "Value": [
+              "15"
+            ]
+          }
+        ]
+      },
+      {
+        "CustomFieldId": "1576b6d8-1add-4d57-9ba9-c34588579da5",
+        "OR": [
+          {
+            "Type": "Between",
+            "Value": [
+              "12",
+              "13"
+            ]
+          }
+        ]
+      }
+    ],
+    "PipelineId": "4573566e-0b6a-4276-9da6-675fb28f864f",
+    "PipelineStageId": "57c95187-c773-44a3-84a4-5066e3b6bf54",
+    "SourceId": "00000000-0000-0000-0000-000000000000",
+    "IsDeleted": true,
+    "HasActivity": true,
+    "LostReasonId": "b8075405-1b0f-4e67-a604-f0aeec08b244",
+    "NextActivityFrom": "1000-01-01T00:00:00.000Z",
+    "NextActivityTo": "9999-12-01T00:00:00.000Z",
+    "IsIdle": true,
+    "IsRotten": false,
+    "Probability": "12",
+    "OwnerIds": [
+      "00000000-0000-0000-0000-000000000000",
+      "a2048abd-8f8a-4354-9486-7177e3fa6770",
+      "f1599895-3d58-44a8-a830-e77b42d8e4c6"
+    ],
+    "PipelineStageIds": [
+      "57c95187-c773-44a3-84a4-5066e3b6bf54",
+      "ef873234-466b-4693-9c52-0926915d9a5c"
+    ]
+  },
+  "From": 2,
+  "Limit": 5
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/deal/search_v2?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Criteria": {
+    "SearchFromTime": "1000-01-01T00:00:00.000Z",
+    "SearchToTime": "9999-12-01T00:00:00.000Z",
+    "Sort": 0,
+    "ContactIds": [
+      "f4ffcdb7-eaac-4834-af80-cdff2d674bca",
+      "3f9240de-6aa0-4801-a30a-f233333299e5"
+    ],
+    "CompanyIds": [
+      "f4ffcdb7-eaac-4834-af80-cdff2d674bca",
+      "3f9240de-6aa0-4801-a30a-f233333299e5"
+    ],
+    "OtherContactIds": [
+      "3f9240de-6aa0-4801-a30a-f233333299e5",
+      "f4ffcdb7-eaac-4834-af80-cdff2d674bca"
+    ],
+    "Keywords": "خرید نرم‌افزار CRM",
+    "LabelIds": [
+      "093c518e-9984-4660-ae3e-416099ef32cc",
+      "5553f31b-e5dc-4301-bf2c-7de5a7b7fd0f"
+    ],
+    "Status": "Pending",
+    "CustomFields": [
+      {
+        "CustomFieldId": "b845931c-8eb6-494e-80fe-356405c0f3c1",
+        "OR": [
+          {
+            "Type": "ContainsAnyString",
+            "Value": [
+              "3"
+            ]
+          },
+          {
+            "Type": "NotContainsAnyString",
+            "Value": [
+              "9"
+            ]
+          },
+          {
+            "Type": "StartsWith",
+            "Value": [
+              "1"
+            ]
+          }
+        ]
+      },
+      {
+        "CustomFieldId": "1576b6d8-1add-4d57-9ba9-c34588579da5",
+        "OR": [
+          {
+            "Type": "GreaterThan",
+            "Value": [
+              "11"
+            ]
+          },
+          {
+            "Type": "LessThan",
+            "Value": [
+              "15"
+            ]
+          }
+        ]
+      },
+      {
+        "CustomFieldId": "1576b6d8-1add-4d57-9ba9-c34588579da5",
+        "OR": [
+          {
+            "Type": "Between",
+            "Value": [
+              "12",
+              "13"
+            ]
+          }
+        ]
+      }
+    ],
+    "PipelineId": "4573566e-0b6a-4276-9da6-675fb28f864f",
+    "PipelineStageId": "57c95187-c773-44a3-84a4-5066e3b6bf54",
+    "SourceId": "00000000-0000-0000-0000-000000000000",
+    "IsDeleted": true,
+    "HasActivity": true,
+    "LostReasonId": "b8075405-1b0f-4e67-a604-f0aeec08b244",
+    "NextActivityFrom": "1000-01-01T00:00:00.000Z",
+    "NextActivityTo": "9999-12-01T00:00:00.000Z",
+    "IsIdle": true,
+    "IsRotten": false,
+    "Probability": "12",
+    "OwnerIds": [
+      "00000000-0000-0000-0000-000000000000",
+      "a2048abd-8f8a-4354-9486-7177e3fa6770",
+      "f1599895-3d58-44a8-a830-e77b42d8e4c6"
+    ],
+    "PipelineStageIds": [
+      "57c95187-c773-44a3-84a4-5066e3b6bf54",
+      "ef873234-466b-4693-9c52-0926915d9a5c"
+    ]
+  },
+  "From": 2,
+  "Limit": 5
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "TotalPrice": 270717349203852,
+        "TotalCount": 651.0,
+        "AllDealsTotalPrice": 270717349203852,
+        "AllDealsCount": 651.0,
+        "PendingDealsTotalPrice": 0,
+        "PendingDealsCount": 0.0,
+        "WonDealsTotalPrice": 270717349203852,
+        "WonDealsCount": 651.0,
+        "LostDealsTotalPrice": 0,
+        "LostDealsCount": 0.0,
+        "List": [
+            {
+                "Id": "c86569b5-2da4-4f3b-ba86-8c56d53840ad",
+                "Code": 3852,
+                "Title": "معامله مریم درخشان بنه کهل",
+                "Description": "",
+                "RegisterTime": "2026-07-16T09:17:49Z",
+                "Price": "9500000",
+                "FinalAdjustmentPrice": "9500000",
+                "CurrencyId": 96107,
+                "Status": "Won",
+                "PipelineStageId": "23bacef1-bce6-446f-aa1b-f25d471792e5",
+                "PipelineId": "9567da88-4a96-4329-8a73-1cbbc7f5b239",
+                "ChangeToWonTime": "2026-07-16T09:17:49Z",
+                "ChangeToLossTime": "2026-07-16T09:17:49Z",
+                "LastTrackingTime": "1930-01-01T00:00:00Z",
+                "NextTrackingTime": "1930-01-01T00:00:00Z",
+                "Probability": 50,
+                "CanEdit": false,
+                "IsDeleted": false,
+                "IsPaid": false,
+                "CanDelete": false,
+                "CanViewPrice": true,
+                "ContactId": "7393ac69-1abd-4e2c-8b9c-e922b805ff58",
+                "PersonId": "7393ac69-1abd-4e2c-8b9c-e922b805ff58",
+                "CompanyId": "00000000-0000-0000-0000-000000000000",
+                "OwnerId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "CreatorId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "Pin": 0,
+                "LabelId": "00000000-0000-0000-0000-000000000000",
+                "LostReasonId": "00000000-0000-0000-0000-000000000000",
+                "LostReasonNote": "",
+                "LostReasonOther": "",
+                "Feedback": 60.0,
+                "ExpectedCloseDate": null,
+                "VisibilityType": "OwnerSubGroup",
+                "Contact": {
+                    "Id": "7393ac69-1abd-4e2c-8b9c-e922b805ff58",
+                    "Code": 289,
+                    "Title": "",
+                    "DisplayName": "  مریم درخشان بنه کهل",
+                    "Type": "Person",
+                    "CompanyName": "",
+                    "CompanyId": "00000000-0000-0000-0000-000000000000",
+                    "HasCompany": false,
+                    "CanEdit": true,
+                    "LeadType": "General",
+                    "LeadStatus": "None",
+                    "ContactType": "Customer",
+                    "CompanyIsCustomer": null,
+                    "CompanyIsProspect": null,
+                    "MobilePhone": "",
+                    "WorkPhone": "",
+                    "WorkPhoneExtension": "",
+                    "Position": "",
+                    "Email": "",
+                    "Feedback": 60.0,
+                    "VisibilityType": "OwnerGroup",
+                    "Owner": {
+                        "UserId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+                        "DisplayName": "میلاد مظاهری",
+                        "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/a727ae10-e9ae-4541-b66a-00781811e5f5.jpg",
+                        "Email": "milad@gmail.com"
+                    },
+                    "OwnerId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+                    "Fields": {},
+                    "LastUpdateTime": "2020-09-28T13:30:50Z",
+                    "OwnerId_Old": "8c0b89b1-515c-42de-957d-294f0e80dbeb"
+                },
+                "Person": {
+                    "Id": "7393ac69-1abd-4e2c-8b9c-e922b805ff58",
+                    "Code": 289,
+                    "Title": "",
+                    "DisplayName": "  مریم درخشان بنه کهل",
+                    "Type": "Person",
+                    "CompanyName": "",
+                    "CompanyId": "00000000-0000-0000-0000-000000000000",
+                    "HasCompany": false,
+                    "CanEdit": true,
+                    "LeadType": "General",
+                    "LeadStatus": "None",
+                    "ContactType": "Customer",
+                    "CompanyIsCustomer": null,
+                    "CompanyIsProspect": null,
+                    "MobilePhone": "",
+                    "WorkPhone": "",
+                    "WorkPhoneExtension": "",
+                    "Position": "",
+                    "Email": "",
+                    "Feedback": 60.0,
+                    "VisibilityType": "OwnerGroup",
+                    "Owner": {
+                        "UserId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+                        "DisplayName": "میلاد مظاهری",
+                        "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/a727ae10-e9ae-4541-b66a-00781811e5f5.jpg",
+                        "Email": "milad@gmail.com"
+                    },
+                    "OwnerId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+                    "Fields": {},
+                    "LastUpdateTime": "2020-09-28T13:30:50Z",
+                    "OwnerId_Old": "8c0b89b1-515c-42de-957d-294f0e80dbeb"
+                },
+                "Company": null,
+                "Owner": {
+                    "UserId": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                    "DisplayName": "زهرا بسطامی",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/8bc0e0b5-9d2d-432a-abe1-7e55bcd2cae1.jpg",
+                    "Email": "zahra.bst1994@gmail.com"
+                },
+                "KeepInTouchBizdomainId": "00000000-0000-0000-0000-000000000000",
+                "NextActivityDate": null,
+                "LastActivityUpdateTime": null,
+                "IsIdle": null,
+                "IsRotten": null,
+                "IsRottenInStage": null,
+                "_Type": null,
+                "Fields": {},
+                "LastUpdateTime": "2026-07-16T09:17:49Z",
+                "PaymentShortLink": "",
+                "CanDeletePayment": true,
+                "CanEditPayment": true,
+                "CanChangeProbability": false,
+                "OwnerId_Old": "8fd990f1-1e5b-4eda-9bc2-26274d5af75e",
+                "Items": [],
+                "Brief": "",
+                "Adjustment": 0.0000000,
+                "CanSetWon": false,
+                "LabelIds": [],
+                "SourceId": "00000000-0000-0000-0000-000000000000",
+                "SourceOther": "",
+                "ReferrerId": "00000000-0000-0000-0000-000000000000",
+                "OtherContacts": [],
+                "ProductsSummary": null,
+                "EstimatedPrice": "9500000"
+            }
+        ]
+    }
+}
+```
+
+</ResponseExample>

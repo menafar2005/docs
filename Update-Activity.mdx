@@ -1,0 +1,409 @@
+---
+title: "Update Activity"
+tag: "POST"
+sidebarTitle: "Update Activity"
+---
+
+# ویرایش فعالیت
+
+این Endpoint برای تغییر اطلاعات یک فعالیت موجود استفاده می‌شود.‎ می‌توانید زمان، مسئول، نوع، توضیحات، رکوردهای مرتبط یا وضعیت انجام فعالیت را تغییر دهید؛ فقط باید ID همان فعالیت را در `Activity.Id` ارسال کنید.‎
+
+```http
+POST {{baseURL}}/api/activity/save?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Activity" type="object" required>
+  اطلاعات فعالیت داخل این آبجکت ارسال می‌شود؛ عنوان، نوع، زمان، مسئول و رکوردهای مرتبط مشخص می‌کنند چه کاری برای چه زمانی و توسط چه کسی انجام شود.
+
+  <Expandable title="property">
+    <ParamField path="Activity.Id" type="string" required>
+      شناسه فعالیتی است که میخواهید آن را ویرایش کنید. 
+    </ParamField>
+
+    <ParamField path="Activity.ActivityTypeId" type="string" required>
+      مشخص می‌کند این فعالیت از چه نوعی است؛ مثلا تماس، جلسه یا پیگیری.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد باید `Id` یکی از نوع‌های فعالیت موجود در دیدار را بگیرد.
+
+        - [Activity Type](/Activity-Type) — `Id` نوع فعالیت موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.Title" type="string" required>
+      عنوان کوتاه فعالیت که به کاربر نمایش داده می‌شود.
+    </ParamField>
+
+    <ParamField path="Activity.OwnerId" type="string">
+      شناسه User مسئول انجام و پیگیری فعالیت است. فعالیت در لیست فعالیت های همین کاربر نمایش داده می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+        - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.Note" type="string">
+      توضیحات لازم پیش از انجام فعالیت است؛ مثلا موضوع تماس یا نکاتی که مسئول باید هنگام پیگیری بداند.
+    </ParamField>
+
+    <ParamField path="Activity.IsDone" type="boolean">
+      مشخص می‌کند فعالیت انجام شده است یا هنوز باز است؛ `true` برای انجام‌شده و `false` برای انجام‌نشده.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — فعالیت انجام‌شده است
+        - `false` — فعالیت هنوز باز است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.ResultNote" type="string">
+      متنی است که نتیجه نهایی فعالیت یا محتوای یادداشت در آن ذخیره می‌شود؛ مثلا «مشتری درخواست پیش‌فاکتور داد».
+
+      <Expandable title="شرایط ارسال">
+        برای Activity معمولا زمانی ارسال می‌شود که فعالیت انجام شده و می‌خواهید نتیجه آن را ثبت کنید.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.IsDeleted" type="boolean">
+      مشخص می‌کند فعالیت در وضعیت حذف‌شده قرار دارد یا فعال است.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — فعالیت یا یادداشت حذف‌شده در نظر گرفته می‌شود
+        - `false` — رکورد حذف‌شده نیست
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.IsPinned" type="boolean">
+      مشخص می‌کند فعالیت برای دسترسی سریع در رکورد مرتبط (کارت یا فعالیت) سنجاق شود.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — رکورد سنجاق می‌شود
+        - `false` — رکورد سنجاق نمی‌شود
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.DueDate" type="string">
+      تاریخ و زمان برنامه‌ریزی‌شده برای انجام فعالیت است.
+    </ParamField>
+
+    <ParamField path="Activity.Duration" type="number">
+      مدت زمان فعالیت برحسب دقیقه است و بازه زمانی آن را در تقویم مشخص می‌کند.
+    </ParamField>
+
+    <ParamField path="Activity.DoneDate" type="string">
+      تاریخ و زمانی است که فعالیت واقعا انجام شده است.
+
+      <Expandable title="شرایط ارسال">
+        زمانی ارسالش کنید که فعالیت انجام شده و `Activity.IsDone` برابر `true` است.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.DealId" type="string">
+      شناسه معامله‌ای است که فعالیت باید به آن وصل شود. بعد از اتصال، فعالیت در سابقه همان معامله دیده می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        مقدار این فیلد باید `Id` یک معامله موجود در دیدار باشد.
+
+        - [Create Deal](/Create-Deal) — اگر معامله هنوز ساخته نشده است
+        - [Search Deal](/Search-Deal) — برای جست‌وجوی معامله
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.CaseId" type="string">
+      شناسه کارتی است که فعالیت یا یادداشت باید به آن وصل شود. بعد از اتصال، رکورد در سابقه همان کارت دیده می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        مقدار این فیلد باید `Id` یک کارت موجود در دیدار باشد.
+
+        - [Create Case](/Create-Case) — اگر کارت هنوز ساخته نشده است
+        - [Search Case](/Search-Case) — برای جست‌وجوی کارت
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.ContactIds[]" type="array">
+      فهرست `Id` اشخاص یا شرکت‌هایی است که این فعالیت یا یادداشت به آن‌ها مربوط می‌شود. رکورد در سابقه مخاطبان انتخاب‌شده هم دیده خواهد شد.
+
+      <Expandable title="وابستگی‌ها">
+        هر مقدار باید `Id` یک شخص یا شرکت موجود در دیدار باشد.
+
+        - [Create Person](/Create-Person) — ساخت شخص جدید
+        - [Get Person By Mobile](/Get-Person-By-Mobile) — پیداکردن شخص با موبایل
+        - [Search Person](/Search-Person) — جست‌وجوی شخص
+        - [Create Company](/Create-Company) — ساخت شرکت جدید
+        - [Search Company](/Search-Company) — جست‌وجوی شرکت
+      </Expandable>
+
+      <Expandable title="property">
+        <ParamField path="Activity.ContactIds[]" type="string">
+          فهرست `Id` اشخاص یا شرکت‌هایی است که این فعالیت یا یادداشت به آن‌ها مربوط می‌شود. رکورد در سابقه مخاطبان انتخاب‌شده هم دیده خواهد شد.
+
+          <Expandable title="وابستگی‌ها">
+            هر مقدار باید `Id` یک شخص یا شرکت موجود در دیدار باشد.
+
+            - [Create Person](/Create-Person) — ساخت شخص جدید
+            - [Get Person By Mobile](/Get-Person-By-Mobile) — پیداکردن شخص با موبایل
+            - [Search Person](/Search-Person) — جست‌وجوی شخص
+            - [Create Company](/Create-Company) — ساخت شرکت جدید
+            - [Search Company](/Search-Company) — جست‌وجوی شرکت
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.CreatorId" type="string">
+      شناسه Userی است که به‌عنوان ایجادکننده فعالیت ثبت می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+        - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+      </Expandable>
+
+      <Expandable title="شرایط ارسال">
+        اگر این فیلد ارسال نشود، ایجادکننده فعالیت مالک بیزدامنه در نظر گرفته می‌شود.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.RecurrenceType" type="string">
+      الگوی تکرار فعالیت را مشخص می‌کند؛ مثلا یک‌باره، روزانه یا هفتگی.
+
+      <Expandable title="مقادیر مجاز">
+        - `DontCare` — فعالیت بدون الگوی تکرار
+        - `OneTime` — فعالیت فقط یک‌بار انجام می‌شود
+        - `Hourly` — تکرار ساعتی
+        - `Daily` — تکرار روزانه
+        - `Weekly` — تکرار هفتگی
+        - `Monthly` — تکرار ماهانه
+        - `Yearly` — تکرار سالانه
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.RecurrenceData" type="number">
+      فاصله تکرار را همراه `RecurrenceType` مشخص می‌کند؛ مثلا `RecurrenceType=Daily` و مقدار `10` یعنی تکرار هر ۱۰ روز.
+
+      <Expandable title="شرایط ارسال">
+        وقتی `RecurrenceType` یک الگوی تکرارشونده مثل `Daily` یا `Weekly` است، این مقدار فاصله تکرار را مشخص می‌کند.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.Tags[]" type="array">
+      فهرست تگ‌هایی است که برای دسته‌بندی و پیداکردن سریع‌تر فعالیت یا یادداشت به آن وصل می‌شوند.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد باید `Id` تگ موجود در دیدار را بگیرد.
+
+        - [Tags](/Tags) — `Id` تگ موردنظر را بردارید
+      </Expandable>
+
+      <Expandable title="property">
+        <ParamField path="Activity.Tags[].TagId" type="string">
+          شناسه تگی است که باید به فعالیت یا یادداشت وصل شود.
+
+          <Expandable title="وابستگی‌ها">
+            این فیلد باید `Id` تگ موجود در دیدار را بگیرد.
+
+            - [Tags](/Tags) — `Id` تگ موردنظر را بردارید
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Activity.RecurrenceEndDate" type="string">
+      آخرین تاریخی است که تکرار فعالیت تا آن ادامه دارد.
+
+      <Expandable title="شرایط ارسال">
+        فقط برای فعالیت تکرارشونده ارسالش کنید؛ برای فعالیت یک‌باره نیازی به آن نیست.
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Activity": {
+    "Id": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+    "ActivityTypeId": "9c691370-f294-4e6b-aad0-b19b3696a0ad",
+    "Title": "323232",
+    "OwnerId": "4db21997-a5f7-4e52-83dc-403c3b29c3ef",
+    "Note": "توضیحات فاکتور و پیش فاکتور در این جا است ",
+    "IsDone": true,
+    "ResultNote": "متن یاداشت را وارد کنید",
+    "IsDeleted": false,
+    "IsPinned": true,
+    "DueDate": "2024-05-14T07:30:00.000Z",
+    "Duration": 0,
+    "DoneDate": "2025-05-14T07:30:00.000Z",
+    "DealId": null,
+    "CaseId": "00000000-0000-0000-0000-000000000000",
+    "ContactIds": [
+      "56620317-b415-4673-a2a5-6d20a7d12b00",
+      "44cb2f3f-9a52-4f16-a6e3-e0d725349647"
+    ],
+    "CreatorId": "c167f254-cf59-47df-b166-8398fc3864bf",
+    "RecurrenceType": "OneTime",
+    "RecurrenceData": 1,
+    "RecurrenceEndDate": "2023-03-14T07:30:00.000Z"
+  }
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location 'https://app.didar.me/api/activity/save?apikey=5xk2y6ua5vswf5d6a6ig1vk3vw8ee3ur' \
+--header 'Content-Type: application/json' \
+--header 'Cookie: LocoAuthCookie=9bead3da-a0d6-4670-8336-bd2d0b9a6615' \
+--data '{
+  "Activity": {
+    "Id": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+    "ActivityTypeId": "9c691370-f294-4e6b-aad0-b19b3696a0ad",
+    "Title": "323232",
+    "OwnerId": "4db21997-a5f7-4e52-83dc-403c3b29c3ef",
+    "Note": "توضیحات فاکتور و پیش فاکتور در این جا است ",
+    "IsDone": true,
+    "ResultNote": "متن یاداشت را وارد کنید",
+    "IsDeleted": false,
+    "IsPinned": true,
+    "DueDate": "2024-05-14T07:30:00.000Z",
+    "Duration": 0,
+    "DoneDate": "2025-05-14T07:30:00.000Z",
+    "DealId": null,
+    "CaseId": "00000000-0000-0000-0000-000000000000",
+    "ContactIds": [
+      "56620317-b415-4673-a2a5-6d20a7d12b00",
+      "44cb2f3f-9a52-4f16-a6e3-e0d725349647"
+    ],
+    "CreatorId": "c167f254-cf59-47df-b166-8398fc3864bf",
+    "RecurrenceType": "OneTime",
+    "RecurrenceData": 1,
+    "RecurrenceEndDate": "2023-03-14T07:30:00.000Z"
+  }
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+        "Title": "323232",
+        "Note": "توضیحات فاکتور و پیش فاکتور در این جا است ",
+        "ResultNote": "متن یاداشت را وارد کنید",
+        "ActivityTypeId": "9c691370-f294-4e6b-aad0-b19b3696a0ad",
+        "IsPrivate": false,
+        "IsDone": true,
+        "IsPinned": true,
+        "IsDeleted": false,
+        "IsKeepInTouch": false,
+        "DueDateType": "Default",
+        "DueDate": "2024-05-14T07:30:00Z",
+        "FinishDate": "2024-05-14T07:30:00Z",
+        "OriginalDueDate": "2026-07-27T13:25:09.9593749Z",
+        "DoneDate": "2025-05-14T07:30:00Z",
+        "RegisterDate": "2026-07-27T13:25:09.9593749Z",
+        "LastUpdateTime": "2026-07-27T13:25:09.9593749Z",
+        "LastPokeDate": "2026-07-27T13:25:09.9593749Z",
+        "Duration": 0,
+        "DealId": "00000000-0000-0000-0000-000000000000",
+        "CaseId": "00000000-0000-0000-0000-000000000000",
+        "TicketId": "00000000-0000-0000-0000-000000000000",
+        "CreatorId": "c167f254-cf59-47df-b166-8398fc3864bf",
+        "OwnerId": "4db21997-a5f7-4e52-83dc-403c3b29c3ef",
+        "UpdaterId": "00000000-0000-0000-0000-000000000000",
+        "ActivityGroupId": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+        "RecurrenceType": "OneTime",
+        "RecurrenceData": 1,
+        "RecurrenceEndDate": "2023-03-14T07:30:00Z",
+        "FeedbackType": "Neutral",
+        "NextOccurrence": "0001-01-01T00:00:00Z",
+        "CanPoke": false,
+        "IsAttended": false,
+        "Deal": null,
+        "Case": null,
+        "Contacts": [
+            {
+                "ContactId": "56620317-b415-4673-a2a5-6d20a7d12b00",
+                "ActivityId": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+                "Status": "Accepted",
+                "Message": "",
+                "Contact": {
+                    "Id": "56620317-b415-4673-a2a5-6d20a7d12b00",
+                    "Title": "",
+                    "FirstName": "12",
+                    "LastName": "",
+                    "WorkPhone": "",
+                    "MobilePhone": "",
+                    "Type": "Company",
+                    "DisplayName": "12 [حذف شده] "
+                }
+            },
+            {
+                "ContactId": "44cb2f3f-9a52-4f16-a6e3-e0d725349647",
+                "ActivityId": "9fe89a5e-21a5-4ce3-a531-fee2d70326b4",
+                "Status": "Accepted",
+                "Message": "",
+                "Contact": {
+                    "Id": "44cb2f3f-9a52-4f16-a6e3-e0d725349647",
+                    "Title": "",
+                    "FirstName": "",
+                    "LastName": "آشنا",
+                    "WorkPhone": "",
+                    "MobilePhone": "",
+                    "Type": "Person",
+                    "DisplayName": "آشنا"
+                }
+            }
+        ],
+        "Creator": {
+            "UserId": "c167f254-cf59-47df-b166-8398fc3864bf",
+            "DisplayName": "ایمان بهبودی",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/b1c6c56c-44a1-4d81-8a5f-a07d5620d007.jpg",
+            "Email": "behboudi@yahoo.com"
+        },
+        "Owner": {
+            "UserId": "4db21997-a5f7-4e52-83dc-403c3b29c3ef",
+            "DisplayName": " ناصر ابراهیمی",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+            "Email": "iransd.com@gmail.com"
+        },
+        "Users": [],
+        "Notifies": [],
+        "Comments": [],
+        "Attachments": [],
+        "Voices": [],
+        "Voips": [],
+        "Tags": [],
+        "CanEdit": true,
+        "CanDelete": true,
+        "CanDone": false,
+        "ActivityTicketStatus": "NotAnswered",
+        "IsTicket": false,
+        "OwnerId_Old": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+        "ActivityGroupType": "Default"
+    }
+}
+```
+
+</ResponseExample>
+
+## <br />**قواعد و محدودیت‌ها**
+
+- آپدیت به این صورت است که فقط فیلد Id اجباری است و مابقی فیلد ها اگر ارسال نشوند به مقدار اولیه و پیشفرض خود برمیگردند. (هر فیلدی که قصد دارید ویرایش نشود باید مقدار آن فیلد را دقیقا طبق مقداری که در حالت قبل از ویرایش بوده پر بکنید)

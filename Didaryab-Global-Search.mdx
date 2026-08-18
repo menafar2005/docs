@@ -1,0 +1,122 @@
+---
+title: "Didaryab Global Search"
+tag: "POST"
+sidebarTitle: "Didaryab Global Search"
+---
+
+{/*  Endpoint: Didaryab Global Search | /untitled-page  */}
+
+## Didaryab — دیداریاب
+
+دیداریاب برای جستجوی هم‌زمان در چند بخش مختلف دیدار ساخته شده است.‎ با ارسال یک عبارت و مشخص‌کردن نوع رکوردها، می‌توانید آن عبارت را میان اشخاص، شرکت‌ها، معاملات، کارت‌ها و فایل‌های پیوست‌شده جستجو کنید.‎
+
+```http
+POST {{baseURL}}/api/search/search?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Keyword" type="string">
+  عبارتی است که دیداریاب باید در Entityهای انتخاب‌شده جست‌وجو کند؛ مثلا نام شخص، عنوان معامله یا بخشی از نام شرکت.
+</ParamField>
+
+<ParamField path="Types[]" type="array">
+  مشخص می‌کند دیداریاب عبارت `Keyword` را داخل کدام نوع رکوردها جست‌وجو کند. می‌توانید یک یا چند نوع را هم‌زمان بفرستید.
+
+  <Expandable title="مقادیر مجاز">
+    - `contact` — جست‌وجو بین اشخاص
+    - `company` — جست‌وجو بین شرکت‌ها
+    - `deal` — جست‌وجو بین معامله‌ها
+    - `case` — جست‌وجو بین کارت‌ها
+    - `attachment` — جست‌وجو بین فایل‌های پیوست‌شده
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Keyword": "test",
+  "Types": [
+    "contact",
+    "company",
+    "deal",
+    "case",
+    "attachment"
+  ]
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/search/search?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Keyword": "آشنا",
+  "Types": [
+    "contact",
+    "company",
+    "deal",
+    "case",
+    "attachment"
+  ]
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Total": 1,
+        "List": [
+            {
+                "_tp": "contact",
+                "rv": "AAAAAKxWs84=",
+                "_Type": 996,
+                "Id": "E67D7252-A21B-45EF-8D63-BE95D50F2EEC",
+                "BizdomainId": "F846D756-64FA-4A0B-86C6-E8F571DECBED",
+                "OwnerId": "8BB84640-C11C-4349-97AB-D8F563C2F871",
+                "IsDeleted": false,
+                "Title": "",
+                "FirstName": "test",
+                "LastName": "test",
+                "Position": "",
+                "MobilePhone": "0912111111",
+                "WorkPhone": "",
+                "WorkPhoneExtension": "",
+                "Fax": "",
+                "MobilePhoneSearch": "912 2526429 9122526429 09122526429",
+                "OtherPhones": "",
+                "Email": "",
+                "OtherEmails": "",
+                "BackgroundInfo": "",
+                "CustomerCode": "",
+                "CodeString": "14491",
+                "IsCustomer": false,
+                "Type": 0,
+                "RegisterTime": "2026-07-22T06:31:51.387",
+                "CompanyId": "00000000-0000-0000-0000-000000000000",
+                "BirthDate": "2026-07-22",
+                "VisibilityType": 1,
+                "_rv": 2891363278
+            }
+        ]
+    }
+}
+```
+
+</ResponseExample>

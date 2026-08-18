@@ -1,0 +1,98 @@
+---
+title: "Get Product By Codes"
+description: "دریافت محصولات دیدار براساس کد محصول از طریق API"
+tag: "POST"
+sidebarTitle: "Get Product By Codes"
+---
+
+# دریافت محصول براساس کد
+
+با این Endpoint می‌توانید اطلاعات یک یا چند محصول را از روی کد آن‌ها دریافت کنید.‎ این روش بیشتر زمانی کاربرد دارد که کد محصولات را در سیستم خودتان دارید و می‌خواهید محصول‌های متناظرشان را در دیدار پیدا کنید.‎
+
+```http
+POST {{didar}}/api/product/getproductbycodes?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+<ParamField path="Code[]" type="array" required>
+  فهرست کد محصولاتی است که می‌خواهید اطلاعاتشان را دریافت کنید. هر عضو آرایه باید کد دقیق یک محصول باشد.
+
+  <Expandable title="property">
+    <ParamField path="Code[]" type="string" required>
+      فهرست کد محصولاتی است که می‌خواهید اطلاعاتشان را دریافت کنید. هر عضو آرایه باید کد دقیق یک محصول باشد.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Code": [
+    "999"
+  ]
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location '{{didar}}/api/product/getproductbycodes?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Code": [
+    "999"
+  ]
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+  "Response": {
+    "Total": 1,
+    "Products": [
+      {
+        "Id": "5487d762-43f1-4430-82a7-83ccef063f34",
+        "Title": "test2",
+        "Code": "999",
+        "Description": "توضیحات تست",
+        "ProfitMargin": 0.0,
+        "TitleForInvoice": "test2",
+        "Unit": "تعداد",
+        "UnitPrice": 2000000.0000000,
+        "Fields": {
+          "Field_6_0_26": "10"
+        },
+        "TitleSepidyar": "",
+        "ExistInSepidyar": false,
+        "itemStockSummary": [],
+        "IsActive": true,
+        "Category": null,
+        "ProductCategoryId": "7034b9a2-6ada-4c51-a420-33dc5a193fb1",
+        "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+        "ProductPrices": [
+          {
+            "Id": 4368354,
+            "CurrencyId": 96107,
+            "Price": "2000000",
+            "ProductId": "5487d762-43f1-4430-82a7-83ccef063f34",
+            "IsDeleted": false
+          }
+        ],
+        "Variants": []
+      }
+    ]
+  }
+}
+```
+
+</ResponseExample>

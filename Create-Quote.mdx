@@ -1,0 +1,689 @@
+---
+title: "Create Quote"
+tag: "POST"
+sidebarTitle: "Create Quote"
+description: "ایجاد پیش‌فاکتور جدید در دیدار همراه با ردیف‌های محصول، اطلاعات خریدار و فروشنده، مدت اعتبار و تنظیمات مالی سند"
+---
+
+# ایجاد پیش‌فاکتور
+
+این Endpoint برای ایجاد یک پیش‌فاکتور جدید در دیدار استفاده می‌شود. هر پیش‌فاکتور می‌تواند شامل یک یا چند ردیف محصول باشد و در صورت نیاز اطلاعات خریدار، اطلاعات فروشنده، تاریخ صدور، مدت اعتبار، تخفیف، مالیات، توضیحات و معامله مرتبط هم همراه آن ثبت شود.
+
+در این ساختار، `SellerInfo` مربوط به کسب‌وکاری است که از دیدار استفاده می‌کند و پیش‌فاکتور را به نام خودش صادر می‌کند. `BuyerInfo` اطلاعات شخص یا شرکتی را نگه می‌دارد که پیش‌فاکتور برای او صادر می‌شود.
+
+```http
+POST {{baseURL}}/api/AccountingQuote/CreateQuote?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Items[]" type="array" required>
+  فهرست ردیف‌های محصول پیش‌فاکتور است. هر عضو این آرایه یک ردیف مستقل از پیش‌فاکتور را می‌سازد و مشخص می‌کند چه محصولی، با چه تعداد، چه قیمت واحدی و چه اطلاعات تکمیلی روی سند ثبت شود.
+
+  <Expandable title="وابستگی‌ها">
+    اطلاعات محصول را از رکورد محصول در دیدار بردارید. اگر محصول متغیر است، اطلاعات زیرمحصول انتخاب‌شده را هم از همان محصول استفاده کنید.
+
+    - [Create Product](/Create_product) — اگر محصول هنوز در دیدار ساخته نشده است
+    - [Search Products](/Search_Products) — برای جست‌وجوی محصول
+    - [Get Product By Codes](/get-product-by-code) — برای پیدا کردن محصول با کد
+  </Expandable>
+
+  <Expandable title="property">
+    <ParamField path="Items[].VariantId" type="string">
+      شناسه زیرمحصولی است که در این ردیف پیش‌فاکتور ارائه می‌شود. این مقدار باید `Id` همان Variant انتخاب‌شده در محصول باشد.
+
+      <Expandable title="شرایط ارسال">
+        فقط زمانی لازم است که محصول متغیر باشد. اگر محصول زیرمحصول یا Variant ندارد، این فیلد را ارسال نکنید.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].VariantTitle" type="string">
+      عنوان زیرمحصول انتخاب‌شده برای این ردیف است؛ مثلا اگر محصول «تی‌شرت» باشد، این مقدار می‌تواند عنوان Variantی مثل «سبز - سایز L» باشد.
+
+      <Expandable title="شرایط ارسال">
+        فقط برای محصولی معنا دارد که Variant مشخصی برای آن انتخاب شده باشد.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].Title" type="string" required>
+      عنوانی است که برای این ردیف محصول روی پیش‌فاکتور ثبت می‌شود. برای محصول متغیر می‌توانید عنوان را به شکلی بفرستید که خود محصول و Variant انتخاب‌شده را برای خریدار مشخص کند.
+    </ParamField>
+
+    <ParamField path="Items[].TitleForInvoice" type="string">
+      عنوان مخصوص نمایش محصول روی سند مالی است. در مدل محصول دیدار نیز هر محصول یا Variant می‌تواند عنوان جداگانه‌ای برای نمایش روی فاکتور و پیش‌فاکتور داشته باشد.
+    </ParamField>
+
+    <ParamField path="Items[].newTitle" type="string">
+      فیلدی برای عنوان جدید ردیف است که در نمونه درخواست خالی ارسال شده است. کاربرد دقیق آن در اطلاعات ارائه‌شده مشخص نشده و جزو حداقل درخواست نیست.
+    </ParamField>
+
+    <ParamField path="Items[].VariantCode" type="string">
+      کد Variant انتخاب‌شده است و باید با `VariantCode` همان زیرمحصول در اطلاعات محصول مطابقت داشته باشد.
+
+      <Expandable title="شرایط ارسال">
+        برای محصولی که Variant ندارد نیازی به ارسال این فیلد نیست.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].Description" type="string" required>
+      توضیحات همین ردیف محصول روی پیش‌فاکتور است. از این فیلد برای ثبت توضیحی استفاده کنید که فقط مربوط به همین محصول یا خدمت است.
+    </ParamField>
+
+    <ParamField path="Items[].Unit" type="string" required>
+      واحد شمارش یا فروش محصول در این ردیف است؛ مثلا `عدد`، `کیلوگرم` یا `ساعت`.
+    </ParamField>
+
+    <ParamField path="Items[].UnitPrice" type="number | string" required>
+      قیمت واحد این ردیف است. مقداری که در این فیلد می‌فرستید همان قیمتی است که در نهایت برای هر واحد از این ردیف محصول روی پیش‌فاکتور نمایش داده می‌شود.
+    </ParamField>
+
+    <ParamField path="Items[].VariantPrices[]" type="array">
+      فهرست قیمت‌های ثبت‌شده برای Variant انتخاب‌شده است. هر عضو قیمت همان Variant را در یک ارز مشخص نگه می‌دارد.
+
+      <Expandable title="property">
+        <ParamField path="Items[].VariantPrices[].Id" type="number">
+          شناسه رکورد قیمت Variant در دیدار است.
+        </ParamField>
+
+        <ParamField path="Items[].VariantPrices[].CurrencyId" type="number">
+          شناسه ارزی است که این قیمت Variant براساس آن ثبت شده است.
+        </ParamField>
+
+        <ParamField path="Items[].VariantPrices[].Price" type="number | string">
+          قیمت Variant در ارزی است که `CurrencyId` همین عضو مشخص می‌کند.
+        </ParamField>
+
+        <ParamField path="Items[].VariantPrices[].VariantId" type="string">
+          شناسه Variantی است که این رکورد قیمت به آن تعلق دارد.
+        </ParamField>
+
+        <ParamField path="Items[].VariantPrices[].IsDeleted" type="boolean">
+          مشخص می‌کند رکورد قیمت حذف‌شده در نظر گرفته می‌شود یا خیر؛ `true` یعنی حذف‌شده و `false` یعنی رکورد قیمت فعال است.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].ProductId" type="string" required>
+      شناسه محصول اصلی این ردیف است. این مقدار باید `Id` محصول موجود در دیدار باشد، حتی اگر برای همان محصول یک `VariantId` هم ارسال می‌کنید.
+
+      <Expandable title="وابستگی‌ها">
+        مقدار این فیلد را از `Id` محصول بردارید.
+
+        - [Create Product](/Create_product) — اگر محصول هنوز ساخته نشده است
+        - [Search Products](/Search_Products) — برای جست‌وجوی محصول
+        - [Get Product By Codes](/get-product-by-code) — برای پیدا کردن محصول با کد
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].ProductCode" type="string" required>
+      کد اختصاصی محصولی است که این ردیف به آن مربوط می‌شود. این مقدار با `Code` محصول در دیدار متناظر است.
+    </ParamField>
+
+    <ParamField path="Items[].Discount" type="number | string">
+      مبلغ تخفیفی است که برای همین ردیف محصول ارسال می‌شود.
+    </ParamField>
+
+    <ParamField path="Items[].TaxPercent" type="number | string">
+      درصد مالیاتی است که برای این ردیف محصول در نظر گرفته می‌شود.
+    </ParamField>
+
+    <ParamField path="Items[].DiscountPercent" type="number | string">
+      درصد تخفیف همین ردیف محصول است.
+    </ParamField>
+
+    <ParamField path="Items[].Quantity" type="number" required>
+      تعداد واحدی از محصول یا Variant است که در این ردیف پیش‌فاکتور ثبت می‌شود.
+    </ParamField>
+
+    <ParamField path="Items[].DiscountType" type="string">
+      مشخص می‌کند تخفیف این ردیف به‌صورت مبلغ ثابت یا درصدی محاسبه شده است.
+
+      <Expandable title="مقادیر مجاز">
+        - `Amount` — تخفیف به‌صورت مبلغ ثابت در نظر گرفته می‌شود
+        - `Percent` — تخفیف به‌صورت درصدی در نظر گرفته می‌شود
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].SaleTypeId" type="string">
+      شناسه نوع فروش این ردیف است. در نمونه درخواست مقدار `00000000-0000-0000-0000-000000000000` ارسال شده و این فیلد جزو حداقل درخواست نیست.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="BizdomainProvider" type="object">
+  این آبجکت در نمونه درخواست به‌صورت خالی (`{}`) ارسال شده است. جزو حداقل درخواست نیست و جزئیات داخلی یا کاربرد دقیق آن در اطلاعات ارائه‌شده مشخص نشده است.
+</ParamField>
+
+<ParamField path="SellerInfo" type="object">
+  اطلاعات فروشنده‌ای است که پیش‌فاکتور به نام او صادر می‌شود. منظور از فروشنده در اینجا همان کسب‌وکار یا شرکتی است که از دیدار استفاده می‌کند، نه یک شرکتِ مشتری که به‌عنوان Contact داخل CRM ثبت شده است.
+
+  <Expandable title="property">
+    <ParamField path="SellerInfo.SellerName" type="string">
+      نام کسب‌وکار فروشنده برای نمایش روی پیش‌فاکتور.
+    </ParamField>
+
+    <ParamField path="SellerInfo.BizDomainId" type="string">
+      شناسه بیزدامنه فروشنده است.
+    </ParamField>
+
+    <ParamField path="SellerInfo.QuoteExpirationDays" type="number">
+      تعداد روزهای اعتبار پیش‌فاکتور از زمان صدور است.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerEconomicCode" type="string">
+      کد اقتصادی فروشنده برای درج در اطلاعات سند مالی.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerNationalCode" type="string">
+      کد یا شناسه ملی ثبت‌شده برای فروشنده در اطلاعات سند مالی.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerPostalCode" type="string">
+      کد پستی فروشنده.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerProvince" type="string">
+      استان آدرس فروشنده.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerGrandCity" type="string">
+      شهرستان یا محدوده شهری اصلی آدرس فروشنده.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerCity" type="string">
+      شهر آدرس فروشنده.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerAddress" type="string">
+      آدرس کامل فروشنده برای درج روی پیش‌فاکتور.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerPhone" type="string">
+      شماره تلفن فروشنده.
+    </ParamField>
+
+    <ParamField path="SellerInfo.InvoiceConditions" type="string">
+      متن شرایط یا توضیحاتی است که فروشنده برای فاکتور در نظر گرفته است.
+    </ParamField>
+
+    <ParamField path="SellerInfo.QuoteConditions" type="string">
+      متن شرایط یا توضیحاتی است که فروشنده برای پیش‌فاکتور در نظر گرفته است.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="BuyerInfo" type="object">
+  اطلاعات خریدار پیش‌فاکتور است. خریدار می‌تواند یک `Person` یا یک `Company` باشد و اطلاعات این آبجکت را می‌توانید براساس اطلاعات همان شخص یا شرکت در دیدار پر کنید.
+
+  <Expandable title="وابستگی‌ها">
+    اگر خریدار شخص است، اطلاعات او را از رکورد Person و اگر شرکت است از رکورد Company بردارید.
+
+    - [Create Person](/Create-Person) — ساخت شخص جدید
+    - [Get Person By Id](/Get-Person-By-Id) — دریافت اطلاعات شخص
+    - [Get Person By Mobile](/Get-Person-By-Mobile) — پیدا کردن شخص با موبایل
+    - [Search Person](/Search-Person) — جست‌وجوی شخص
+    - [Create Company](/Create-Company) — ساخت شرکت جدید
+    - [Get Company By Id](/Get-Company-By-Id) — دریافت اطلاعات شرکت
+    - [Search Company](/Search-Company) — جست‌وجوی شرکت
+  </Expandable>
+
+  <Expandable title="property">
+    <ParamField path="BuyerInfo.BuyerType" type="string">
+      نوع خریدار را مشخص می‌کند.
+
+      <Expandable title="مقادیر مجاز">
+        - `Person` — خریدار یک شخص است
+        - `Company` — خریدار یک شرکت است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerTitle" type="string">
+      عنوانی است که قبل از نام خریدار قرار می‌گیرد؛ مثلا `آقای` یا `خانم`.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerName" type="string">
+      نام خریدار برای نمایش روی پیش‌فاکتور است. برای `Person` نام شخص و برای `Company` نام شرکت در این فیلد قرار می‌گیرد.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerEconomicCode" type="string">
+      کد اقتصادی شرکت خریدار است.
+
+      <Expandable title="شرایط ارسال">
+        فقط زمانی ارسال کنید که `BuyerInfo.BuyerType` برابر `Company` است.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerNationalCode" type="string">
+      کد ملی ثبت‌شده برای شرکت خریدار در اطلاعات پیش‌فاکتور است.
+
+      <Expandable title="شرایط ارسال">
+        فقط زمانی ارسال کنید که `BuyerInfo.BuyerType` برابر `Company` است.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerNationalID" type="string">
+      شناسه ملی خریدار برای درج در اطلاعات پیش‌فاکتور است.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerRegistrationNumber" type="string">
+      شماره ثبت شرکت خریدار است.
+
+      <Expandable title="شرایط ارسال">
+        فقط زمانی ارسال کنید که `BuyerInfo.BuyerType` برابر `Company` است.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerProvince" type="string">
+      استان آدرس خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerGrandCity" type="string">
+      شهرستان یا محدوده شهری اصلی آدرس خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerCity" type="string">
+      شهر آدرس خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerPostalCode" type="string">
+      کد پستی خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerMobilePhone" type="string">
+      شماره موبایل خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerFaxNumber" type="string">
+      شماره فکس خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerAddress" type="object">
+      ساختار آدرس خریدار است. آدرس‌های شخص و شرکت در دیدار نیز به‌صورت مجموعه‌ای از مقادیر عنوان‌دار نگهداری می‌شوند و در این آبجکت می‌توانید آدرس موردنظر برای پیش‌فاکتور را ارسال کنید.
+
+      <Expandable title="property">
+        <ParamField path="BuyerInfo.BuyerAddress.KeyValues[]" type="array">
+          فهرست اجزای آدرس یا آدرس‌های عنوان‌دار خریدار است.
+
+          <Expandable title="property">
+            <ParamField path="BuyerInfo.BuyerAddress.KeyValues[].Key" type="string">
+              کلید یا نوع داخلی آدرس است؛ در نمونه ارائه‌شده مقدار `سایر` دیده می‌شود.
+            </ParamField>
+
+            <ParamField path="BuyerInfo.BuyerAddress.KeyValues[].Title" type="string">
+              عنوان قابل نمایش این آدرس؛ مثلا `سایر` یا `منزل`.
+            </ParamField>
+
+            <ParamField path="BuyerInfo.BuyerAddress.KeyValues[].Value" type="string">
+              متن آدرسی است که برای این عنوان ثبت می‌شود.
+            </ParamField>
+          </Expandable>
+        </ParamField>
+
+        <ParamField path="BuyerInfo.BuyerAddress.FilledKeyValues[]" type="array">
+          فهرست مقادیر تکمیل‌شده ساختار آدرس است. در نمونه کامل ارائه‌شده این آرایه خالی ارسال شده و ساختار اعضای آن در اطلاعات ورودی مشخص نشده است.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerPhone" type="string">
+      شماره تلفن ثابت خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerEmail" type="string">
+      ایمیل خریدار.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="CreatorId" type="string" required>
+  شناسه Userی است که به‌عنوان ایجادکننده پیش‌فاکتور ثبت می‌شود.
+
+  <Expandable title="وابستگی‌ها">
+    مقدار این فیلد باید `UserId` یک User موجود در دیدار باشد.
+
+    - [User List](/User-List) — `UserId` کاربر موردنظر را بردارید
+  </Expandable>
+</ParamField>
+
+<ParamField path="IssueDate" type="string">
+  تاریخ و زمان صدور پیش‌فاکتور است.
+</ParamField>
+
+<ParamField path="Adjustment" type="number | string">
+  مبلغ تعدیل نهایی پیش‌فاکتور است که همراه جمع محاسبات سند ارسال می‌شود. در نمونه کامل مقدار منفی برای این فیلد استفاده شده است.
+</ParamField>
+
+<ParamField path="DiscountRows[]" type="array">
+  فهرست ردیف‌های تخفیف پیش‌فاکتور است. در نمونه کامل ارائه‌شده این آرایه خالی است و ساختار اعضای آن در اطلاعات ورودی مشخص نشده است.
+</ParamField>
+
+<ParamField path="BizDomainId" type="string" required>
+  شناسه بیزدامنه است.
+</ParamField>
+
+<ParamField path="CurrencyId" type="number" required>
+  شناسه ارزی است که مبالغ این پیش‌فاکتور براساس آن ثبت می‌شوند.
+</ParamField>
+
+<ParamField path="DealId" type="string">
+  شناسه معامله‌ای است که می‌خواهید پیش‌فاکتور به آن متصل شود. اگر این فیلد ارسال شود، پیش‌فاکتور به همان معامله در دیدار مرتبط می‌شود.
+
+  <Expandable title="وابستگی‌ها">
+    مقدار این فیلد باید `Id` یک معامله موجود در دیدار باشد.
+
+    - [Create Deal](/Create-Deal) — ساخت معامله جدید
+    - [Get Deal By Id](/Get-Deal-By-Id) — دریافت معامله با شناسه
+    - [Search Deal](/Search-Deal) — جست‌وجوی معامله
+  </Expandable>
+</ParamField>
+
+<ParamField path="QuoteExpirationDays" type="number">
+  تعداد روزهایی است که پیش‌فاکتور از زمان صدور معتبر در نظر گرفته می‌شود.
+</ParamField>
+
+<ParamField path="Description" type="string">
+  توضیحات کلی پیش‌فاکتور است و برای متنی استفاده می‌شود که مربوط به کل سند است، نه فقط یک ردیف محصول.
+</ParamField>
+
+## قواعد و محدودیت‌ها
+
+- حداقل بدنه لازم برای ایجاد پیش‌فاکتور شامل `Items`، `CreatorId`، `BizDomainId` و `CurrencyId` است.
+- داخل هر عضو `Items`، فیلدهای `Title`، `Description`، `Unit`، `UnitPrice`، `ProductId`، `ProductCode` و `Quantity` الزامی هستند.
+- اگر محصول متغیر باشد، `VariantId` همان Variant انتخاب‌شده را هم ارسال کنید. برای محصول بدون Variant نیازی به `VariantId` نیست.
+- مقدار `Items[].UnitPrice` همان قیمت واحدی است که برای آن ردیف محصول روی پیش‌فاکتور نمایش داده می‌شود.
+- `BuyerInfo.BuyerType` فقط یکی از دو مقدار `Person` یا `Company` را می‌پذیرد.
+- `BuyerEconomicCode`، `BuyerNationalCode` و `BuyerRegistrationNumber` فقط برای خریدار از نوع `Company` ارسال می‌شوند.
+
+## حداقل درخواست
+
+```json
+{
+  "Items": [
+    {
+      "Title": "test product wp",
+      "Description": "تست 1",
+      "Unit": "عدد",
+      "UnitPrice": "5300",
+      "ProductId": "569984af-a8e4-4060-88c1-9481464c5e8f",
+      "ProductCode": "didar120",
+      "Quantity": 2
+    }
+  ],
+  "CreatorId": "8bb84640-c11c-4349-97ab-d8f563c2f871",
+  "BizDomainId": "67c7954d-1db7-41f5-8ed2-3bd055566636",
+  "CurrencyId": 259726
+}
+```
+
+اگر محصول متغیر است، `VariantId` را هم داخل همان عضو `Items` اضافه کنید.
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Items": [
+    {
+      "VariantId": "5aa5c45b-fa32-4ca5-85a7-f1c46f9ea2c8",
+      "VariantTitle": "تست ورینت دیدار 1",
+      "Title": "تست دیدار - تست ورینت دیدار 1",
+      "TitleForInvoice": "تست دیدار - تست ورینت دیدار 1",
+      "newTitle": "",
+      "Code": "59595595",
+      "VariantCode": "3030000",
+      "Description": "تست زهرا 1",
+      "Unit": "کیلوگرم",
+      "UnitPrice": "3000",
+      "VariantPrices": [
+        {
+          "Id": 53,
+          "CurrencyId": 3,
+          "Price": "3000",
+          "VariantId": "5aa5c45b-fa32-4ca5-85a7-f1c46f9ea2c8",
+          "IsDeleted": false
+        }
+      ],
+      "ProductId": "2ad7f436-9484-45e4-a485-b6d5cc66322b",
+      "ProductCode": "59595595",
+      "Discount": 150,
+      "TaxPercent": "10",
+      "DiscountPercent": "5",
+      "Quantity": 1,
+      "DiscountType": "Percent",
+      "SaleTypeId": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "VariantId": "a0d1d12f-1a2a-4093-b094-057031df482b",
+      "VariantTitle": "تست ورینت دیدار 2",
+      "Title": "تست دیدار - تست ورینت دیدار 2",
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "OriginalTitle": "",
+      "TitleForInvoice": "تست دیدار - تست ورینت دیدار 2",
+      "newTitle": "",
+      "Code": "59595595",
+      "VariantCode": "3030030300",
+      "Description": "تست زهرا 1",
+      "Unit": "کیلوگرم",
+      "UnitPrice": "4000",
+      "VariantPrices": [
+        {
+          "Id": 54,
+          "CurrencyId": 3,
+          "Price": "4000",
+          "VariantId": "a0d1d12f-1a2a-4093-b094-057031df482b",
+          "IsDeleted": false
+        }
+      ],
+      "ProductId": "2ad7f436-9484-45e4-a485-b6d5cc66322b",
+      "ProductCode": "59595595",
+      "Discount": "1000",
+      "TaxPercent": "10",
+      "DiscountPercent": 0,
+      "Quantity": 1,
+      "DiscountType": "Amount"
+    }
+  ],
+  "BizdomainProvider": {},
+  "SellerInfo": {
+    "SellerName": "نرم نگاران آرمیتیس",
+    "BizDomainId": "ffc39d03-0fcf-467d-88cc-b645ad92bf7c",
+    "QuoteExpirationDays": 5,
+    "SellerEconomicCode": "4111155714671",
+    "SellerNationalCode": "2079472",
+    "SellerPostalCode": "1998135738",
+    "SellerProvince": "تهران",
+    "SellerGrandCity": "تهران",
+    "SellerCity": "تهران",
+    "SellerAddress": " سعادت آباد، بالاتر از چهارراه سرو،بعد از پل یادگار، کوچه پنجم، پلاک 9، واحد 3، طبقه 2",
+    "SellerPhone": "22353500",
+    "InvoiceConditions": "شرایط پیش فرض فاکتور",
+    "QuoteConditions": "این پیش فاکتور صرفا جهت اعلام قیمت به شرکت متقاضی داده شده و هیچ ارزش دیگری ندارد5"
+  },
+  "BuyerInfo": {
+    "BuyerType": "Company",
+    "BuyerTitle": "",
+    "BuyerName": "QA Test Company",
+    "BuyerEconomicCode": "20200231515",
+    "BuyerNationalCode": "",
+    "BuyerNationalID": "6021523521",
+    "BuyerRegistrationNumber": "6566565555",
+    "BuyerProvince": "",
+    "BuyerGrandCity": "",
+    "BuyerCity": "",
+    "BuyerPostalCode": "5453534534",
+    "BuyerMobilePhone": "",
+    "BuyerFaxNumber": "955558",
+    "BuyerAddress": {
+      "KeyValues": [
+        {
+          "Key": "سایر",
+          "Title": "سایر",
+          "Value": "تهران"
+        }
+      ],
+      "FilledKeyValues": []
+    },
+    "BuyerPhone": "303000202",
+    "BuyerEmail": "testttttttttttttt@gmail.com"
+  },
+  "CreatorId": "1ccc4069-8d34-4f69-b0f3-76c7bb75bb03",
+  "IssueDate": "2025-11-07T14:22:14.290Z",
+  "Adjustment": "-435",
+  "DiscountRows": [],
+  "BizDomainId": "ffc39d03-0fcf-467d-88cc-b645ad92bf7c",
+  "CurrencyId": 3,
+  "DealId": "db619720-34c1-4120-841b-d1b70ae3c706",
+  "QuoteExpirationDays": 5,
+  "Description": "این پیش فاکتور صرفا جهت اعلام قیمت به شرکت متقاضی داده شده و هیچ ارزش دیگری ندارد."
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location '{{baseURL}}/api/AccountingQuote/CreateQuote?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "Items": [
+    {
+      "VariantId": "5aa5c45b-fa32-4ca5-85a7-f1c46f9ea2c8",
+      "VariantTitle": "تست ورینت دیدار 1",
+      "Title": "تست دیدار - تست ورینت دیدار 1",
+      "TitleForInvoice": "تست دیدار - تست ورینت دیدار 1",
+      "newTitle": "",
+      "Code": "59595595",
+      "VariantCode": "3030000",
+      "Description": "تست زهرا 1",
+      "Unit": "کیلوگرم",
+      "UnitPrice": "3000",
+      "VariantPrices": [
+        {
+          "Id": 53,
+          "CurrencyId": 3,
+          "Price": "3000",
+          "VariantId": "5aa5c45b-fa32-4ca5-85a7-f1c46f9ea2c8",
+          "IsDeleted": false
+        }
+      ],
+      "ProductId": "2ad7f436-9484-45e4-a485-b6d5cc66322b",
+      "ProductCode": "59595595",
+      "Discount": 150,
+      "TaxPercent": "10",
+      "DiscountPercent": "5",
+      "Quantity": 1,
+      "DiscountType": "Percent",
+      "SaleTypeId": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "VariantId": "a0d1d12f-1a2a-4093-b094-057031df482b",
+      "VariantTitle": "تست ورینت دیدار 2",
+      "Title": "تست دیدار - تست ورینت دیدار 2",
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "OriginalTitle": "",
+      "TitleForInvoice": "تست دیدار - تست ورینت دیدار 2",
+      "newTitle": "",
+      "Code": "59595595",
+      "VariantCode": "3030030300",
+      "Description": "تست زهرا 1",
+      "Unit": "کیلوگرم",
+      "UnitPrice": "4000",
+      "VariantPrices": [
+        {
+          "Id": 54,
+          "CurrencyId": 3,
+          "Price": "4000",
+          "VariantId": "a0d1d12f-1a2a-4093-b094-057031df482b",
+          "IsDeleted": false
+        }
+      ],
+      "ProductId": "2ad7f436-9484-45e4-a485-b6d5cc66322b",
+      "ProductCode": "59595595",
+      "Discount": "1000",
+      "TaxPercent": "10",
+      "DiscountPercent": 0,
+      "Quantity": 1,
+      "DiscountType": "Amount"
+    }
+  ],
+  "BizdomainProvider": {},
+  "SellerInfo": {
+    "SellerName": "نرم نگاران آرمیتیس",
+    "BizDomainId": "ffc39d03-0fcf-467d-88cc-b645ad92bf7c",
+    "QuoteExpirationDays": 5,
+    "SellerEconomicCode": "4111155714671",
+    "SellerNationalCode": "2079472",
+    "SellerPostalCode": "1998135738",
+    "SellerProvince": "تهران",
+    "SellerGrandCity": "تهران",
+    "SellerCity": "تهران",
+    "SellerAddress": " سعادت آباد، بالاتر از چهارراه سرو،بعد از پل یادگار، کوچه پنجم، پلاک 9، واحد 3، طبقه 2",
+    "SellerPhone": "22353500",
+    "InvoiceConditions": "شرایط پیش فرض فاکتور",
+    "QuoteConditions": "این پیش فاکتور صرفا جهت اعلام قیمت به شرکت متقاضی داده شده و هیچ ارزش دیگری ندارد5"
+  },
+  "BuyerInfo": {
+    "BuyerType": "Company",
+    "BuyerTitle": "",
+    "BuyerName": "QA Test Company",
+    "BuyerEconomicCode": "20200231515",
+    "BuyerNationalCode": "",
+    "BuyerNationalID": "6021523521",
+    "BuyerRegistrationNumber": "6566565555",
+    "BuyerProvince": "",
+    "BuyerGrandCity": "",
+    "BuyerCity": "",
+    "BuyerPostalCode": "5453534534",
+    "BuyerMobilePhone": "",
+    "BuyerFaxNumber": "955558",
+    "BuyerAddress": {
+      "KeyValues": [
+        {
+          "Key": "سایر",
+          "Title": "سایر",
+          "Value": "تهران"
+        }
+      ],
+      "FilledKeyValues": []
+    },
+    "BuyerPhone": "303000202",
+    "BuyerEmail": "testttttttttttttt@gmail.com"
+  },
+  "CreatorId": "1ccc4069-8d34-4f69-b0f3-76c7bb75bb03",
+  "IssueDate": "2025-11-07T14:22:14.290Z",
+  "Adjustment": "-435",
+  "DiscountRows": [],
+  "BizDomainId": "ffc39d03-0fcf-467d-88cc-b645ad92bf7c",
+  "CurrencyId": 3,
+  "DealId": "db619720-34c1-4120-841b-d1b70ae3c706",
+  "QuoteExpirationDays": 5,
+  "Description": "این پیش فاکتور صرفا جهت اعلام قیمت به شرکت متقاضی داده شده و هیچ ارزش دیگری ندارد."
+}'
+```
+
+</RequestExample>
+
+## لینک‌های مرتبط
+
+- [Create Product](/Create_product)
+- [Search Products](/Search_Products)
+- [Get Product By Codes](/get-product-by-code)
+- [Create Person](/Create-Person)
+- [Get Person By Id](/Get-Person-By-Id)
+- [Get Person By Mobile](/Get-Person-By-Mobile)
+- [Search Person](/Search-Person)
+- [Create Company](/Create-Company)
+- [Get Company By Id](/Get-Company-By-Id)
+- [Search Company](/Search-Company)
+- [User List](/User-List)
+- [Create Deal](/Create-Deal)
+- [Get Deal By Id](/Get-Deal-By-Id)
+- [Search Deal](/Search-Deal)

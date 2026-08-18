@@ -1,0 +1,59 @@
+---
+title: "Attach Files To Activity"
+tag: "POST"
+sidebarTitle: "Attach Files To Activity"
+---
+
+# پیوست فایل به فعالیت
+
+این Endpoint یک یا چند فایل را به فعالیتی که از قبل در دیدار ساخته شده متصل می‌کند.‎ ابتدا باید ID فعالیت را داشته باشید و سپس فایل‌ها را با فرمت `multipart/form-data` ارسال کنید.‎
+
+```http
+POST https://app.didar.me/api/activity/AttachFilesToActivity?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: multipart/form-data
+```
+
+## بدنه درخواست
+
+<ParamField path="activityId" type="string" required>
+  شناسه فعالیتی است که فایل باید به آن پیوست شود.
+</ParamField>
+
+<ParamField path="uploads" type="File" required>
+  فایل یا فایل‌هایی است که میخواهید به فعالیت پیوست شوند.
+</ParamField>
+
+## نمونه درخواست
+
+| Key | type | value |
+| --- | --- | --- |
+| `activityId` | Text | 042c9de7-fe4a-49e7-8821-ab4ca456ba6e |
+| `uploads` | File | <kbd>sample.md</kbd> |
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": [
+        {
+            "Key": "cbeb2df2-c2b8-4cb6-854f-b7356643d82d.md",
+            "Size": 10824,
+            "Type": "text/markdown",
+            "Name": "sample.md"
+        }
+    ]
+}
+```
+
+</ResponseExample>

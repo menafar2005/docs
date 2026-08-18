@@ -1,0 +1,153 @@
+---
+title: "Get Note By Id"
+tag: "POST"
+sidebarTitle: "Get Note By Id"
+---
+
+{/*  Endpoint: Get Note By Id | /untitled-page-11  */}
+
+## دریافت یادداشت توسط شناسه
+
+این Endpoint اطلاعات یک یادداشت مشخص را براساس ID آن برمی‌گرداند.‎ زمانی از آن استفاده کنید که ID یادداشت را دارید و می‌خواهید متن، تگ‌ها یا رکوردهای مرتبط با آن را دریافت کنید.‎
+
+```http
+POST {{baseURL}}/api/Activity/GetActivityAndNoteById?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Id" type="string" required>
+  شناسه یکتای یادداشتی است که می‌خواهید اطلاعاتش را دریافت کنید.
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Id": "0740f0b5-a015-40d2-964d-fc6b4bf86152"
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/Activity/GetActivityAndNoteById?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Id": "0740f0b5-a015-40d2-964d-fc6b4bf86152"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "0740f0b5-a015-40d2-964d-fc6b4bf86152",
+        "Title": "",
+        "Note": "",
+        "ResultNote": "test note text",
+        "ActivityTypeId": "00000000-0000-0000-0000-000000000000",
+        "IsPrivate": false,
+        "IsDone": true,
+        "IsPinned": true,
+        "DueDateType": "Default",
+        "DueDate": "2026-07-28T07:42:12Z",
+        "FinishDate": "2026-07-28T07:42:12Z",
+        "OriginalDueDate": "2026-07-28T07:42:12Z",
+        "DoneDate": "2026-07-28T07:42:12Z",
+        "RegisterDate": "2026-07-27T15:37:42Z",
+        "LastUpdateTime": "2026-07-28T07:58:18Z",
+        "LastPokeDate": "2026-07-28T07:42:12Z",
+        "Duration": 0,
+        "DealId": "d8044233-c42b-4a55-bd30-6dc8c1915196",
+        "CaseId": "d8004233-c42b-0000-bd30-6dc8c1989096",
+        "CreatorId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+        "OwnerId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+        "UpdaterId": "00000000-0000-0000-0000-000000000000",
+        "ActivityGroupId": "0740f0b5-a015-40d2-964d-fc6b4bf86152",
+        "RecurrenceType": "OneTime",
+        "RecurrenceData": 0,
+        "RecurrenceEndDate": "2026-07-28T07:42:12Z",
+        "FeedbackType": "Neutral",
+        "NextOccurrence": "2026-07-28T07:42:12Z",
+        "Deal": {
+            "Id": "d8044233-c42b-4a55-bd30-6dc8c1915196",
+            "Title": "معامله نفری تست"
+        },
+        "Case": null,
+        "Contacts": [
+            {
+                "ContactId": "bdfaf004-2ad3-47cb-89b9-0002fe5e5678",
+                "ActivityId": "0740f0b5-a015-40d2-964d-fc6b4bf86152",
+                "Status": "Accepted",
+                "Message": "",
+                "Contact": {
+                    "Id": "bdfaf004-2ad3-47cb-89b9-0002fe5e5678",
+                    "Title": "جناب آقای",
+                    "FirstName": "سهیل",
+                    "LastName": "شیرازی",
+                    "WorkPhone": "",
+                    "MobilePhone": "",
+                    "Type": "Person",
+                    "DisplayName": "سهیل شیرازی"
+                }
+            },
+            {
+                "ContactId": "3d92eedd-3a16-4ef0-ad2a-632a477f8e3b",
+                "ActivityId": "0740f0b5-a015-40d2-964d-fc6b4bf86152",
+                "Status": "Accepted",
+                "Message": "",
+                "Contact": {
+                    "Id": "3d92eedd-3a16-4ef0-ad2a-632a477f8e3b",
+                    "Title": "",
+                    "FirstName": "12",
+                    "LastName": "",
+                    "WorkPhone": "",
+                    "MobilePhone": "",
+                    "Type": "Company",
+                    "DisplayName": "12"
+                }
+            }
+        ],
+        "Creator": {
+            "UserId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+            "DisplayName": "میلاد مظاهری",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/a727ae10-e9ae-4541-b66a-00781811e5f5.jpg",
+            "Email": "milad@gmail.com"
+        },
+        "Owner": {
+            "UserId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+            "DisplayName": "میلاد مظاهری",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/a727ae10-e9ae-4541-b66a-00781811e5f5.jpg",
+            "Email": "milad@gmail.com"
+        },
+        "Tags": [
+            {
+                "ActivityId": "0740f0b5-a015-40d2-964d-fc6b4bf86152",
+                "TagId": "161ca98d-b715-4ffe-b9ee-722ce33655f6"
+            },
+            {
+                "ActivityId": "0740f0b5-a015-40d2-964d-fc6b4bf86152",
+                "TagId": "553655d9-8591-4bdd-b4d4-f3aca19ac5bb"
+            }
+        ],
+        "OwnerId_Old": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+        "ActivityGroupType": "Default"
+    }
+}
+```
+
+</ResponseExample>

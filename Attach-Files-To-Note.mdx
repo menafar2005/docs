@@ -1,0 +1,61 @@
+---
+title: "Attach Files To Note"
+tag: "POST"
+sidebarTitle: "Attach Files To Note"
+---
+
+{/*  Endpoint: Attach Files To Note | /untitled-page-10  */}
+
+## اتصال فایل به یادداشت
+
+با این Endpoint می‌توانید یک یا چند فایل را به یادداشتی که قبلاً ثبت شده متصل کنید.‎ شناسه یادداشت را در `activityId` قرار دهید و فایل‌ها را با فرمت `multipart/form-data` ارسال کنید.‎
+
+```http
+POST https://app.didar.me/api/activity/AttachFilesToActivity?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: multipart/form-data
+```
+
+## بدنه درخواست
+
+<ParamField path="activityId" type="string" required>
+  شناسه یادداشتی است که فایل باید به آن پیوست شود.
+</ParamField>
+
+<ParamField path="uploads" type="File" required>
+  فایل یا فایل‌هایی است که باید به یادداشت پیوست شوند.
+</ParamField>
+
+## نمونه درخواست
+
+| Key | type | value |
+| --- | --- | --- |
+| `activityId` | Text | 042c9de7-fe4a-49e7-8821-ab4ca456ba6e |
+| `uploads` | File | <kbd>sample.md</kbd> |
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": [
+        {
+            "Key": "cbeb2df2-c2b8-4cb6-854f-b7356643d82d.md",
+            "Size": 10824,
+            "Type": "text/markdown",
+            "Name": "sample.md"
+        }
+    ]
+}
+```
+
+</ResponseExample>

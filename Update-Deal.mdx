@@ -1,0 +1,603 @@
+---
+title: "Update Deal"
+tag: "POST"
+sidebarTitle: "Update Deal"
+---
+
+## ویرایش معامله
+
+با این Endpoint می‌توانید اطلاعات یا وضعیت یک معامله موجود را تغییر دهید.‎ برای مثال می‌توانید معامله را به مرحله دیگری ببرید، مسئول یا مبلغ آن را تغییر دهید، آن را برنده یا شکست‌خورده کنید یا محصولات مرتبطش را به‌روزرسانی کنید.‎
+
+```http
+POST {{baseURL}}/api/deal/save_v2?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Deal" type="object" required>
+  اطلاعات معامله داخل این آبجکت ارسال می‌شود.
+
+  <Expandable title="property">
+    <ParamField path="Deal.Id" type="string" required>
+      در این فیلد باید شناسه معامله ای راقرار دهید که می خواهید ویرایش کنید
+    </ParamField>
+
+    <ParamField path="Deal.Title" type="string" required>
+      عنوان معامله که در کارت معامله، فهرست معاملات نمایش داده می‌شود.
+    </ParamField>
+
+    <ParamField path="Deal.Description" type="string">
+      توضیحات تکمیلی معامله برای ثبت زمینه فروش، نیاز مشتری یا نکات پیگیری.
+    </ParamField>
+
+    <ParamField path="Deal.PersonId" type="string" required>
+      شناسه شخص اصلی طرف معامله است. این فیلد مشخص می‌کند فروش یا مذاکره با کدام شخص در جریان است.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام یا موبایل شخص را نمی‌پذیرد؛ باید `Id` شخص موجود در دیدار را بفرستید.
+
+        - [Create Person](/Create-Person) — اگر شخص هنوز در دیدار ساخته نشده است
+        - [Get Person By Id](/Get-Person-By-Id) — اگر `Id` شخص را دارید
+        - [Get Person By Mobile](/Get-Person-By-Mobile) — اگر شماره موبایل شخص را دارید
+        - [Search Person](/Search-Person) — برای جست‌وجوی شخص
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.CompanyId" type="string">
+      شناسه شرکتی است که معامله به آن مربوط می‌شود؛ مثلا شرکتی که شخص اصلی معامله در آن کار می‌کند یا خرید برای آن انجام می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام شرکت را نمی‌پذیرد؛ باید `Id` شرکت موجود در دیدار را بفرستید.
+
+        - [Create Company](/Create-Company) — اگر شرکت هنوز ساخته نشده است
+        - [Get Company By Id](/Get-Company-By-Id) — اگر `Id` شرکت را دارید
+        - [Search Company](/Search-Company) — برای جست‌وجوی شرکت
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.PipelineId" type="string" required>
+      شناسه کاریزی است که معامله باید داخل آن قرار بگیرد؛ مثلا کاریز فروش سازمانی یا فروش آنلاین.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه کاریز و مرحله باید متعلق به ساختار کاریزهای معامله در همین اکانت باشد.
+
+        - [List Deal Pipelines](/List-Deal-Pipelines) — `Response[].Id` شناسه کاریز و `Response[].Stages[].Id` شناسه مرحله است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.PipelineStageId" type="string" required>
+      شناسه مرحله‌ای از کاریز معامله است و جای فعلی معامله را در فرایند فروش مشخص می‌کند؛ مثلا «ارسال پیشنهاد».
+
+      <Expandable title="وابستگی‌ها">
+        شناسه کاریز و مرحله باید متعلق به ساختار کاریزهای معامله در همین اکانت باشد.
+
+        - [List Deal Pipelines](/List-Deal-Pipelines) — `Response[].Id` شناسه کاریز و `Response[].Stages[].Id` شناسه مرحله است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.OwnerId" type="string">
+      شناسه User مسئول پیگیری و پیش‌برد معامله است.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+        - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.Status" type="string">
+      وضعیت چرخه عمر معامله، مانند باز، موفق یا ناموفق.
+
+      <Expandable title="مقادیر مجاز">
+        - `Pending` — معامله باز و در جریان است؛ مقدار پیش‌فرض
+        - `Won` — معامله موفق شده است
+        - `Lost` — معامله شکست خورده است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.Price" type="string">
+      مبلغ معامله؛ ارزش مالی فعلی معامله را برای گزارش‌ها و پیش‌بینی فروش تعیین می‌کند.
+    </ParamField>
+
+    <ParamField path="Deal.LabelIds[]" type="array">
+      فهرست شناسه برچسب‌هایی است که باید به معامله وصل شوند؛ مثلا «مهم» یا «نیاز به پیگیری مدیر».
+
+      <Expandable title="وابستگی‌ها">
+        هر مقدار باید `Id` یکی از برچسب‌های معامله باشد.
+
+        - [Deal Labels](/Deal-Labels) — `Id` برچسب معامله را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.SourceId" type="string">
+      شناسه نحوه آشنایی معامله است و نشان می‌دهد این فرصت فروش از چه کانالی وارد شده و این معامله از چه طریقی ایجاد شده؛ مثلا سایت، تبلیغات یا معرفی دوستان.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد باید `Id` یکی از منابع تعریف‌شده در دیدار را بگیرد.
+
+        - [Sources](/Sources) — `Id` منبع موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.SourceOther" type="string">
+      اگر منبع جذب موردنظر در فهرست منابع تعریف‌شده وجود ندارد، عنوان منبع را در این فیلد بفرستید.
+
+      <Expandable title="شرایط ارسال">
+        زمانی استفاده کنید که منبع موردنظر در فهرست Sources وجود ندارد.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.ReferrerId" type="string">
+      شناسه معرف معامله؛ برای ثبت فرد یا رکوردی که این فرصت فروش را معرفی کرده است.
+    </ParamField>
+
+    <ParamField path="Deal.ExpectedCloseDate" type="null">
+      تاریخ مورد انتظار برای نهایی‌شدن معامله؛ در برنامه‌ریزی و پیش‌بینی فروش استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="Deal.LostReasonId" type="string">
+      شناسه یکی از دلایل شکست تعریف‌شده در دیدار است و مشخص می‌کند معامله چرا ناموفق شده است.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد باید `Id` یکی از دلایل شکست تعریف‌شده در دیدار را بگیرد.
+
+        - [Lost Reasons](/Lost-Reasons) — `Id` دلیل شکست موردنظر را بردارید
+      </Expandable>
+
+      <Expandable title="شرایط ارسال">
+        فقط زمانی ارسالش کنید که `Deal.Status` برابر `Lost` است و دلیل شکست از قبل در دیدار تعریف شده است.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.LostReasonNote" type="string">
+      توضیح تکمیلی درباره دلیل شکست معامله است؛ مثلا جزئیاتی که از انتخاب `LostReasonId` به‌تنهایی مشخص نمی‌شود.
+
+      <Expandable title="شرایط ارسال">
+        این فیلد زمانی معنا دارد که معامله شکست خورده باشد و بخواهید جزئیات بیشتری کنار دلیل شکست ثبت کنید.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.LostReasonOther" type="string">
+      اگر دلیل شکست موردنظر در فهرست دلایل تعریف‌شده وجود ندارد، متن دلیل جدید را در این فیلد بفرستید.
+
+      <Expandable title="شرایط ارسال">
+        فقط زمانی استفاده کنید که معامله شکست خورده و دلیل مناسب در فهرست دلایل شکست پیدا نمی‌شود.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.VisibilityType" type="string">
+      سطح مشاهده معامله؛ مشخص می‌کند چه کاربران یا گروه‌هایی بر اساس قواعد دسترسی امکان دیدن آن را دارند.
+    </ParamField>
+
+    <ParamField path="Deal.CurrencyId" type="string">
+      شناسه ارز مبالغ معامله.
+    </ParamField>
+
+    <ParamField path="Deal.Fields[]" type="object">
+      مقدار Custom Fieldهای معامله است. کلید هر پراپرتی، کلید فنی فیلد و مقدار آن، دیتایی است که باید در همان فیلد ذخیره شود.
+
+      <Expandable title="وابستگی‌ها">
+        فقط از کلید Custom Fieldهایی استفاده کنید که برای معامله تعریف شده‌اند.
+
+        - [Get Custom Fields](/Get-Custom-Fields) — کلید فنی فیلد متناسب با Entity را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.CreatorId" type="string">
+      شناسه Userی است که به‌عنوان ایجادکننده معامله ثبت می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+        - [User List](/User-List) — مقدار `UserId` کاربر موردنظر را بردارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.Code" type="string">
+      کد اختصاصی رکورد برای شناسایی و جست‌وجوی آن.
+    </ParamField>
+
+    <ParamField path="Deal.OtherContactIds" type="string">
+      شناسه سایر اشخاص یا شرکت‌های مرتبط با معامله است؛ یعنی مخاطبانی غیر از شخص و شرکت اصلی که باید در معامله دیده شوند.
+
+      <Expandable title="وابستگی‌ها">
+        هر مقدار باید `Id` یک شخص یا شرکت موجود در دیدار باشد.
+
+        - [Create Person](/Create-Person) — ساخت شخص جدید
+        - [Get Person By Mobile](/Get-Person-By-Mobile) — پیداکردن شخص با موبایل
+        - [Search Person](/Search-Person) — جست‌وجوی شخص
+        - [Create Company](/Create-Company) — ساخت شرکت جدید
+        - [Search Company](/Search-Company) — جست‌وجوی شرکت
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.IsPaid" type="boolean">
+      مشخص می‌کند مبلغ معامله پرداخت شده است یا خیر.
+
+      <Expandable title="مقادیر مجاز">
+        - `true` — معامله پرداخت‌شده علامت می‌خورد
+        - `false` — معامله پرداخت‌نشده است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.UserLosing" type="string">
+      اطلاعات کاربری که معامله را به وضعیت ناموفق منتقل کرده است.
+    </ParamField>
+
+    <ParamField path="Deal.ChangeToWonTime" type="string">
+      تاریخ و زمان انتقال معامله به وضعیت موفق.
+
+      <Expandable title="شرایط ارسال">
+        فقط برای معامله‌ای معنا دارد که وضعیت آن به `Won` تغییر کرده است.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Deal.ChangeToLossTime" type="string">
+      تاریخ و زمان انتقال معامله به وضعیت ناموفق.
+
+      <Expandable title="شرایط ارسال">
+        فقط برای معامله‌ای معنا دارد که وضعیت آن به `Lost` تغییر کرده است.
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="DealItems[]" type="array">
+  فهرست محصولات یا خدمات داخل معامله است. هر عضو یک ردیف مستقل با محصول، تعداد، قیمت، تخفیف و مالیات می‌سازد.
+
+  <Expandable title="property">
+    <ParamField path="DealItems[].ProductId" type="string" required>
+      شناسه محصولی است که این ردیف معامله براساس آن ساخته می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه و اطلاعات محصول یا زیرمحصول را از Endpointهای محصول بردارید.
+
+        - [Create Product](/Create_product) — اگر محصول هنوز ساخته نشده است
+        - [Search Products](/Search_Products) — برای جست‌وجوی محصول
+        - [Get Product By Codes](/get-product-by-code) — اگر کد محصول را دارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="DealItems[].Quantity" type="string" required>
+      تعداد محصول یا خدمت در این ردیف؛ مبلغ ردیف بر اساس این تعداد محاسبه می‌شود.
+    </ParamField>
+
+    <ParamField path="DealItems[].UnitPrice" type="string">
+      قیمت هر واحد محصول یا خدمت در این ردیف پیش از تخفیف و مالیات.
+    </ParamField>
+
+    <ParamField path="DealItems[].Price" type="string">
+      مبلغ پایه این ردیف محصول یا خدمت.
+    </ParamField>
+
+    <ParamField path="DealItems[].Discount" type="string">
+      مبلغ تخفیف اعمال‌شده روی این ردیف.
+    </ParamField>
+
+    <ParamField path="DealItems[].DiscountPercent" type="string">
+      درصد تخفیف این ردیف که در محاسبه مبلغ نهایی استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="DealItems[].TaxPercent" type="string">
+      درصد مالیات این ردیف که به مبلغ پس از تخفیف افزوده می‌شود.
+    </ParamField>
+
+    <ParamField path="DealItems[].Description" type="string">
+      توضیحات اختصاصی این ردیف محصول یا خدمت در معامله.
+    </ParamField>
+
+    <ParamField path="DealItems[].VariantId" type="string">
+      شناسه زیرمحصول انتخاب‌شده برای این ردیف است؛ مثلا نسخه یک‌ساله یک محصول اشتراکی.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه و اطلاعات محصول یا زیرمحصول را از Endpointهای محصول بردارید.
+
+        - [Create Product](/Create_product) — اگر محصول هنوز ساخته نشده است
+        - [Search Products](/Search_Products) — برای جست‌وجوی محصول
+        - [Get Product By Codes](/get-product-by-code) — اگر کد محصول را دارید
+      </Expandable>
+
+      <Expandable title="شرایط ارسال">
+        اگر محصول زیرمحصول ندارد، این فیلد را ارسال نکنید یا `null` بفرستید. اگر محصول متغیر است و این فیلد ارسال نشود، زیرمحصول پیش‌فرض انتخاب می‌شود.
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Deal": {
+    "Title": "سفارش 123",
+    "Description": "سفارش سفارش سفارش سفارش",
+    "PersonId": "eed0fdf9-026a-42a0-b9a0-b02b456434ba",
+    "CompanyId": "eed0fdf9-026a-42a0-b9a0-b02b456434ba",
+    "PipelineId": "9ae651bd-bbd4-4771-99e6-65231db1e1f2",
+    "PipelineStageId": "63658e7a-0bb2-4822-84ac-2e701e22e967",
+    "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+    "Status": "Lost",
+    "Price": "101.23",
+    "LabelIds": [
+      "093c518e-9984-4660-ae3e-416099ef32cc",
+      "5553f31b-e5dc-4301-bf2c-7de5a7b7fd0f"
+    ],
+    "SourceId": "86a316a5-7c0d-47c6-8867-87dd6b5b86dd",
+    "SourceOther": "asdfasdf",
+    "ReferrerId": "f4ffcdb7-eaac-4834-af80-cdff2d674bca",
+    "ExpectedCloseDate": null,
+    "LostReasonId": "b8075405-1b0f-4e67-a604-f0aeec08b244",
+    "LostReasonNote": "SDF",
+    "LostReasonOther": "SDF",
+    "VisibilityType": "Owner",
+    "CurrencyId": "null",
+    "Fields": {
+      "Field_8783_0_34": "1234",
+      "Field_8783_12_35": 12
+    },
+    "CreatorId": "a2048abd-8f8a-4354-9486-7177e3fa6770",
+    "Code": "123",
+    "OtherContactIds": "f4ffcdb7-eaac-4834-af80-cdff2d674bca,3f9240de-6aa0-4801-a30a-f233333299e5",
+    "IsPaid": false,
+    "UserLosing": "a2048abd-8f8a-4354-9486-7177e3fa6770",
+    "ChangeToWonTime": "2025-10-05T06:58:39Z",
+    "ChangeToLossTime": "2025-10-05T06:58:39Z",
+    "ContactId": "f91821d7-690b-4b7f-8cf2-1db0cd72b11f",
+    "IsDeleted": false,
+    "LabelId": "00000000-0000-0000-0000-000000000000",
+    "EstimatedPrice": 500000,
+    "SegmentIds": [],
+    "UserId": "f677929c-0f9a-4570-8234-c5b6ac20b892"
+  },
+  "DealItems": [
+    {
+      "ProductId": "831f67fa-1311-4aef-8eb3-8c534a7958a5",
+      "Quantity": "1",
+      "UnitPrice": "10105016",
+      "Price": "123123",
+      "Discount": "10105016",
+      "DiscountPercent": "12",
+      "TaxPercent": "3",
+      "Description": "10105016",
+      "VariantId": "1f8475e3-f556-430a-81d9-274a4b012adf"
+    }
+  ]
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/deal/save_v2?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Deal": {
+    "Title": "سفارش 123",
+    "Description": "سفارش سفارش سفارش سفارش",
+    "PersonId": "eed0fdf9-026a-42a0-b9a0-b02b456434ba",
+    "CompanyId": "eed0fdf9-026a-42a0-b9a0-b02b456434ba",
+    "PipelineId": "9ae651bd-bbd4-4771-99e6-65231db1e1f2",
+    "PipelineStageId": "63658e7a-0bb2-4822-84ac-2e701e22e967",
+    "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+    "Status": "Lost",
+    "Price": "101.23",
+    "LabelIds": [
+      "093c518e-9984-4660-ae3e-416099ef32cc",
+      "5553f31b-e5dc-4301-bf2c-7de5a7b7fd0f"
+    ],
+    "SourceId": "86a316a5-7c0d-47c6-8867-87dd6b5b86dd",
+    "SourceOther": "asdfasdf",
+    "ReferrerId": "f4ffcdb7-eaac-4834-af80-cdff2d674bca",
+    "ExpectedCloseDate": null,
+    "LostReasonId": "b8075405-1b0f-4e67-a604-f0aeec08b244",
+    "LostReasonNote": "SDF",
+    "LostReasonOther": "SDF",
+    "VisibilityType": "Owner",
+    "CurrencyId": "null",
+    "Fields": {
+      "Field_8783_0_34": "1234",
+      "Field_8783_12_35": 12
+    },
+    "CreatorId": "a2048abd-8f8a-4354-9486-7177e3fa6770",
+    "Code": "123",
+    "OtherContactIds": "f4ffcdb7-eaac-4834-af80-cdff2d674bca,3f9240de-6aa0-4801-a30a-f233333299e5",
+    "IsPaid": false,
+    "UserLosing": "a2048abd-8f8a-4354-9486-7177e3fa6770",
+    "ChangeToWonTime": "2025-10-05T06:58:39Z",
+    "ChangeToLossTime": "2025-10-05T06:58:39Z",
+    "ContactId": "f91821d7-690b-4b7f-8cf2-1db0cd72b11f",
+    "IsDeleted": false,
+    "LabelId": "00000000-0000-0000-0000-000000000000",
+    "EstimatedPrice": 500000,
+    "SegmentIds": [],
+    "UserId": "f677929c-0f9a-4570-8234-c5b6ac20b892"
+  },
+  "DealItems": [
+    {
+      "ProductId": "831f67fa-1311-4aef-8eb3-8c534a7958a5",
+      "Quantity": "1",
+      "UnitPrice": "10105016",
+      "Price": "123123",
+      "Discount": "10105016",
+      "DiscountPercent": "12",
+      "TaxPercent": "3",
+      "Description": "10105016",
+      "VariantId": "1f8475e3-f556-430a-81d9-274a4b012adf"
+    }
+  ]
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "8d5a12ba-f092-4a0f-86c5-48c6808188f4",
+        "Code": 0,
+        "BizDomainId": "f846d756-64fa-4a0b-86c6-e8f571decbed",
+        "Title": "سفارش 123",
+        "Description": null,
+        "OwnerId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+        "CreatorId": "00000000-0000-0000-0000-000000000000",
+        "ContactId": "eed0fdf9-026a-42a0-b9a0-b02b456434ba",
+        "PersonId": "eed0fdf9-026a-42a0-b9a0-b02b456434ba",
+        "CompanyId": "00000000-0000-0000-0000-000000000000",
+        "OtherContactIds": null,
+        "IsDeleted": false,
+        "IsPaid": false,
+        "Status": "Pending",
+        "Probability": 0,
+        "Price": "0",
+        "FinalAdjustmentPrice": "0",
+        "CurrencyId": 96107,
+        "LostReasonId": "00000000-0000-0000-0000-000000000000",
+        "LostReasonNote": null,
+        "LostReasonOther": null,
+        "RegisterTime": "2026-07-28T12:19:26.8644559Z",
+        "ChangeToWonTime": "2026-07-28T12:19:26.8644559Z",
+        "ChangeToLossTime": "2026-07-28T12:19:26.8644559Z",
+        "LastTrackingTime": "1930-01-01T00:00:00Z",
+        "NextTrackingTime": "1930-01-01T00:00:00Z",
+        "HasTracking": false,
+        "ExpectedCloseDate": null,
+        "CanEdit": true,
+        "CanDelete": true,
+        "CanSetLost": true,
+        "CanChangeToPending": false,
+        "CanSetVisibility": true,
+        "CanChangeProbability": false,
+        "CanSetWon": true,
+        "CanViewPrice": true,
+        "HasAccess": true,
+        "IsIdle": null,
+        "IsRotten": null,
+        "IsRottenInStage": null,
+        "EstimatedPrice": "0",
+        "Pin": 0,
+        "LabelId": "00000000-0000-0000-0000-000000000000",
+        "VisibilityType": "OwnerGroup",
+        "ReferrerId": "00000000-0000-0000-0000-000000000000",
+        "SourceId": "00000000-0000-0000-0000-000000000000",
+        "SourceOther": null,
+        "PipelineStageId": "63658e7a-0bb2-4822-84ac-2e701e22e967",
+        "PipelineId": "00000000-0000-0000-0000-000000000000",
+        "NextActivityDate": null,
+        "LastActivityUpdateTime": null,
+        "Owner": {
+            "UserId": "8c0b89b1-515c-42de-957d-294f0e80dbeb",
+            "DisplayName": "میلاد مظاهری",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/a727ae10-e9ae-4541-b66a-00781811e5f5.jpg",
+            "Email": "milad@gmail.com"
+        },
+        "Creator": {
+            "UserId": "00000000-0000-0000-0000-000000000000",
+            "DisplayName": "کاربر میهمان ",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+            "Email": ""
+        },
+        "UserLosing": {
+            "UserId": "00000000-0000-0000-0000-000000000000",
+            "DisplayName": "کاربر میهمان ",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+            "Email": ""
+        },
+        "Contact": null,
+        "Person": {
+            "Id": "eed0fdf9-026a-42a0-b9a0-b02b456434ba",
+            "Code": 218,
+            "Title": "جناب آقای",
+            "DisplayName": "12 آشنasasا",
+            "Type": "Person",
+            "CompanyName": "",
+            "CompanyId": "fd914338-7f30-4b11-aa4e-021b7a37d59b",
+            "HasCompany": true,
+            "CompanyIsCustomer": false,
+            "CompanyIsProspect": true,
+            "Position": "مدیر واحد",
+            "Feedback": 60.0,
+            "Owner": {
+                "UserId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+                "DisplayName": " محمد علی مزینی",
+                "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/52c406aa-ae3d-4699-b253-6c5af7648549.jpg",
+                "Email": "mamozayyani@gmail.com"
+            },
+            "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+            "OwnerId_Old": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+            "LastUpdateTime": "2026-06-15T05:56:48Z"
+        },
+        "Company": null,
+        "Referrer": null,
+        "OtherContacts": [],
+        "Fields": {},
+        "Source": null,
+        "KeepInTouchBizdomainId": "00000000-0000-0000-0000-000000000000",
+        "Feedback": 0.0,
+        "LastUpdateTime": "0001-01-01T00:00:00Z",
+        "PaymentShortLink": null,
+        "CanDeletePayment": true,
+        "CanEditPayment": true,
+        "OwnerId_Old": "00000000-0000-0000-0000-000000000000",
+        "Adjustment": null,
+        "Items": [
+            {
+                "Id": "084c56f1-31b8-42fd-a9aa-7c7858b793ce",
+                "Price": 0.0,
+                "Unit": "",
+                "UnitPrice": 0.0,
+                "TaxPrice": 0.0,
+                "Title": "تست-",
+                "TitleForInvoice": null,
+                "Description": "",
+                "Discount": 0.0,
+                "DiscountPercent": 0.0,
+                "DiscountType": "Amount",
+                "EditorId": "00000000-0000-0000-0000-000000000000",
+                "CreatedDate": "2026-07-28T12:19:26.8722135Z",
+                "CreatorId": "00000000-0000-0000-0000-000000000000",
+                "ModifiedDate": "2026-07-28T12:19:26.8933081Z",
+                "DealId": "8d5a12ba-f092-4a0f-86c5-48c6808188f4",
+                "PriceAfterDiscount": 0.0,
+                "ProductCode": "1003",
+                "ProductId": "200fbf46-6d84-4d4e-bd54-e72f54f100ba",
+                "Quantity": 1.0,
+                "SaleTypeId": null,
+                "TaxPercent": 10,
+                "VariantCode": null,
+                "VariantId": null,
+                "VariantTitle": null,
+                "itemStockSummary": [],
+                "ExistInSepidyar": false
+            }
+        ],
+        "LabelIds": []
+    }
+}
+```
+
+</ResponseExample>
+
+## لینک ها مرتبط
+
+- [Create Product](/create-product)
+- [Search Products](/Search_Products)
+- [Get Custom Fields](/Get-Custom-Fields)
+- [User List](/User-List)
+- [Create Person](/Create-Person)
+- [Get Person By Mobile](/Get-Person-By-Mobile)
+- [Search Person](/Search-Person)
+- [Create Company](/Create-Company)
+- [Search Company](/Search-Company)
+- [List Deal Pipelines](/List-Deal-Pipelines)

@@ -1,0 +1,301 @@
+---
+title: "Search Case"
+tag: "POST"
+sidebarTitle: "Search Case"
+---
+
+{/*  Endpoint: Search Case | /untitled-page-31  */}
+
+## جستجوی کارت
+
+با این Endpoint می‌توانید کارت‌ها را براساس عنوان، بازه زمانی، مخاطب، مسئول، مرحله کاریز، معامله مرتبط یا فیلدهای اضافه پیدا کنید.‎ نتایج با `From` و `Limit` به‌صورت صفحه‌بندی‌شده برگردانده می‌شوند.‎
+
+```http
+POST {{baseURL}}/api/Case/search?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Criteria" type="object">
+  مجموعه معیارهای جست‌وجو و فیلتر؛ فقط رکوردهایی که با این شرایط سازگار باشند در نتیجه برگردانده می‌شوند.
+
+  <Expandable title="property">
+    <ParamField path="Criteria.SearchTimeField" type="number">
+      نام فیلد تاریخی که بازه `SearchFromTime` و `SearchToTime` باید روی آن اعمال شود.
+    </ParamField>
+
+    <ParamField path="Criteria.SearchFromTime" type="string">
+      ابتدای بازه زمانی جست‌وجو؛ رکوردهای پیش از این زمان از نتیجه حذف می‌شوند.
+    </ParamField>
+
+    <ParamField path="Criteria.SearchToTime" type="string">
+      انتهای بازه زمانی جست‌وجو؛ رکوردهای پس از این زمان از نتیجه حذف می‌شوند.
+    </ParamField>
+
+    <ParamField path="Criteria.ContactIds[]" type="array">
+      فهرست شناسه اشخاص اصلی است و فقط معامله‌های مرتبط با این اشخاص را برمی‌گرداند.
+
+      <Expandable title="وابستگی‌ها">
+        این فیلد نام یا موبایل شخص را نمی‌پذیرد؛ باید `Id` شخص موجود در دیدار را بفرستید.
+
+        - [Create Person](/Create-Person) — اگر شخص هنوز در دیدار ساخته نشده است
+        - [Get Person By Id](/Get-Person-By-Id) — اگر `Id` شخص را دارید
+        - [Get Person By Mobile](/Get-Person-By-Mobile) — اگر شماره موبایل شخص را دارید
+        - [Search Person](/Search-Person) — برای جست‌وجوی شخص
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.Keywords" type="string">
+      عبارتی که در این فیلد وارد میکنید روی عنوان کارت ها سرچ می شود و کارت هایی که عنوان مشابه عبارت وارد شده در این فیلد داشته باشن در پاسخ ارسال می شوند
+    </ParamField>
+
+    <ParamField path="Criteria.OwnerId" type="string">
+      شناسه مسئول مرتبط با کارت. با وارد کردن این فیلد کارتهایی در پاسخ ارسال می شوند که مسئولشان فردی است که در این فیلد ارسال کرده اید
+    </ParamField>
+
+    <ParamField path="Criteria.PipelineStageId" type="string">
+      شناسه یک مرحله کاریز است و فقط رکوردهای داخل همان مرحله را برمی‌گرداند.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه مرحله باید متعلق به یکی از کاریزهای کارت در همین اکانت باشد.
+
+        - [List Case Pipelines](/List-Case-Pipelines) — `Response[].Stages[].Id` شناسه مرحله کاریز کارت است
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.DealId" type="string">
+      شناسه معامله برای محدودکردن نتایج به داده مرتبط با همان معامله. دریافت شناسه معامله:
+
+      <Expandable title="وابستگی‌ها">
+        مقدار این فیلد باید `Id` یک معامله موجود در دیدار باشد.
+
+        - [Create Deal](/Create-Deal) — اگر معامله هنوز ساخته نشده است
+        - [Get Deal By Id](/Get-Deal-By-Id) — اگر `Id` معامله را دارید
+        - [Search Deal](/Search-Deal) — برای جست‌وجوی معامله
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Criteria.CustomFields[]" type="array">
+      شرط‌های جست‌وجو روی فیلدهای اضافه؛ ساختار هر شرط باید با نوع فیلد اضافه سازگار باشد. دریافت فیلد های اضافی: توجه داشته باشید که فیلد انتخابی برای کارت باید حتما `"FieldType": "Case"`<br />
+
+      <Expandable title="وابسنگی">
+        برای دریافت کلید فیلد های اختصاصی از اندپوینت زیر استفاده کنید: <br />[Get Custom Fields](/Get-Custom-Fields)
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="From" type="number">
+  اندیس شروع نتایج برای صفحه‌بندی است. مثلا `0` یعنی دریافت از اولین نتیجه و `20` یعنی ۲۰ نتیجه اول رد شوند.
+</ParamField>
+
+<ParamField path="Limit" type="number">
+  حداکثر تعداد رکوردی است که در همین پاسخ برگردانده می‌شود.
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Criteria": {
+    "SearchTimeField": 1,
+    "SearchFromTime": "1000-01-01T19:30:00.000Z",
+    "SearchToTime": "9999-12-28T19:29:59.999Z",
+    "ContactIds": [],
+    "Keywords": "",
+    "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+    "PipelineStageId": "80c3e56c-2856-4f13-b559-a5dd8a1a4138",
+    "DealId": "16d952cc-2321-4680-a951-957c3eb21423",
+    "CustomFields": []
+  },
+  "From": 0,
+  "Limit": 2
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/Case/search?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Criteria": {
+    "SearchTimeField": 1,
+    "SearchFromTime": "1000-01-01T19:30:00.000Z",
+    "SearchToTime": "9999-12-28T19:29:59.999Z",
+    "ContactIds": [],
+    "Keywords": "",
+    "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+    "PipelineStageId": "80c3e56c-2856-4f13-b559-a5dd8a1a4138",
+    "DealId": "16d952cc-2321-4680-a951-957c3eb21423",
+    "CustomFields": []
+  },
+  "From": 0,
+  "Limit": 2
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "TotalCount": [
+            4
+        ],
+        "AllCasesCount": [
+            4
+        ],
+        "InProgressCasesCount": [
+            4
+        ],
+        "DoneCasesCount": [
+            0
+        ],
+        "List": [
+            {
+                "Id": "b83965ac-5a28-4be2-a844-e783ba2f254c",
+                "OwnerId": "00000000-0000-0000-0000-000000000000",
+                "OwnerId_Old": "00000000-0000-0000-0000-000000000000",
+                "Title": " 1231  تست",
+                "CanDelete": true,
+                "CanEdit": true,
+                "IsCaseCategoryActive": null,
+                "Description": "<p>احسان</p>",
+                "CompanyId": "00000000-0000-0000-0000-000000000000",
+                "PersonId": "00000000-0000-0000-0000-000000000000",
+                "ContactId": "00000000-0000-0000-0000-000000000000",
+                "IsDeleted": false,
+                "Status": "InProgress",
+                "CreateTime": "2026-07-28T16:35:51Z",
+                "DueDate": "2026-07-28T16:35:51Z",
+                "InProgressTime": "2026-07-28T16:35:51Z",
+                "DoneTime": "2026-07-28T16:35:51Z",
+                "CaseType": "Simple",
+                "DealId": "00000000-0000-0000-0000-000000000000",
+                "LabelId": "048cba4c-c168-421d-949b-4ca2bb84ebb4",
+                "Code": 4,
+                "Color": "",
+                "Priority": 0,
+                "UserIds": [],
+                "PipelineStageId": "2d34c424-62e5-4fcc-b0f0-bfbd11bf440a",
+                "PipelineId": "f7861340-b22c-49b1-bb5a-d96b5cdba979",
+                "PipelineChangeTime": "2026-07-28T16:35:51Z",
+                "CaseCategoryId": "00000000-0000-0000-0000-000000000000",
+                "OtherContactIds": "",
+                "ResultNote": "",
+                "NextActivityDate": null,
+                "LastActivityUpdateTime": "2026-07-29T06:13:02Z",
+                "VisibilityType": "Owner",
+                "CategoryType": "ActivityOriented",
+                "CreatorId": "00000000-0000-0000-0000-000000000000",
+                "Creator": {
+                    "UserId": "00000000-0000-0000-0000-000000000000",
+                    "DisplayName": "کاربر میهمان ",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+                    "Email": ""
+                },
+                "Owner": {
+                    "UserId": "00000000-0000-0000-0000-000000000000",
+                    "DisplayName": "کاربر میهمان ",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+                    "Email": ""
+                },
+                "Category": null,
+                "Fields": {},
+                "Contact": null,
+                "Person": null,
+                "Company": null,
+                "OtherContacts": [],
+                "Deal": null,
+                "_Type": null,
+                "LabelIds": [
+                    "048cba4c-c168-421d-949b-4ca2bb84ebb4"
+                ],
+                "IdleStatus": null,
+                "RottenInPipelineStatus": null,
+                "RottenInStageStatus": null,
+                "CaseRating": null
+            },
+            {
+                "Id": "d3feb2cc-0583-4a1c-ac63-8e23d3b2737b",
+                "OwnerId": "00000000-0000-0000-0000-000000000000",
+                "OwnerId_Old": "00000000-0000-0000-0000-000000000000",
+                "Title": " 1231  تست",
+                "CanDelete": true,
+                "CanEdit": true,
+                "IsCaseCategoryActive": null,
+                "Description": "",
+                "CompanyId": "00000000-0000-0000-0000-000000000000",
+                "PersonId": "00000000-0000-0000-0000-000000000000",
+                "ContactId": "00000000-0000-0000-0000-000000000000",
+                "IsDeleted": false,
+                "Status": "InProgress",
+                "CreateTime": "2026-07-28T16:30:51Z",
+                "DueDate": "2026-07-28T16:30:51Z",
+                "InProgressTime": "2026-07-28T16:30:51Z",
+                "DoneTime": "2026-07-28T16:30:51Z",
+                "CaseType": "Simple",
+                "DealId": "00000000-0000-0000-0000-000000000000",
+                "LabelId": "048cba4c-c168-421d-949b-4ca2bb84ebb4",
+                "Code": 3,
+                "Color": "",
+                "Priority": 0,
+                "UserIds": [],
+                "PipelineStageId": "2d34c424-62e5-4fcc-b0f0-bfbd11bf440a",
+                "PipelineId": "f7861340-b22c-49b1-bb5a-d96b5cdba979",
+                "PipelineChangeTime": "2026-07-28T16:30:51Z",
+                "CaseCategoryId": "00000000-0000-0000-0000-000000000000",
+                "OtherContactIds": "",
+                "ResultNote": "",
+                "NextActivityDate": null,
+                "LastActivityUpdateTime": null,
+                "VisibilityType": "Owner",
+                "CategoryType": "ActivityOriented",
+                "CreatorId": "00000000-0000-0000-0000-000000000000",
+                "Creator": {
+                    "UserId": "00000000-0000-0000-0000-000000000000",
+                    "DisplayName": "کاربر میهمان ",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+                    "Email": ""
+                },
+                "Owner": {
+                    "UserId": "00000000-0000-0000-0000-000000000000",
+                    "DisplayName": "کاربر میهمان ",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+                    "Email": ""
+                },
+                "Category": null,
+                "Fields": {},
+                "Contact": null,
+                "Person": null,
+                "Company": null,
+                "OtherContacts": [],
+                "Deal": null,
+                "_Type": null,
+                "LabelIds": [
+                    "048cba4c-c168-421d-949b-4ca2bb84ebb4"
+                ],
+                "IdleStatus": null,
+                "RottenInPipelineStatus": null,
+                "RottenInStageStatus": null,
+                "CaseRating": null
+            }
+        ]
+    }
+}
+```
+
+</ResponseExample>

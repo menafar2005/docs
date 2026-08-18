@@ -1,0 +1,309 @@
+---
+title: "Get Company By Id"
+tag: "POST"
+sidebarTitle: "Get Company By Id"
+---
+
+## دریافت جزئیات شرکت توسط شناسه شرکت
+
+با این Endpoint می‌توانید اطلاعات کامل یک شرکت مشخص را براساس ID آن دریافت کنید.‎ این درخواست زمانی مناسب است که شرکت را از قبل پیدا کرده‌اید و به اطلاعات ثبت‌شده، مسئول، راه‌های تماس، آدرس‌ها یا فیلدهای اضافه آن نیاز دارید.‎
+
+```http
+POST {{baseURL}}/api/contact/GetContactDetail?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Id" type="string" required>
+  شناسه یکتای شرکتی است که می‌خواهید اطلاعاتش را دریافت کنید.
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Id": "5a0b0303-4b21-4144-9576-d5f1504c3573"
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/contact/GetContactDetail?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Id": "5a0b0303-4b21-4144-9576-d5f1504c3573"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "5a0b0303-4b21-4144-9576-d5f1504c3573",
+        "Code": 14504,
+        "Title": "",
+        "FirstName": "12",
+        "LastName": "",
+        "DisplayName": "12",
+        "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+        "CompanyId": "00000000-0000-0000-0000-000000000000",
+        "BirthDate": "2025-08-31T00:00:00Z",
+        "BirthDateMessageId": "88356367-c004-4263-98e5-6b4e8bbc9852",
+        "BirthDateisValid": false,
+        "MobilePhone": "تلفن منشی 09344454323",
+        "WorkPhone": "تلفن منشی 09344454323",
+        "WorkPhoneExtension": "تلفن منشی",
+        "Fax": "فکس منشی 09344454323",
+        "Email": "ایمیل منشی mad@sdf.com",
+        "CanDelete": true,
+        "CanEdit": true,
+        "IsDeleted": false,
+        "IsVIP": true,
+        "IsMine": false,
+        "HasAccess": true,
+        "LeadGenerationType": "Manual",
+        "LeadStatus": "None",
+        "LeadType": "General",
+        "ContactType": "General",
+        "IsCustomer": false,
+        "IsProspect": false,
+        "Type": "Company",
+        "BackgroundInfo": "12312",
+        "RegisterTime": "2026-07-28T11:12:03Z",
+        "Position": "مدیر واحد",
+        "CustomerCode": "123-site",
+        "EconomicIssue": "sdaf23",
+        "NationalCode": "",
+        "RegistrationNumber": "asdf2134",
+        "NationalID": "safdasdf12",
+        "ZipCode": "123asdf",
+        "CityTitle": "اسکو",
+        "ProvinceTitle": "آذربایجان شرقی",
+        "ProvinceId": "c990e86b-a13a-40f4-b21d-79bf09e6e579",
+        "CityId": "314409ce-ee7f-424e-ab88-c578d0ca187f",
+        "HasCompany": false,
+        "CompanyName": "",
+        "CompanyIsCustomer": null,
+        "CompanyIsProspect": null,
+        "CompanyCode": null,
+        "CompanyAndPosition": " - مدیر واحد",
+        "Feedback": 60.0,
+        "VisibilityType": "Owner",
+        "OtherPhones": {
+            "KeyValues": [
+                {
+                    "Key": "همراه",
+                    "Value": "تلفن 0123",
+                    "Title": "همراه"
+                },
+                {
+                    "Key": "محل کار",
+                    "Value": "موبایل 09123",
+                    "Title": "محل کار"
+                },
+                {
+                    "Key": "منزل",
+                    "Value": "موبایل 09123",
+                    "Title": "منزل"
+                },
+                {
+                    "Key": "سایر",
+                    "Value": "موبایل 09123",
+                    "Title": "سایر"
+                }
+            ]
+        },
+        "OtherEmails": {
+            "KeyValues": [
+                {
+                    "Key": "کاری",
+                    "Value": "mamo@sd.comsd",
+                    "Title": "کاری"
+                },
+                {
+                    "Key": "شخصی",
+                    "Value": "masmo@sd.com",
+                    "Title": "شخصی"
+                },
+                {
+                    "Key": "سایر",
+                    "Value": "msdfamo@sd.com",
+                    "Title": "سایر"
+                }
+            ]
+        },
+        "Websites": {
+            "KeyValues": [
+                {
+                    "Key": "asdf",
+                    "Value": "asdfasdfasdf",
+                    "Title": "asdf"
+                }
+            ]
+        },
+        "Addresses": {
+            "KeyValues": [
+                {
+                    "Key": "",
+                    "Value": "ASasdfasdfDF",
+                    "Title": ""
+                },
+                {
+                    "Key": "محل کار",
+                    "Value": "ASDF",
+                    "Title": "محل کار"
+                },
+                {
+                    "Key": "منزل",
+                    "Value": "ASDFASDF",
+                    "Title": "منزل"
+                },
+                {
+                    "Key": "سایر",
+                    "Value": "ASDFSDF",
+                    "Title": "سایر"
+                }
+            ]
+        },
+        "BankAccounts": {
+            "Values": [
+                {
+                    "Values": [
+                        "",
+                        "asdf",
+                        "asdf",
+                        "asdf",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ],
+                    "Value1": "",
+                    "Value2": "asdf",
+                    "Value3": "asdf",
+                    "Value4": "asdf",
+                    "Value5": "",
+                    "Value6": "",
+                    "Value7": "",
+                    "Value8": "",
+                    "Value9": "",
+                    "Value10": "",
+                    "Value11": "",
+                    "Value12": "",
+                    "Value13": "",
+                    "Value14": "",
+                    "Value15": ""
+                },
+                {
+                    "Values": [
+                        "Card",
+                        "asdfasfd",
+                        "asdfasdf",
+                        "asdfasdf",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ],
+                    "Value1": "Card",
+                    "Value2": "asdfasfd",
+                    "Value3": "asdfasdf",
+                    "Value4": "asdfasdf",
+                    "Value5": "",
+                    "Value6": "",
+                    "Value7": "",
+                    "Value8": "",
+                    "Value9": "",
+                    "Value10": "",
+                    "Value11": "",
+                    "Value12": "",
+                    "Value13": "",
+                    "Value14": "",
+                    "Value15": ""
+                },
+                {
+                    "Values": [
+                        "Account",
+                        "sadfasdf",
+                        "asdfasdf",
+                        "asdfasdf",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ],
+                    "Value1": "Account",
+                    "Value2": "sadfasdf",
+                    "Value3": "asdfasdf",
+                    "Value4": "asdfasdf",
+                    "Value5": "",
+                    "Value6": "",
+                    "Value7": "",
+                    "Value8": "",
+                    "Value9": "",
+                    "Value10": "",
+                    "Value11": "",
+                    "Value12": "",
+                    "Value13": "",
+                    "Value14": "",
+                    "Value15": ""
+                }
+            ]
+        },
+        "Owner": {
+            "UserId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+            "DisplayName": " محمد علی مزینی",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/52c406aa-ae3d-4699-b253-6c5af7648549.jpg",
+            "Email": "mamozayyani@gmail.com"
+        },
+        "ContactStatus": {},
+        "Fields": {
+            "Field_996_0_7": "sdf"
+        },
+        "Segments": [],
+        "KeepInTouch": null,
+        "LastUpdateTime": "2026-07-28T11:12:03Z",
+        "OwnerId_Old": "f1599895-3d58-44a8-a830-e77b42d8e4c6"
+    }
+}
+```
+
+</ResponseExample>

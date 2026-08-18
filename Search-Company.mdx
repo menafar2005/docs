@@ -1,0 +1,284 @@
+---
+title: "Search Company"
+tag: "POST"
+sidebarTitle: "Search Company"
+---
+
+{/*  Endpoint: Search Company | /untitled-page-22  */}
+
+## جستجوی شرکت
+
+این Endpoint برای پیدا‌کردن شرکت‌ها براساس نام، شماره تماس، شناسه ملی، شماره ثبت، کد اقتصادی، کد مشتری یا تاریخ ثبت استفاده می‌شود.‎ اگر ID شرکت را ندارید، می‌توانید ابتدا با این درخواست شرکت موردنظر را پیدا کنید.‎
+
+```http
+POST https://app.didar.me/api/contact/PersonSearch?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Criteria" type="object">
+  مجموعه معیارهای جست‌وجو و فیلتر؛ فقط رکوردهایی که با این شرایط سازگار باشند در نتیجه برگردانده می‌شوند.
+
+  <Expandable title="property">
+    <ParamField path="Criteria.IsDeleted" type="number">
+      مشخص می‌کند رکورد حذف شده است یا همچنان فعال است. مقادیری که می توانید ارسال کنید: `0` → رکورد حذف نشده باشد `1` → حذف شده باشد
+    </ParamField>
+
+    <ParamField path="Criteria.IsPinned" type="number">
+      فیلتر سنجاق‌شدن رکوردها. مقادیری که می توانید ارسال کنید: `-1` → سنجاق نشده باشد `1` → سنجاق شده باشد
+    </ParamField>
+
+    <ParamField path="Criteria.IsVIP" type="number">
+      فیلتر شرکت ویژه. مقادیری که می توانید ارسال کنید: `-1` → شرکت ویژه نباشد `1` → شرکت ویژه باشد
+    </ParamField>
+
+    <ParamField path="Criteria.SortOrder" type="number">
+      جهت مرتب‌سازی نتایج، مانند صعودی یا نزولی.
+    </ParamField>
+
+    <ParamField path="Criteria.Keywords" type="null">
+      عبارتی است که جست‌وجو براساس آن انجام می‌شود. نتیجه فقط رکوردهایی را برمی‌گرداند که نام شرکت مرتبط با این عبارت تطبیق داشته باشد.
+    </ParamField>
+
+    <ParamField path="Criteria.MobilePhone" type="string">
+      شماره موبایل برای جست‌وجو یا محدودکردن نتایج مخاطبان.
+    </ParamField>
+
+    <ParamField path="Criteria.WorkPhone" type="string">
+      شماره تلفن محل کار برای جست‌وجوی مخاطب.
+    </ParamField>
+
+    <ParamField path="Criteria.Email" type="string">
+      نشانی ایمیل برای جست‌وجوی مخاطب.
+    </ParamField>
+
+    <ParamField path="Criteria.EconomicIssue" type="string">
+      کد اقتصادی مخاطب برای اطلاعات مالیاتی و صدور فاکتور رسمی.
+    </ParamField>
+
+    <ParamField path="Criteria.RegistrationNumber" type="string">
+      شماره ثبت شرکت یا شخص حقوقی.
+    </ParamField>
+
+    <ParamField path="Criteria.NationalID" type="string">
+      شناسه ملی شرکت برای اطلاعات حقوقی و صدور اسناد رسمی.
+    </ParamField>
+
+    <ParamField path="Criteria.ZipCode" type="string">
+      کد پستی برای محدودکردن نتایج مخاطبان.
+    </ParamField>
+
+    <ParamField path="Criteria.CustomerCode" type="string">
+      کد مشتری برای جست‌وجوی دقیق مخاطب.
+    </ParamField>
+
+    <ParamField path="Criteria.SearchFromTime" type="string">
+      ابتدای بازه زمانی جست‌وجو؛ رکوردهای پیش از این زمان از نتیجه حذف می‌شوند.
+    </ParamField>
+
+    <ParamField path="Criteria.SearchToTime" type="string">
+      انتهای بازه زمانی جست‌وجو؛ رکوردهای پس از این زمان از نتیجه حذف می‌شوند.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="From" type="number">
+  اندیس شروع نتایج برای صفحه‌بندی است. مثلا `0` یعنی دریافت از اولین نتیجه و `20` یعنی ۲۰ نتیجه اول رد شوند.
+</ParamField>
+
+<ParamField path="Limit" type="number">
+  حداکثر تعداد رکوردی است که در همین پاسخ برگردانده می‌شود.
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+    "Criteria": {
+        "IsDeleted": 0,
+        "IsPinned": -1,
+        "IsVIP": -1,
+        "SortOrder": 1,
+        "Keywords": "test",
+        "MobilePhone": "09108907328",
+        "WorkPhone": "",
+        "Email": "",
+        "NationalCode": "",
+        "ZipCode": "",
+        "CustomerCode": "",
+        "SearchFromTime": "1000-01-01T08:59:22Z",
+        "SearchToTime": "9999-12-29T08:59:22Z",
+        "CustomFields": [
+           { 
+            "Field_996_0_226" : "test" 
+           } 
+        ]
+    },
+    "From": 0,
+    "Limit": 2
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location 'https://app.didar.me/api/contact/PersonSearch?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+    "Criteria": {
+        "IsDeleted": 0,
+        "IsPinned": -1,
+        "IsVIP": -1,
+        "SortOrder": 1,
+        "Keywords": "test",
+        "MobilePhone": "09108907328",
+        "WorkPhone": "",
+        "Email": "",
+        "NationalCode": "",
+        "ZipCode": "",
+        "CustomerCode": "",
+        "SearchFromTime": "1000-01-01T08:59:22Z",
+        "SearchToTime": "9999-12-29T08:59:22Z",
+        "CustomFields": [
+           { 
+            "Field_996_0_226" : "test" 
+           } 
+        ]
+    },
+    "From": 0,
+    "Limit": 2
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "TotalCount": 24,
+        "List": [
+            {
+                "Id": "c15ab449-4432-4ebc-9b96-d39db57af988",
+                "Code": 14503,
+                "Title": "جناب آقای",
+                "FirstName": "12",
+                "LastName": "آشنasasا",
+                "DisplayName": "12 آشنasasا",
+                "MobilePhone": "09391232",
+                "CompanyName": "",
+                "WorkPhone": "02155587458",
+                "WorkPhoneExtension": "تلفن منشی",
+                "CompanyIsCustomer": false,
+                "CompanyIsProspect": false,
+                "Position": "مدیر واحد",
+                "RegisterTime": "2026-07-28T09:03:58Z",
+                "IsVIP": true,
+                "BackgroundInfo": "12312sdsd",
+                "Type": "Person",
+                "LeadType": "General",
+                "ContactType": "General",
+                "IsDeleted": false,
+                "CanDelete": true,
+                "CanEdit": true,
+                "IsMine": false,
+                "HasAccess": true,
+                "LeadGenerationType": "Manual",
+                "HasCompany": true,
+                "CompanyId": "39e05281-f35a-4923-bed4-8d2db9947be8",
+                "Email": "",
+                "Feedback": 60.0,
+                "VisibilityType": "All",
+                "Owner": {
+                    "UserId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+                    "DisplayName": " محمد علی مزینی",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/52c406aa-ae3d-4699-b253-6c5af7648549.jpg",
+                    "Email": "mamozayyani@gmail.com"
+                },
+                "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+                "ContactStatus": {},
+                "Segments": [],
+                "_Type": null,
+                "KeepInTouch": null,
+                "Fields": {
+                    "Field_996_0_7": "asdfasdfasdf",
+                    "Field_996_0_8": "asdfasdfasdf"
+                },
+                "LastUpdateTime": "2026-07-28T09:03:58Z",
+                "OwnerId_Old": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+                "CustomerCode": "12311213",
+                "NationalCode": "asdfdsdd2132",
+                "ZipCode": "123assdddf",
+                "NationalID": "",
+                "RegistrationNumber": "",
+                "EconomicIssue": ""
+            },
+            {
+                "Id": "1fa676b1-7319-4d08-84c1-7ac6010d0c4f",
+                "Code": 14260,
+                "Title": "",
+                "FirstName": "",
+                "LastName": "تست ایجاد دستی",
+                "DisplayName": "تست ایجاد دستی",
+                "MobilePhone": "",
+                "CompanyName": "",
+                "WorkPhone": "",
+                "WorkPhoneExtension": "",
+                "CompanyIsCustomer": null,
+                "CompanyIsProspect": null,
+                "Position": "",
+                "RegisterTime": "2026-04-22T07:10:11Z",
+                "IsVIP": true,
+                "BackgroundInfo": "",
+                "Type": "Person",
+                "LeadType": "General",
+                "ContactType": "Prospect",
+                "IsDeleted": false,
+                "CanDelete": true,
+                "CanEdit": true,
+                "IsMine": false,
+                "HasAccess": true,
+                "LeadGenerationType": "Manual",
+                "HasCompany": false,
+                "CompanyId": "00000000-0000-0000-0000-000000000000",
+                "Email": "",
+                "Feedback": 60.0,
+                "VisibilityType": "Owner",
+                "Owner": {
+                    "UserId": "c668fb14-52e6-4b5b-869d-8603e060abf5",
+                    "DisplayName": "عارفه کامیاب",
+                    "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/ed7950b0-6012-4a11-9156-efd2c4fb02df.jpg",
+                    "Email": "km.arefeh@gmail.com"
+                },
+                "OwnerId": "c668fb14-52e6-4b5b-869d-8603e060abf5",
+                "ContactStatus": {},
+                "Segments": [],
+                "_Type": null,
+                "KeepInTouch": null,
+                "Fields": {},
+                "LastUpdateTime": "2026-06-13T12:32:29Z",
+                "OwnerId_Old": "c668fb14-52e6-4b5b-869d-8603e060abf5",
+                "CustomerCode": "",
+                "NationalCode": "",
+                "ZipCode": "",
+                "NationalID": "",
+                "RegistrationNumber": "",
+                "EconomicIssue": ""
+            }
+        ]
+    }
+}
+```
+
+</ResponseExample>

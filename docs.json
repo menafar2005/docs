@@ -1,0 +1,214 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "luma",
+  "name": "Didar CRM",
+  "colors": {
+    "primary": "#00b994",
+    "light": "#00b994",
+    "dark": "#4fa1ab"
+  },
+  "favicon": {
+    "light": "/images/Didar-Logo(1).svg",
+    "dark": "/images/Didar-Logo(1).svg"
+  },
+  "logo": {
+    "light": "/images/Didar-Logo(1).svg",
+    "dark": "/images/Didar-Logo(1).svg",
+    "href": "https://app.mintlify.com/didar-crm/didar-crm/~/a674b803-2fcf-4f21-a942-82d0cc4ac78a"
+  },
+  "navbar": {
+    "links": [],
+    "primary": {
+      "type": "button",
+      "label": "Sign In",
+      "href": "https://app.didar.me"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Getting Started",
+        "pages": [
+          "getting-started",
+          "basic-concepts",
+          "start-API"
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "anchors": [
+          {
+            "anchor": "محصولات",
+            "icon": "rectangle-api",
+            "pages": [
+              "Create_product",
+              "Search_Products",
+              "product-category",
+              "get-product-by-code"
+            ]
+          },
+          {
+            "anchor": "فعالیت",
+            "icon": "rectangle-api",
+            "pages": [
+              "Activity-Type",
+              "Create-Activity",
+              "Update-Activity",
+              "Search-Activity",
+              "Attach-Files-To-Activity",
+              "Get-Activity-By-Id"
+            ]
+          },
+          {
+            "anchor": "یادداشت",
+            "icon": "rectangle-api",
+            "pages": [
+              "Create-Note",
+              "Update-Note",
+              "Attach-Files-To-Note",
+              "Get-Note-By-Id"
+            ]
+          },
+          {
+            "anchor": "دیداریاب",
+            "icon": "rectangle-api",
+            "pages": [
+              "Didaryab-Global-Search"
+            ]
+          },
+          {
+            "anchor": "فیلد های اضافی",
+            "icon": "rectangle-api",
+            "pages": [
+              "Get-Custom-Fields"
+            ]
+          },
+          {
+            "anchor": "کاربران",
+            "icon": "rectangle-api",
+            "pages": [
+              "User-List"
+            ]
+          },
+          {
+            "anchor": "شخص",
+            "icon": "rectangle-api",
+            "pages": [
+              "Create-Person",
+              "Update-Person",
+              "Get-Person-By-Id",
+              "Get-Person-By-Mobile",
+              "Search-Person"
+            ]
+          },
+          {
+            "anchor": "شرکت",
+            "icon": "rectangle-api",
+            "pages": [
+              "Create-Company",
+              "Update-Company",
+              "Get-Company-By-Id",
+              "Search-Company"
+            ]
+          },
+          {
+            "anchor": "معامله",
+            "icon": "rectangle-api",
+            "pages": [
+              "Create-Deal",
+              "Get-Deal-By-Id",
+              "Update-Deal",
+              "Search-Deal"
+            ]
+          },
+          {
+            "anchor": "فاکتور / پیش فاکتور",
+            "icon": "rectangle-api",
+            "pages": [
+              "Create-Invoice",
+              "Create-Quote",
+              "Update-Invoice",
+              "Update-Quote",
+              "Remove-Invoice",
+              "Remove-Quote",
+              "Get-Invoice-Quote"
+            ]
+          },
+          {
+            "anchor": "کارت ها",
+            "icon": "rectangle-api",
+            "pages": [
+              "Create-Case",
+              "Update-Case",
+              "Search-Case"
+            ]
+          },
+          {
+            "anchor": "کاریز ها",
+            "icon": "rectangle-api",
+            "pages": [
+              "List-Deal-Pipelines",
+              "List-Case-Pipelines"
+            ]
+          },
+          {
+            "anchor": "اطلاعات پایه",
+            "icon": "rectangle-api",
+            "pages": [
+              "Segments",
+              "Case-Labels",
+              "Deal-Labels",
+              "Tags",
+              "Lost-Reasons",
+              "Sources",
+              "Get-Locations"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Webhook",
+        "pages": [
+          "start-webhook",
+          "deal-webhooks",
+          "case-webhooks",
+          "activity-webhooks",
+          "person-webhooks",
+          "untitled-page-2",
+          "note-webhooks",
+          "payment-webhooks",
+          "invoice-webhooks",
+          "quote-webhooks",
+          "untitled-page"
+        ]
+      }
+    ]
+  },
+  "fonts": {
+    "family": "Vazirmatn"
+  },
+  "markdown": {
+    "schema": true
+  },
+  "background": {
+    "color": {
+      "light": "#f7f7f7",
+      "dark": "#212121"
+    }
+  },
+  "contextual": {
+    "options": [
+      "download-pdf",
+      "chatgpt",
+      "claude",
+      "copy"
+    ],
+    "display": "header"
+  },
+  "interaction": {
+    "drilldown": true
+  },
+  "seo": {
+    "indexing": "all"
+  }
+}

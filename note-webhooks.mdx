@@ -1,0 +1,472 @@
+---
+title: "وب‌هوک‌های یادداشت"
+description: "مرجع ساختار داده و شرایط ارسال وب‌هوک‌های ایجاد و ویرایش یادداشت در دیدار"
+sidebarTitle: "وب هوک یادداشت"
+---
+
+# وب‌هوک‌های یادداشت
+
+وب‌هوک‌های یادداشت اطلاعات یادداشت را پس از ایجاد یا ویرایش آن به آدرس مقصد ارسال می‌کنند. ساختار کلی Payload در هر دو رویداد یکسان است؛ با این تفاوت که در وب‌هوک ویرایش، آرایه `changes` مشخص می‌کند کدام اطلاعات یادداشت در همان عملیات تغییر کرده‌اند.
+
+## ساختار داده ارسالی
+
+<ParamField path="data" type="object">
+  اطلاعات کامل یادداشتی است که وب‌هوک برای آن ارسال شده است. در وب‌هوک ایجاد، این Object وضعیت یادداشتی تازه ایجادشده را نشان می‌دهد و در وب‌هوک ویرایش، آخرین وضعیت همان یادداشت را پس از اعمال تغییرات در اختیار شما قرار می‌دهد.
+
+  <Expandable title="property">
+    <ParamField path="data.Id" type="string">
+      شناسه یادداشتی است که این وب‌هوک برای آن ارسال شده است. اگر رویداد از نوع ایجاد باشد، این مقدار شناسه یادداشتی است که تازه در دیدار ایجاد شده و اگر رویداد از نوع ویرایش باشد، شناسه همان یادداشتی است که اطلاعات آن تغییر کرده است.
+    </ParamField>
+
+    <ParamField path="data.Title" type="string">
+      عنوان ثبت‌شده برای این یادداشت است. اگر یادداشت بدون عنوان ساخته شده باشد، این مقدار خالی ارسال می‌شود و محتوای اصلی در `data.ResultNote` قرار می‌گیرد.
+    </ParamField>
+
+    <ParamField path="data.Note" type="string">
+    </ParamField>
+
+    <ParamField path="data.ResultNote" type="string">
+      متن اصلی یادداشتی است که ایجاد یا ویرایش شده است. این همان محتوایی است که کاربران دیدار در تاریخچه رکورد مرتبط می‌بینند و در وب‌هوک ویرایش، نسخه نهایی متن پس از ذخیره تغییرات را نشان می‌دهد.
+    </ParamField>
+
+    <ParamField path="data.ActivityTypeId" type="string">
+      شناسه نوع رکوردی است که یادداشت در ساختار داخلی دیدار با آن ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.IsPrivate" type="boolean">
+      مشخص می‌کند این یادداشت به‌صورت خصوصی ثبت شده است یا خیر. مقدار `true` یعنی نمایش یادداشت می‌تواند به کاربران مجاز محدود باشد و مقدار `false` یعنی یادداشت خصوصی نیست.
+    </ParamField>
+
+    <ParamField path="data.IsDone" type="boolean">
+      مشخص می‌کند این یادداشت در ساختار داخلی دیدار به‌عنوان انجام‌شده ثبت شده است یا خیر. مقدار `true` یعنی تکمیل شده و مقدار `false` یعنی در وضعیت انجام‌شده قرار ندارد.
+    </ParamField>
+
+    <ParamField path="data.IsPinned" type="boolean">
+      مشخص می‌کند یادداشت پین شده است یا خیر. مقدار `true` یعنی یادداشت برای مشاهده سریع‌تر برجسته شده و مقدار `false` یعنی پین نشده است.
+    </ParamField>
+
+    <ParamField path="data.IsDeleted" type="boolean">
+      مشخص می‌کند یادداشت حذف شده است یا خیر. مقدار `true` یعنی یادداشت حذف شده و مقدار `false` یعنی همچنان در تاریخچه رکورد وجود دارد.
+    </ParamField>
+
+    <ParamField path="data.DueDateType" type="number">
+      کد نحوه زمان‌بندی این یادداشت است و مشخص می‌کند مقادیر `DueDate` و `FinishDate` به چه شکل در دیدار تفسیر می‌شوند.
+    </ParamField>
+
+    <ParamField path="data.DueDate" type="string">
+      زمان شروع یا سررسید ثبت‌شده برای این یادداشت است و نشان می‌دهد یادداشت در چه زمانی در تاریخچه یا برنامه پیگیری قرار گرفته است.
+    </ParamField>
+
+    <ParamField path="data.FinishDate" type="string">
+      زمان پایان ثبت‌شده برای این یادداشت است و همراه `DueDate` بازه زمانی آن را مشخص می‌کند.
+    </ParamField>
+
+    <ParamField path="data.OriginalDueDate" type="string">
+      زمان اولیه‌ای است که برای این یادداشت ثبت شده بود؛ حتی اگر زمان‌بندی آن بعداً تغییر کرده باشد.
+    </ParamField>
+
+    <ParamField path="data.DoneDate" type="string">
+      زمانی است که این یادداشت در ساختار دیدار به‌عنوان انجام‌شده ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.RegisterDate" type="string">
+      زمانی است که این یادداشت برای اولین بار در دیدار ایجاد و ثبت شده است. این مقدار زمان ایجاد رکورد را نشان می‌دهد، نه زمان آخرین ویرایش آن.
+    </ParamField>
+
+    <ParamField path="data.LastUpdateTime" type="string">
+      زمان آخرین ویرایش محتوای این یادداشت است.
+    </ParamField>
+
+    <ParamField path="data.LastPokeDate" type="string">
+      آخرین زمانی است که عملیات پیگیری یا یادآوری داخلی برای این یادداشت ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.Duration" type="number">
+      مدت زمانی است که برای این یادداشت یا رخداد مرتبط با آن ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.DealId" type="string">
+      شناسه معامله‌ای است که این یادداشت روی آن ثبت شده است. مقدار شناسه صفر یعنی یادداشت به معامله‌ای متصل نیست.
+    </ParamField>
+
+    <ParamField path="data.CaseId" type="string">
+      شناسه کارتی است که این یادداشت روی آن ثبت شده است. مقدار شناسه صفر یعنی یادداشت به کارتی متصل نیست.
+    </ParamField>
+
+    <ParamField path="data.CreatorId" type="string">
+      شناسه کاربری است که این یادداشت را برای اولین بار ثبت کرده است.
+    </ParamField>
+
+    <ParamField path="data.OwnerId" type="string">
+      شناسه کاربری است که این یادداشت به او نسبت داده شده یا مسئول آن محسوب می‌شود.
+    </ParamField>
+
+    <ParamField path="data.UpdaterId" type="string">
+      شناسه کاربری است که آخرین تغییر ثبت‌شده روی این یادداشت را انجام داده است.
+    </ParamField>
+
+    <ParamField path="data.ActivityGroupId" type="string">
+      شناسه گروهی است که این یادداشت در ساختار داخلی به آن تعلق دارد و برای اتصال رخدادهای مرتبط یا تکرارشونده استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.RecurrenceType" type="number">
+      کد نوع تکرار یادداشت است و مشخص می‌کند این رکورد بدون تکرار است یا براساس چه الگویی دوباره ایجاد می‌شود.
+    </ParamField>
+
+    <ParamField path="data.RecurrenceData" type="number">
+      مقدار تکمیلی الگوی تکرار است و جزئیات تکرار را در کنار `RecurrenceType` نگهداری می‌کند.
+    </ParamField>
+
+    <ParamField path="data.RecurrenceEndDate" type="string">
+      زمان پایان الگوی تکرار است و مشخص می‌کند ایجاد رخدادهای بعدی تا چه تاریخی ادامه دارد.
+    </ParamField>
+
+    <ParamField path="data.FeedbackType" type="number">
+      کد نوع بازخورد ثبت‌شده برای این یادداشت است و شکل ارزیابی یا نتیجه مرتبط با آن را مشخص می‌کند.
+    </ParamField>
+
+    <ParamField path="data.NextOccurrence" type="string">
+      زمان رخداد بعدی این یادداشت در صورت تکرارشونده‌بودن است.
+    </ParamField>
+
+    <ParamField path="data.CanPoke" type="boolean">
+      مشخص می‌کند امکان اجرای عملیات پیگیری یا یادآوری داخلی برای این یادداشت وجود دارد یا خیر. مقدار `true` یعنی این امکان فعال است و مقدار `false` یعنی قابل انجام نیست.
+    </ParamField>
+
+    <ParamField path="data.IsAttended" type="boolean">
+      مشخص می‌کند حضور مرتبط با این یادداشت یا رخداد ثبت شده است یا خیر. مقدار `true` یعنی حضور ثبت شده و مقدار `false` یعنی ثبت نشده است.
+    </ParamField>
+
+    <ParamField path="data.IsTicket" type="boolean">
+      مشخص می‌کند این یادداشت در ساختار داخلی دیدار به‌عنوان تیکت ثبت شده است یا خیر. مقدار `true` یعنی ماهیت تیکت دارد و مقدار `false` یعنی تیکت نیست.
+    </ParamField>
+
+    <ParamField path="data.ActivityGroupType" type="number">
+      کد نوع گروهی است که این یادداشت به آن تعلق دارد و ساختار ارتباط آن با رخدادهای هم‌گروه را مشخص می‌کند.
+    </ParamField>
+
+    <ParamField path="data.ContactIds" type="array">
+      فهرست شناسه اشخاصی است که این یادداشت به آن‌ها مرتبط شده است. هر عضو Array یک شخص را مشخص می‌کند که محتوای یادداشت درباره او یا در پرونده او ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.CompanyIds" type="array">
+      فهرست شناسه شرکت‌هایی است که این یادداشت به آن‌ها مرتبط شده است. هر عضو Array یک شرکت را مشخص می‌کند که یادداشت در ارتباط با آن ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.UserIds" type="array">
+      فهرست شناسه کاربران دیدار است که به این یادداشت مرتبط شده‌اند؛ برای مثال کاربرانی که در مشاهده، پیگیری یا ثبت آن نقش دارند.
+    </ParamField>
+
+    <ParamField path="data.Attachments" type="array">
+      فهرست فایل‌هایی است که به این یادداشت پیوست شده‌اند. هر عضو Array نماینده یک فایل مرتبط با محتوای یادداشت است.
+    </ParamField>
+
+    <ParamField path="data.Tags" type="array">
+      فهرست تگ‌هایی است که برای دسته‌بندی و پیدا‌کردن این یادداشت به آن متصل شده‌اند.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="changes" type="array">
+  تغییراتی که باعث ارسال وب‌هوک ویرایش یادداشت شده‌اند در این Array قرار می‌گیرند. در وب‌هوک ایجاد، `changes` خالی است؛ چون یادداشت تازه ساخته شده و نسخه قبلی‌ای برای مقایسه وجود ندارد. در وب‌هوک ویرایش، هر عضو مشخص می‌کند کدام فیلد تغییر کرده، مقدار آن پیش از ویرایش چه بوده و پس از ویرایش به چه مقداری تبدیل شده است. Object `data` وضعیت نهایی یادداشت را نشان می‌دهد و `changes` فقط تغییرات همان عملیات را گزارش می‌کند.
+
+  <Expandable title="property">
+    <ParamField path="changes[].propertyName" type="string">
+      نام فیلدی از یادداشت است که در این عملیات ویرایش تغییر کرده است. این مقدار مشخص می‌کند `before` و `after` مربوط به کدام بخش از اطلاعات یادداشت هستند.
+    </ParamField>
+
+    <ParamField path="changes[].before" type="string">
+      مقدار فیلد پیش از انجام این ویرایش است. با مقایسه آن با `changes[].after` می‌توانید دقیقاً تشخیص دهید اطلاعات یادداشت از چه مقداری تغییر کرده است. نوع مقدار به فیلد نوشته‌شده در `propertyName` بستگی دارد و می‌تواند رشته، عدد، Boolean، Object، Array یا `null` باشد.
+    </ParamField>
+
+    <ParamField path="changes[].after" type="string">
+      مقدار فیلد پس از انجام و ذخیره ویرایش است. این مقدار نتیجه نهایی همان تغییر را نشان می‌دهد و باید با مقدار متناظر آن در Object `data` هم‌خوان باشد.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="meta" type="object">
+  اطلاعات فنی مربوط به خود رویداد وب‌هوک است، نه اطلاعات یادداشت. این Object مشخص می‌کند چه عملیاتی انجام شده، رویداد متعلق به کدام بیزدامنه و یادداشت است، چه کاربری آن را ایجاد کرده، تغییر از چه منبعی آمده و Payload توسط کدام تنظیم وب‌هوک و در چندمین تلاش ارسال شده است.
+
+  <Expandable title="property">
+    <ParamField path="meta.actionType" type="number">
+      کد عددی نوع عملیاتی است که باعث ارسال این وب‌هوک شده است. براساس نمونه‌ها، مقدار `1` یعنی یادداشت ایجاد شده و مقدار `2` یعنی یادداشت ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.actionTypeTitle" type="string">
+      عنوان متنی همان عملیاتی است که در `meta.actionType` به‌صورت عددی مشخص شده است. در نمونه ایجاد مقدار `Add` و در نمونه ویرایش مقدار `Change` ارسال می‌شود.
+    </ParamField>
+
+    <ParamField path="meta.bizDomainId" type="string">
+      شناسه بیزدامنه‌ای است که یادداشت در آن ایجاد یا ویرایش شده است. این مقدار مشخص می‌کند رویداد وب‌هوک متعلق به کدام حساب یا فضای کاری دیدار است.
+    </ParamField>
+
+    <ParamField path="meta.entityId" type="string">
+      شناسه یادداشتی است که رویداد وب‌هوک برای آن ثبت شده است. این مقدار باید به همان رکوردی اشاره کند که اطلاعات کامل آن داخل `data` قرار گرفته و معمولاً با `data.Id` یکسان است.
+    </ParamField>
+
+    <ParamField path="meta.entity" type="number">
+      کد عددی داخلی نوع موجودیتی است که رویداد برای آن ثبت شده است. در Payload این صفحه، این کد به موجودیت یادداشت اشاره می‌کند.
+    </ParamField>
+
+    <ParamField path="meta.entityTitle" type="string">
+      عنوان فنی موجودیتی است که این وب‌هوک به آن مربوط می‌شود و نشان می‌دهد رکورد داخل `data` از نوع یادداشت است.
+    </ParamField>
+
+    <ParamField path="meta.id" type="number">
+      شناسه رویدادی است که پس از ایجاد یا ویرایش یادداشت در سیستم ثبت شده و این Payload براساس آن ساخته شده است. این شناسه مربوط به خود رویداد است، نه شناسه یادداشت.
+    </ParamField>
+
+    <ParamField path="meta.isBulkEdit" type="boolean">
+      مشخص می‌کند تغییر یادداشت در قالب یک عملیات گروهی انجام شده است یا خیر. مقدار `true` یعنی این رویداد نتیجه ویرایش گروهی بوده و مقدار `false` یعنی یادداشت به‌صورت تکی ایجاد یا ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.timeStamp" type="string">
+      زمانی است که رویداد ایجاد یا ویرایش یادداشت در دیدار ثبت شده و Payload وب‌هوک براساس آن تولید شده است. این زمان لزوماً با تاریخ‌های داخل خود یادداشت یکسان نیست.
+    </ParamField>
+
+    <ParamField path="meta.userId" type="string">
+      شناسه کاربری است که عملیات منجر به ارسال این وب‌هوک را انجام داده است. در رویداد ایجاد، کاربری را نشان می‌دهد که یادداشت را ساخته و در رویداد ویرایش، کاربری را مشخص می‌کند که تغییر را انجام داده است.
+    </ParamField>
+
+    <ParamField path="meta.webhookId" type="number">
+      شناسه تنظیم وب‌هوکی است که این Payload را به آدرس مقصد ارسال کرده است. این مقدار برای تشخیص وب‌هوک تعریف‌شده‌ای که رویداد از طریق آن ارسال شده کاربرد دارد.
+    </ParamField>
+
+    <ParamField path="meta.changeSource" type="number">
+      کد عددی منبعی است که عملیات ایجاد یا ویرایش از طریق آن انجام شده است. عنوان قابل‌خواندن همین منبع در `meta.changeSourceTitle` قرار می‌گیرد.
+    </ParamField>
+
+    <ParamField path="meta.changeSourceTitle" type="string">
+      عنوان متنی منبعی است که یادداشت از طریق آن ایجاد یا ویرایش شده است. برای مثال مقدار `Api` یعنی عملیات از طریق API انجام شده است.
+    </ParamField>
+
+    <ParamField path="meta.attempt" type="number">
+      شماره تلاش برای ارسال همین رویداد وب‌هوک به آدرس مقصد است. مقدار `1` یعنی Payload در اولین تلاش ارسال شده است.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## وب‌هوک ایجاد یادداشت چه زمانی ارسال می‌شود؟
+
+وب‌هوک ایجاد یادداشت زمانی ارسال می‌شود که یک یادداشت جدید با موفقیت در دیدار ثبت شود. آبجکت `data` شامل اطلاعات یادداشت تازه ایجادشده است و آرایه `changes` خالی ارسال می‌شود، چون پیش از این عملیات رکوردی وجود نداشته که فیلدی از آن تغییر کرده باشد.
+
+## وب‌هوک ویرایش یادداشت چه زمانی ارسال می‌شود؟
+
+وب‌هوک ویرایش یادداشت زمانی ارسال می‌شود که حداقل یکی از اطلاعات موجود در `data` تغییر کند. فیلدهایی که تغییر آن‌ها می‌تواند باعث ارسال این وب‌هوک شود عبارت‌اند از:
+
+- `data.Id`
+- `data.Title`
+- `data.Note`
+- `data.ResultNote`
+- `data.ActivityTypeId`
+- `data.IsPrivate`
+- `data.IsDone`
+- `data.IsPinned`
+- `data.IsDeleted`
+- `data.DueDateType`
+- `data.DueDate`
+- `data.FinishDate`
+- `data.OriginalDueDate`
+- `data.DoneDate`
+- `data.RegisterDate`
+- `data.LastUpdateTime`
+- `data.LastPokeDate`
+- `data.Duration`
+- `data.DealId`
+- `data.CaseId`
+- `data.CreatorId`
+- `data.OwnerId`
+- `data.UpdaterId`
+- `data.ActivityGroupId`
+- `data.RecurrenceType`
+- `data.RecurrenceData`
+- `data.RecurrenceEndDate`
+- `data.FeedbackType`
+- `data.NextOccurrence`
+- `data.CanPoke`
+- `data.IsAttended`
+- `data.IsTicket`
+- `data.ActivityGroupType`
+- `data.ContactIds`
+- `data.CompanyIds`
+- `data.UserIds`
+- `data.Attachments`
+- `data.Tags`
+
+اگر هیچ‌کدام از فیلدهای موجود در `data` تغییر نکنند، وب‌هوک ویرایش یادداشت ارسال نمی‌شود. آرایه `changes` عامل Trigger نیست؛ این آرایه نتیجه تغییرات انجام‌شده را گزارش می‌کند و `data` آخرین وضعیت یادداشت را پس از ویرایش نشان می‌دهد.
+
+## نمونه داده ارسالی
+
+<CodeGroup>
+
+```json وب‌هوک ایجاد یادداشت
+{
+  "data": {
+    "Id": "82376e2f-84ff-41bf-a637-52e9eab6ab4b",
+    "Title": "",
+    "Note": "",
+    "ResultNote": "\ntest note\n\n",
+    "ActivityTypeId": "00000000-0000-0000-0000-000000000000",
+    "IsPrivate": false,
+    "IsDone": true,
+    "IsPinned": false,
+    "IsDeleted": false,
+    "DueDateType": 2,
+    "DueDate": "2026-08-02T15:37:19.267Z",
+    "FinishDate": "2026-08-02T20:30:00Z",
+    "OriginalDueDate": "2026-08-02T15:37:30.1555862+00:00",
+    "DoneDate": "2026-08-02T15:37:30.1555862Z",
+    "RegisterDate": "2026-08-02T15:37:30.1555862+00:00",
+    "LastUpdateTime": "2026-08-02T15:37:30.1555862+00:00",
+    "LastPokeDate": "2026-08-02T15:37:30.1555862Z",
+    "Duration": 5,
+    "DealId": "fb2fb2ad-34b1-458d-86a5-ddb68ec3176f",
+    "CaseId": "00000000-0000-0000-0000-000000000000",
+    "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "OwnerId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "UpdaterId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "ActivityGroupId": "00000000-0000-0000-0000-000000000000",
+    "RecurrenceType": 0,
+    "RecurrenceData": 1,
+    "RecurrenceEndDate": "2026-08-02T15:37:30.1555862Z",
+    "FeedbackType": 0,
+    "NextOccurrence": "0001-01-01T00:00:00",
+    "CanPoke": false,
+    "IsAttended": false,
+    "IsTicket": false,
+    "ActivityGroupType": 0,
+    "ContactIds": [
+      "a88c049a-159a-4ce3-8a24-a28f6bc8dacf"
+    ],
+    "CompanyIds": [],
+    "UserIds": [],
+    "Attachments": [],
+    "Tags": []
+  },
+  "changes": [],
+  "meta": {
+    "actionType": 1,
+    "actionTypeTitle": "Add",
+    "bizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "entityId": "82376e2f-84ff-41bf-a637-52e9eab6ab4b",
+    "entity": 8782,
+    "entityTitle": "Note",
+    "id": 639212818501860381,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-02T15:37:30.1860381Z",
+    "userId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "webhookId": 32498,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+```json وب‌هوک ویرایش یادداشت
+{
+  "data": {
+    "Id": "82376e2f-84ff-41bf-a637-52e9eab6ab4b",
+    "Title": "",
+    "Note": "",
+    "ResultNote": "\ntest note (edited)\n\n",
+    "ActivityTypeId": "00000000-0000-0000-0000-000000000000",
+    "IsPrivate": false,
+    "IsDone": true,
+    "IsPinned": false,
+    "IsDeleted": false,
+    "DueDateType": 2,
+    "DueDate": "2026-08-02T15:37:19.267Z",
+    "FinishDate": "2026-08-02T20:30:00Z",
+    "OriginalDueDate": "2026-08-02T15:37:30.1555862Z",
+    "DoneDate": "2026-08-02T15:37:30.1555862Z",
+    "RegisterDate": "2026-08-02T15:37:30",
+    "LastUpdateTime": "2026-08-02T15:38:22.8580736Z",
+    "LastPokeDate": "2026-08-02T15:37:30.1555862Z",
+    "Duration": 5,
+    "DealId": "fb2fb2ad-34b1-458d-86a5-ddb68ec3176f",
+    "CaseId": "00000000-0000-0000-0000-000000000000",
+    "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "OwnerId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "UpdaterId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "ActivityGroupId": "00000000-0000-0000-0000-000000000000",
+    "RecurrenceType": 0,
+    "RecurrenceData": 1,
+    "RecurrenceEndDate": "2026-08-02T15:37:30.1555862Z",
+    "FeedbackType": 0,
+    "NextOccurrence": "2026-08-02T15:37:19",
+    "CanPoke": false,
+    "IsAttended": false,
+    "IsTicket": false,
+    "ActivityGroupType": 0,
+    "ContactIds": [
+      "a88c049a-159a-4ce3-8a24-a28f6bc8dacf"
+    ],
+    "CompanyIds": [],
+    "UserIds": [],
+    "Attachments": [],
+    "Tags": []
+  },
+  "changes": [
+    {
+      "propertyName": "NoteDoneDate",
+      "before": "2026-08-02T15:37:30",
+      "after": "2026-08-02T15:37:30.1555862Z"
+    },
+    {
+      "propertyName": "NoteDueDate",
+      "before": "2026-08-02T15:37:19",
+      "after": "2026-08-02T15:37:19.267Z"
+    },
+    {
+      "propertyName": "ResultNote",
+      "before": "\ntest note\n\n",
+      "after": "\ntest note (edited)\n\n"
+    },
+    {
+      "propertyName": "DueDate",
+      "before": "2026-08-02T15:37:19",
+      "after": "2026-08-02T15:37:19.267Z"
+    },
+    {
+      "propertyName": "LastPokeDate",
+      "before": "2026-08-02T15:37:30",
+      "after": "2026-08-02T15:37:30.1555862Z"
+    },
+    {
+      "propertyName": "RecurrenceEndDate",
+      "before": "2026-08-02T15:37:30",
+      "after": "2026-08-02T15:37:30.1555862Z"
+    },
+    {
+      "propertyName": "DoneDate",
+      "before": "2026-08-02T15:37:30",
+      "after": "2026-08-02T15:37:30.1555862Z"
+    },
+    {
+      "propertyName": "OriginalDueDate",
+      "before": "2026-08-02T15:37:19",
+      "after": "2026-08-02T15:37:30.1555862Z"
+    }
+  ],
+  "meta": {
+    "actionType": 2,
+    "actionTypeTitle": "Change",
+    "bizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "entityId": "82376e2f-84ff-41bf-a637-52e9eab6ab4b",
+    "entity": 8782,
+    "entityTitle": "Note",
+    "id": 639212819029047087,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-02T15:38:22.9047087Z",
+    "userId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "webhookId": 32499,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+</CodeGroup>

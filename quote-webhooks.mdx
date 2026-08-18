@@ -1,0 +1,427 @@
+---
+title: "وب‌هوک‌های پیش‌فاکتور"
+description: "مرجع ساختار داده و شرایط ارسال وب‌هوک‌های ایجاد و ویرایش پیش‌فاکتور در دیدار"
+sidebarTitle: "وب هوک پیش فاکتور"
+---
+
+# وب‌هوک‌های پیش‌فاکتور
+
+وب‌هوک‌های پیش‌فاکتور اطلاعات پیش‌فاکتور را پس از ایجاد یا ویرایش آن به آدرس مقصد ارسال می‌کنند. ساختار کلی Payload در هر دو رویداد یکسان است؛ با این تفاوت که در وب‌هوک ویرایش، آرایه `changes` مشخص می‌کند کدام اطلاعات پیش‌فاکتور در همان عملیات تغییر کرده‌اند.
+
+## ساختار داده ارسالی
+
+<ParamField path="data" type="object">
+  اطلاعات کامل پیش‌فاکتوری است که وب‌هوک برای آن ارسال شده است. در وب‌هوک ایجاد، این Object وضعیت پیش‌فاکتوری تازه ایجادشده را نشان می‌دهد و در وب‌هوک ویرایش، آخرین وضعیت همان پیش‌فاکتور را پس از اعمال تغییرات در اختیار شما قرار می‌دهد.
+
+  <Expandable title="property">
+    <ParamField path="data.Id" type="number">
+      شناسه پیش‌فاکتوری است که این وب‌هوک برای آن ارسال شده است. اگر رویداد از نوع ایجاد باشد، این مقدار شناسه پیش‌فاکتوری است که تازه در دیدار ایجاد شده و اگر رویداد از نوع ویرایش باشد، شناسه همان پیش‌فاکتوری است که اطلاعات آن تغییر کرده است.
+    </ParamField>
+
+    <ParamField path="data.BizDomainId" type="string">
+      شناسه بیزدامنه‌ای است که این پیش‌فاکتور داخل آن صادر شده است و مشخص می‌کند سند متعلق به کدام حساب دیدار است.
+    </ParamField>
+
+    <ParamField path="data.DealId" type="string">
+      شناسه معامله‌ای است که این پیش‌فاکتور برای آن صادر شده است. با این مقدار می‌توانید سند فروش را به فرصت فروش مربوط در سیستم مقصد متصل کنید.
+    </ParamField>
+
+    <ParamField path="data.FinalPrice" type="number">
+      مبلغ نهایی قابل‌پرداخت این پیش‌فاکتور پس از اعمال تخفیف‌ها و مالیات است.
+    </ParamField>
+
+    <ParamField path="data.CreatedOn" type="string">
+      زمانی است که این پیش‌فاکتور برای اولین بار در دیدار ایجاد و صادر شده است.
+    </ParamField>
+
+    <ParamField path="data.CreatorId" type="string">
+      شناسه کاربری است که این پیش‌فاکتور را در دیدار ایجاد کرده است.
+    </ParamField>
+
+    <ParamField path="data.IsCanceled" type="boolean">
+      مشخص می‌کند پیش‌فاکتور لغو شده است یا خیر. مقدار `true` یعنی سند لغو شده و دیگر به‌عنوان پیش‌فاکتور فعال در نظر گرفته نمی‌شود؛ مقدار `false` یعنی لغو نشده است.
+    </ParamField>
+
+    <ParamField path="data.InvoiceFormattedNumber" type="string">
+      شماره نمایشی سند مرتبط است که در Payload پیش‌فاکتور ارسال شده است. این مقدار شماره‌ای است که کاربران برای ارجاع انسانی به سند می‌بینند و با شناسه فنی `data.Id` متفاوت است.
+    </ParamField>
+
+    <ParamField path="data.QuoteFormattedNumber" type="string">
+      شماره نمایشی و قالب‌بندی‌شده پیش‌فاکتور است؛ همان شماره‌ای که کاربران روی سند و در فهرست پیش‌فاکتورها مشاهده می‌کنند. این مقدار با شناسه فنی `data.Id` متفاوت است.
+    </ParamField>
+
+    <ParamField path="data.InvoiceType" type="string">
+      کد نوع سند فروش است و مشخص می‌کند این پیش‌فاکتور در ساختار مالی دیدار با چه نوعی ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.Description" type="string">
+      توضیحات تکمیلی ثبت‌شده برای این پیش‌فاکتور است و می‌تواند شرایط پرداخت، توضیح سفارش یا اطلاعاتی را داشته باشد که باید همراه سند نمایش داده شود.
+    </ParamField>
+
+    <ParamField path="data.TotalPrice" type="number">
+      جمع قیمت اقلام این پیش‌فاکتور پیش از کسر تخفیف و افزودن مالیات است.
+    </ParamField>
+
+    <ParamField path="data.TotalDiscount" type="number">
+      مجموع مبلغ تخفیفی است که از اقلام یا کل این پیش‌فاکتور کسر شده است.
+    </ParamField>
+
+    <ParamField path="data.TotalTaxPrice" type="number">
+      مجموع مبلغ مالیات محاسبه‌شده برای اقلام این پیش‌فاکتور است.
+    </ParamField>
+
+    <ParamField path="data.TotalFinalPrice" type="number">
+      جمع نهایی این پیش‌فاکتور پس از محاسبه قیمت اقلام، تخفیف‌ها و مالیات است.
+    </ParamField>
+
+    <ParamField path="data.QuoteExpirationDays" type="number">
+      تعداد روزهایی است که اعتبار پیشنهاد قیمت برای این سند در نظر گرفته شده است. این مقدار مشخص می‌کند پیش‌فاکتور یا پیشنهاد تا چند روز معتبر است.
+    </ParamField>
+
+    <ParamField path="data.Items" type="array">
+      فهرست اقلامی است که در این پیش‌فاکتور قرار گرفته‌اند. هر عضو Array یک ردیف از سند را نشان می‌دهد و اطلاعات محصول، تعداد، قیمت، تخفیف، مالیات و مبلغ نهایی همان ردیف را نگهداری می‌کند.
+
+      <Expandable title="property">
+        <ParamField path="data.Items[].ProductId" type="string">
+          شناسه محصولی است که در این ردیف از پیش‌فاکتور قرار گرفته است. با این مقدار می‌توانید ردیف سند را به محصول اصلی در دیدار متصل کنید.
+        </ParamField>
+
+        <ParamField path="data.Items[].ProductCode" type="string">
+          کد محصول درج‌شده در این ردیف است و برای تطبیق کالا با کد محصول در سیستم‌های فروش یا حسابداری استفاده می‌شود.
+        </ParamField>
+
+        <ParamField path="data.Items[].VariantId" type="string">
+          شناسه زیرمحصول یا تنوعی است که در این ردیف پیش‌فاکتور انتخاب شده است؛ برای مثال یک رنگ، اندازه یا مدل مشخص از محصول اصلی.
+        </ParamField>
+
+        <ParamField path="data.Items[].VariantCode" type="string">
+          کد زیرمحصول یا تنوع انتخاب‌شده در این ردیف است و برای تطبیق نسخه دقیق محصول با سیستم مقصد استفاده می‌شود.
+        </ParamField>
+
+        <ParamField path="data.Items[].Title" type="string">
+          عنوان محصول یا خدمتی است که در این ردیف از سند نمایش داده می‌شود.
+        </ParamField>
+
+        <ParamField path="data.Items[].VariantTitle" type="string">
+          عنوان زیرمحصول یا تنوع انتخاب‌شده در این ردیف است و مشخص می‌کند دقیقاً کدام نسخه از محصول روی پیش‌فاکتور قرار گرفته است.
+        </ParamField>
+
+        <ParamField path="data.Items[].Description" type="string">
+          توضیح اختصاصی همین ردیف از سند است و می‌تواند جزئیات محصول، خدمت یا شرایط مربوط به آن قلم را نگهداری کند.
+        </ParamField>
+
+        <ParamField path="data.Items[].Unit" type="string">
+          واحد فروش قلم است؛ برای مثال عدد، بسته، متر یا ساعت. مقدار `Quantity` براساس همین واحد تفسیر می‌شود.
+        </ParamField>
+
+        <ParamField path="data.Items[].UnitPrice" type="number">
+          قیمت هر واحد از محصول یا خدمت در این ردیف، پیش از محاسبه تعداد، تخفیف و مالیات است.
+        </ParamField>
+
+        <ParamField path="data.Items[].Quantity" type="number">
+          تعداد یا مقدار محصول و خدمت ثبت‌شده در این ردیف است.
+        </ParamField>
+
+        <ParamField path="data.Items[].Index" type="number">
+          ترتیب نمایش این ردیف در {n} است. از این مقدار می‌توانید برای حفظ ترتیب اقلام هنگام نمایش یا چاپ سند استفاده کنید.
+        </ParamField>
+
+        <ParamField path="data.Items[].Discount" type="number">
+          مبلغ تخفیف اعمال‌شده روی همین ردیف است.
+        </ParamField>
+
+        <ParamField path="data.Items[].DiscountPercent" type="number">
+          درصد تخفیف اعمال‌شده روی همین ردیف است.
+        </ParamField>
+
+        <ParamField path="data.Items[].Price" type="number">
+          مبلغ این ردیف پیش از مالیات و پس از محاسبه قیمت واحد، تعداد و تخفیف است.
+        </ParamField>
+
+        <ParamField path="data.Items[].TaxPrice" type="number">
+          مبلغ مالیات محاسبه‌شده برای همین ردیف است.
+        </ParamField>
+
+        <ParamField path="data.Items[].FinalPrice" type="number">
+          مبلغ نهایی همین ردیف پس از محاسبه تعداد، تخفیف و مالیات است.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="data.DiscountRows" type="string">
+      اطلاعات ردیف‌های تخفیف مستقلی است که روی این پیش‌فاکتور ثبت شده‌اند. این بخش تخفیف‌هایی را نگهداری می‌کند که ممکن است به‌صورت یک ردیف جدا از اقلام محصول اعمال شده باشند.
+    </ParamField>
+
+    <ParamField path="data.BuyerInfo" type="string">
+      اطلاعات خریدار ثبت‌شده روی این پیش‌فاکتور است. این داده‌ها برای نمایش مشخصات مشتری روی سند فروش و ارسال آن به سیستم‌های مالی استفاده می‌شوند.
+    </ParamField>
+
+    <ParamField path="data.SellerInfo" type="string">
+      اطلاعات فروشنده ثبت‌شده روی این پیش‌فاکتور است. این داده‌ها مشخصات کسب‌وکار صادرکننده سند را برای نمایش یا چاپ نگهداری می‌کنند.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="changes" type="array">
+  تغییراتی که باعث ارسال وب‌هوک ویرایش پیش‌فاکتور شده‌اند در این Array قرار می‌گیرند. در وب‌هوک ایجاد، `changes` خالی است؛ چون پیش‌فاکتور تازه ساخته شده و نسخه قبلی‌ای برای مقایسه وجود ندارد. در وب‌هوک ویرایش، هر عضو مشخص می‌کند کدام فیلد تغییر کرده، مقدار آن پیش از ویرایش چه بوده و پس از ویرایش به چه مقداری تبدیل شده است. Object `data` وضعیت نهایی پیش‌فاکتور را نشان می‌دهد و `changes` فقط تغییرات همان عملیات را گزارش می‌کند.
+
+  <Expandable title="property">
+    <ParamField path="changes[].propertyName" type="string">
+      نام فیلدی از پیش‌فاکتور است که در این عملیات ویرایش تغییر کرده است. این مقدار مشخص می‌کند `before` و `after` مربوط به کدام بخش از اطلاعات پیش‌فاکتور هستند.
+    </ParamField>
+
+    <ParamField path="changes[].before" type="number">
+      مقدار فیلد پیش از انجام این ویرایش است. با مقایسه آن با `changes[].after` می‌توانید دقیقاً تشخیص دهید اطلاعات پیش‌فاکتور از چه مقداری تغییر کرده است. نوع مقدار به فیلد نوشته‌شده در `propertyName` بستگی دارد و می‌تواند رشته، عدد، Boolean، Object، Array یا `null` باشد.
+    </ParamField>
+
+    <ParamField path="changes[].after" type="number">
+      مقدار فیلد پس از انجام و ذخیره ویرایش است. این مقدار نتیجه نهایی همان تغییر را نشان می‌دهد و باید با مقدار متناظر آن در Object `data` هم‌خوان باشد.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="meta" type="object">
+  اطلاعات فنی مربوط به خود رویداد وب‌هوک است، نه اطلاعات پیش‌فاکتور. این Object مشخص می‌کند چه عملیاتی انجام شده، رویداد متعلق به کدام بیزدامنه و پیش‌فاکتور است، چه کاربری آن را ایجاد کرده، تغییر از چه منبعی آمده و Payload توسط کدام تنظیم وب‌هوک و در چندمین تلاش ارسال شده است.
+
+  <Expandable title="property">
+    <ParamField path="meta.actionType" type="number">
+      کد عددی نوع عملیاتی است که باعث ارسال این وب‌هوک شده است. براساس نمونه‌ها، مقدار `1` یعنی پیش‌فاکتور ایجاد شده و مقدار `2` یعنی پیش‌فاکتور ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.actionTypeTitle" type="string">
+      عنوان متنی همان عملیاتی است که در `meta.actionType` به‌صورت عددی مشخص شده است. در نمونه ایجاد مقدار `Add` و در نمونه ویرایش مقدار `Change` ارسال می‌شود.
+    </ParamField>
+
+    <ParamField path="meta.bizDomainId" type="string">
+      شناسه بیزدامنه‌ای است که پیش‌فاکتور در آن ایجاد یا ویرایش شده است. این مقدار مشخص می‌کند رویداد وب‌هوک متعلق به کدام حساب یا فضای کاری دیدار است.
+    </ParamField>
+
+    <ParamField path="meta.entityId" type="string">
+      شناسه پیش‌فاکتوری است که رویداد وب‌هوک برای آن ثبت شده است. این مقدار باید به همان رکوردی اشاره کند که اطلاعات کامل آن داخل `data` قرار گرفته و معمولاً با `data.Id` یکسان است.
+    </ParamField>
+
+    <ParamField path="meta.entity" type="number">
+      کد عددی داخلی نوع موجودیتی است که رویداد برای آن ثبت شده است. در Payload این صفحه، این کد به موجودیت پیش‌فاکتور اشاره می‌کند.
+    </ParamField>
+
+    <ParamField path="meta.entityTitle" type="string">
+      عنوان فنی موجودیتی است که این وب‌هوک به آن مربوط می‌شود و نشان می‌دهد رکورد داخل `data` از نوع پیش‌فاکتور است.
+    </ParamField>
+
+    <ParamField path="meta.id" type="number">
+      شناسه رویدادی است که پس از ایجاد یا ویرایش پیش‌فاکتور در سیستم ثبت شده و این Payload براساس آن ساخته شده است. این شناسه مربوط به خود رویداد است، نه شناسه پیش‌فاکتور.
+    </ParamField>
+
+    <ParamField path="meta.isBulkEdit" type="boolean">
+      مشخص می‌کند تغییر پیش‌فاکتور در قالب یک عملیات گروهی انجام شده است یا خیر. مقدار `true` یعنی این رویداد نتیجه ویرایش گروهی بوده و مقدار `false` یعنی پیش‌فاکتور به‌صورت تکی ایجاد یا ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.timeStamp" type="string">
+      زمانی است که رویداد ایجاد یا ویرایش پیش‌فاکتور در دیدار ثبت شده و Payload وب‌هوک براساس آن تولید شده است. این زمان لزوماً با تاریخ‌های داخل خود پیش‌فاکتور یکسان نیست.
+    </ParamField>
+
+    <ParamField path="meta.userId" type="string">
+      شناسه کاربری است که عملیات منجر به ارسال این وب‌هوک را انجام داده است. در رویداد ایجاد، کاربری را نشان می‌دهد که پیش‌فاکتور را ساخته و در رویداد ویرایش، کاربری را مشخص می‌کند که تغییر را انجام داده است.
+    </ParamField>
+
+    <ParamField path="meta.webhookId" type="number">
+      شناسه تنظیم وب‌هوکی است که این Payload را به آدرس مقصد ارسال کرده است. این مقدار برای تشخیص وب‌هوک تعریف‌شده‌ای که رویداد از طریق آن ارسال شده کاربرد دارد.
+    </ParamField>
+
+    <ParamField path="meta.changeSource" type="number">
+      کد عددی منبعی است که عملیات ایجاد یا ویرایش از طریق آن انجام شده است. عنوان قابل‌خواندن همین منبع در `meta.changeSourceTitle` قرار می‌گیرد.
+    </ParamField>
+
+    <ParamField path="meta.changeSourceTitle" type="string">
+      عنوان متنی منبعی است که پیش‌فاکتور از طریق آن ایجاد یا ویرایش شده است. برای مثال مقدار `Api` یعنی عملیات از طریق API انجام شده است.
+    </ParamField>
+
+    <ParamField path="meta.attempt" type="number">
+      شماره تلاش برای ارسال همین رویداد وب‌هوک به آدرس مقصد است. مقدار `1` یعنی Payload در اولین تلاش ارسال شده است.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## وب‌هوک ایجاد پیش‌فاکتور چه زمانی ارسال می‌شود؟
+
+وب‌هوک ایجاد پیش‌فاکتور زمانی ارسال می‌شود که یک پیش‌فاکتور جدید با موفقیت در دیدار ثبت شود. آبجکت `data` شامل اطلاعات پیش‌فاکتور تازه ایجادشده است و آرایه `changes` خالی ارسال می‌شود، چون پیش از این عملیات رکوردی وجود نداشته که فیلدی از آن تغییر کرده باشد.
+
+## وب‌هوک ویرایش پیش‌فاکتور چه زمانی ارسال می‌شود؟
+
+وب‌هوک ویرایش پیش‌فاکتور زمانی ارسال می‌شود که حداقل یکی از اطلاعات موجود در `data` تغییر کند. فیلدهایی که تغییر آن‌ها می‌تواند باعث ارسال این وب‌هوک شود عبارت‌اند از:
+
+- `data.Id`
+- `data.BizDomainId`
+- `data.DealId`
+- `data.FinalPrice`
+- `data.CreatedOn`
+- `data.CreatorId`
+- `data.IsCanceled`
+- `data.InvoiceFormattedNumber`
+- `data.QuoteFormattedNumber`
+- `data.InvoiceType`
+- `data.Description`
+- `data.TotalPrice`
+- `data.TotalDiscount`
+- `data.TotalTaxPrice`
+- `data.TotalFinalPrice`
+- `data.QuoteExpirationDays`
+- `data.Items[].ProductId`
+- `data.Items[].ProductCode`
+- `data.Items[].VariantId`
+- `data.Items[].VariantCode`
+- `data.Items[].Title`
+- `data.Items[].VariantTitle`
+- `data.Items[].Description`
+- `data.Items[].Unit`
+- `data.Items[].UnitPrice`
+- `data.Items[].Quantity`
+- `data.Items[].Index`
+- `data.Items[].Discount`
+- `data.Items[].DiscountPercent`
+- `data.Items[].Price`
+- `data.Items[].TaxPrice`
+- `data.Items[].FinalPrice`
+- `data.DiscountRows`
+- `data.BuyerInfo`
+- `data.SellerInfo`
+
+اگر هیچ‌کدام از فیلدهای موجود در `data` تغییر نکنند، وب‌هوک ویرایش پیش‌فاکتور ارسال نمی‌شود. آرایه `changes` عامل Trigger نیست؛ این آرایه نتیجه تغییرات انجام‌شده را گزارش می‌کند و `data` آخرین وضعیت پیش‌فاکتور را پس از ویرایش نشان می‌دهد.
+
+## نمونه داده ارسالی
+
+<CodeGroup>
+
+```json وب‌هوک ایجاد پیش‌فاکتور
+{
+  "data": {
+    "Id": 2230759,
+    "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "DealId": "fb2fb2ad-34b1-458d-86a5-ddb68ec3176f",
+    "FinalPrice": 550000,
+    "CreatedOn": "2026-08-02T15:47:04.8360056+00:00",
+    "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "IsCanceled": false,
+    "InvoiceFormattedNumber": null,
+    "QuoteFormattedNumber": "Q-1",
+    "InvoiceType": "Quote",
+    "Description": "",
+    "TotalPrice": 500000,
+    "TotalDiscount": 0,
+    "TotalTaxPrice": 50000,
+    "TotalFinalPrice": 550000,
+    "QuoteExpirationDays": 3,
+    "Items": [
+      {
+        "ProductId": "6a76de58-b3ab-456a-8e0b-635a620f1599",
+        "ProductCode": "101",
+        "VariantId": null,
+        "VariantCode": null,
+        "Title": "product2",
+        "VariantTitle": null,
+        "Description": "",
+        "Unit": "عدد",
+        "UnitPrice": 500000,
+        "Quantity": 1,
+        "Index": 0,
+        "Discount": 0,
+        "DiscountPercent": 0,
+        "Price": 500000,
+        "TaxPrice": 50000,
+        "FinalPrice": 550000
+      }
+    ],
+    "DiscountRows": "[]",
+    "BuyerInfo": "{\"BuyerType\":\"Person\",\"BuyerTitle\":\"\",\"BuyerName\":\"test\",\"BuyerEconomicCode\":\"\",\"BuyerNationalCode\":\"\",\"BuyerNationalID\":\"\",\"BuyerRegistrationNumber\":\"\",\"BuyerProvince\":\"\",\"BuyerGrandCity\":\"\",\"BuyerCity\":\"\",\"BuyerPostalCode\":\"\",\"BuyerMobilePhone\":\"09101111212\",\"BuyerFaxNumber\":\"\",\"BuyerAddress\":{\"KeyValues\":[{\"Key\":\"سایر\",\"Title\":\"سایر\",\"Value\":\"\"}],\"FilledKeyValues\":[]},\"BuyerPhone\":\"\",\"BuyerEmail\":\"\"}",
+    "SellerInfo": "{\"SellerName\":\"زیما\",\"BizDomainId\":\"b8233b92-7a57-42a3-8f3e-59fdbbb6c833\",\"QuoteExpirationDays\":3,\"SellerEconomicCode\":\"\",\"SellerNationalCode\":\"\",\"SellerPostalCode\":\"\",\"SellerProvince\":\"\",\"SellerGrandCity\":\"\",\"SellerCity\":\"\",\"SellerAddress\":\"\",\"SellerPhone\":\"\",\"InvoiceConditions\":\"\",\"QuoteConditions\":\"\"}"
+  },
+  "changes": null,
+  "meta": {
+    "actionType": 1,
+    "actionTypeTitle": "Add",
+    "bizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "entityId": "2230759",
+    "entity": 4,
+    "entityTitle": "Quote",
+    "id": 639212824248480599,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-02T15:47:04.8480599Z",
+    "userId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "webhookId": 32504,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+```json وب‌هوک ویرایش پیش‌فاکتور
+{
+  "data": {
+    "Id": 2230759,
+    "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "DealId": "fb2fb2ad-34b1-458d-86a5-ddb68ec3176f",
+    "FinalPrice": 550000,
+    "CreatedOn": "2026-08-02T15:47:04.8360056",
+    "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "IsCanceled": false,
+    "InvoiceFormattedNumber": null,
+    "QuoteFormattedNumber": "Q-1",
+    "InvoiceType": "Quote",
+    "Description": "",
+    "TotalPrice": 500000,
+    "TotalDiscount": 0,
+    "TotalTaxPrice": 50000,
+    "TotalFinalPrice": 550000,
+    "QuoteExpirationDays": 3,
+    "Items": [
+      {
+        "ProductId": "6a76de58-b3ab-456a-8e0b-635a620f1599",
+        "ProductCode": "101",
+        "VariantId": null,
+        "VariantCode": null,
+        "Title": "product2",
+        "VariantTitle": null,
+        "Description": "",
+        "Unit": "عدد",
+        "UnitPrice": 500000,
+        "Quantity": 1,
+        "Index": 0,
+        "Discount": 0,
+        "DiscountPercent": 0,
+        "Price": 500000,
+        "TaxPrice": 50000,
+        "FinalPrice": 550000
+      }
+    ],
+    "DiscountRows": "[]",
+    "BuyerInfo": "{\"BuyerType\":\"Person\",\"BuyerTitle\":\"\",\"BuyerName\":\"test\",\"BuyerEconomicCode\":\"\",\"BuyerNationalCode\":\"\",\"BuyerNationalID\":\"\",\"BuyerRegistrationNumber\":\"\",\"BuyerProvince\":\"\",\"BuyerGrandCity\":\"\",\"BuyerCity\":\"\",\"BuyerPostalCode\":\"\",\"BuyerMobilePhone\":\"09101111212\",\"BuyerFaxNumber\":\"\",\"BuyerAddress\":{\"KeyValues\":[{\"Key\":\"سایر\",\"Title\":\"سایر\",\"Value\":\"\"}],\"FilledKeyValues\":[]},\"BuyerPhone\":\"\",\"BuyerEmail\":\"\"}",
+    "SellerInfo": "{\"SellerName\":\"زیما\",\"BizDomainId\":\"b8233b92-7a57-42a3-8f3e-59fdbbb6c833\",\"QuoteExpirationDays\":3,\"SellerEconomicCode\":\"\",\"SellerNationalCode\":\"\",\"SellerPostalCode\":\"\",\"SellerProvince\":\"\",\"SellerGrandCity\":\"\",\"SellerCity\":\"\",\"SellerAddress\":\"\",\"SellerPhone\":\"\",\"InvoiceConditions\":\"\",\"QuoteConditions\":\"\"}"
+  },
+  "changes": [
+    {
+      "propertyName": "Adjustment",
+      "before": 0,
+      "after": -150000
+    }
+  ],
+  "meta": {
+    "actionType": 2,
+    "actionTypeTitle": "Change",
+    "bizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "entityId": "2230759",
+    "entity": 4,
+    "entityTitle": "Quote",
+    "id": 639212824845401689,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-02T15:48:04.5401689Z",
+    "userId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "webhookId": 32505,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+</CodeGroup>

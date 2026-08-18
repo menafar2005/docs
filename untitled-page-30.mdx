@@ -1,0 +1,342 @@
+---
+title: "Update Case"
+tag: "POST"
+sidebarTitle: "Update Case"
+---
+
+# ویرایش کارت
+
+این Endpoint کارت موجود را براساس **Case.Id** ویرایش می‌کند. اطلاعات اصلی، مرحله، دسته‌بندی، مسئول، وضعیت، مخاطبان مرتبط، برچسب‌ها و فیلدهای اضافه قابل تغییر هستند.
+
+```http
+POST {{baseURL}}/api/Case/Save_v2?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Case" type="object">
+  اطلاعات کارتی که باید ایجاد یا ویرایش شود؛ مشخصات کارت، مسئول، کاریز، مخاطبان و وضعیت آن در این آبجکت قرار می‌گیرند.
+
+  <Expandable title="property">
+    <ParamField path="Case.Id" type="string" required>
+      شناسه کارتی که میخواهید آن را ویرایش کنید
+    </ParamField>
+
+    <ParamField path="Case.Title" type="string" required>
+      عنوان کارت که در نمای کاریز و فهرست کارت‌ها نمایش داده می‌شود.
+    </ParamField>
+
+    <ParamField path="Case.PipelineStageId" type="string" required>
+      شناسه مرحله کاریز کارت؛ جایگاه جاری کارت را در فرایند مربوط تعیین می‌کند.
+    </ParamField>
+
+    <ParamField path="Case.OwnerId" type="string">
+      شناسه کاربری که مسئول پیگیری و مدیریت کارت است. شناسه کاربر مسئول را از اندپوینت زیر دریافت کنید: <br />[User List ](/untitled-page-13)<br /><br />**دقت کنید که مقدار فیلد** `UserId `**کاربر مدنظر خود را در پاسخ اندپوینت بالا برداشته و در این فیلد قرار دهید**
+    </ParamField>
+
+    <ParamField path="Case.Description" type="string">
+      توضیحات تکمیلی کارت برای ثبت موضوع، نیاز یا جزئیات پیگیری.
+    </ParamField>
+
+    <ParamField path="Case.CompanyId" type="string">
+      شناسه شرکت مرتبط با کارت. شناسه شرکت مرتبط را از یکی از اندپوینت های زیر می توانید دریافت کنید: <br />[Create Company](/untitled-page-19)<br />[Search Company](/untitled-page-22)
+    </ParamField>
+
+    <ParamField path="Case.PersonId" type="string">
+      شناسه شخص مرتبط با کارت. شناسه فرد مرتبط با کارت را می توانید از یکی از اندپوینت های زیر دریافت کنید: <br />[Create Person](/untitled-page-14)<br />[Get Person By Mobile](/untitled-page-17)<br />[Search Person](/untitled-page-18)
+    </ParamField>
+
+    <ParamField path="Case.CaseCategoryId" type="string" required>
+      شناسه دسته‌بندی کارت که نوع یا فرایند کارت را مشخص می‌کند. مقدار این فیلد باید برابر با یکی از مقادیر زیر باشد:
+
+      ```json
+      "00000000-0000-0000-0000-000000000000": "فعالیت محور",
+      "cd06853c-35df-4d9b-b124-9556474d84a1": "کانبان",
+      "37375848-a403-4186-8460-d45754f49e4c": "تیکت"
+      ```
+
+      شما باید یکی از شناسه های بالا را انتخاب کرده و در این فیلد قرار دهید
+    </ParamField>
+
+    <ParamField path="Case.DealId" type="string">
+      شناسه معامله مرتبط با کارت، در صورتی که کارت در جریان یک معامله ایجاد شده باشد. دریافت شناسه معامله: <br />[Create Deal](/untitled-page-23)<br />[Search Deal](/untitled-page-27)
+    </ParamField>
+
+    <ParamField path="Case.IsDeleted" type="boolean">
+      مشخص می‌کند کارت حذف شده است یا همچنان فعال است. مقادیر مجاز: <br />`true `<br />`false`
+    </ParamField>
+
+    <ParamField path="Case.Status" type="string">
+      وضعیت جاری کارت در چرخه انجام کار. مقادیر مجاز وضعیت کارت: <br />`InProgress`<br />`Done`
+    </ParamField>
+
+    <ParamField path="Case.DueDate" type="string">
+      تاریخ سررسید کارت؛ زمانی که انتظار می‌رود کار تا آن انجام شود.
+    </ParamField>
+
+    <ParamField path="Case.Priority" type="number">
+      اولویت کارت برای مرتب‌سازی و تعیین تقدم رسیدگی. مقادیر مجاز اولویت: <br />`-2`  → مقدار پیشفرض (پایین ترین اهمیت)<br />`-1`  → اهمیت کم<br />`0`  → اهمیت متوسط<br />`1`  → اهمیت بالا
+    </ParamField>
+
+    <ParamField path="Case.UserIds[]" type="array">
+      فهرست شناسه کاربران مرتبط با کارت، علاوه بر مسئول اصلی. دریافت آیدی کاربران از طریق اندپوینت زیر: <br />[User List ](/untitled-page-13)
+
+      <Expandable title="property">
+        <ParamField path="Case.UserIds[]" type="string">
+          فهرست شناسه کاربران مرتبط با کارت، علاوه بر مسئول اصلی.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.OtherContactIds" type="string">
+      شناسه سایر مخاطبان مرتبط با کارت، علاوه بر مخاطب اصلی.
+    </ParamField>
+
+    <ParamField path="Case.ResultNote" type="string">
+      نتیجه یا جمع‌بندی ثبت‌شده پس از تکمیل کارت.
+    </ParamField>
+
+    <ParamField path="Case.VisibilityType" type="string">
+      سطح مشاهده کارت؛ تعیین می‌کند چه کاربران یا گروه‌هایی امکان دیدن آن را دارند. مقادیر مجاز سطح دسترسی: <br />
+
+      ```postman_json
+      0: Owner, 1 : OwnerGroup, 2: OwnerSubGroup, 3: All
+      ```
+    </ParamField>
+
+    <ParamField path="Case.Fields" type="object">
+      مقادیر فیلدهای اضافه تعریف‌شده برای کارت. کلید های فیلد های اضافی را می توانید از اندپوینت زیر دریافت کنید: <br />[Get Custom Fields](/untitled-page-12)<br /><br />توجه داشته باشید که فیلد انتخابی برای کارت باید حتما `"FieldType": "Case"`
+
+      <Expandable title="property">
+        <ParamField path="Case.Fields.Field_Key" type="string">
+          مقدار فیلد اضافه با کلید فنی `Field_Key`؛ معنا، نوع و گزینه‌های مجاز این فیلد از تنظیمات فیلدهای اضافه همان بیزدامنه دریافت می‌شود.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Case.CanDelete" type="boolean">
+      مشخص می‌کند کاربر فعلی اجازه حذف کارت را دارد یا خیر. مقادیر مجاز: <br />`true`<br />`false`
+    </ParamField>
+
+    <ParamField path="Case.CanEdit" type="boolean">
+      مشخص می‌کند کاربر فعلی اجازه ویرایش کارت را دارد یا خیر. مقادیر مجاز: <br />`true`<br />`false`
+    </ParamField>
+
+    <ParamField path="Case.IsCaseCategoryActive" type="boolean">
+      مشخص می‌کند دسته‌بندی فعلی کارت فعال و قابل استفاده است یا خیر. مقادیر مجاز: <br />`true`<br />`false`
+    </ParamField>
+
+    <ParamField path="Case.InProgressTime" type="string">
+      تاریخ و زمان ورود کارت به وضعیت در حال انجام.
+    </ParamField>
+
+    <ParamField path="Case.NextActivityDate" type="string">
+      تاریخ نزدیک‌ترین فعالیت باز مرتبط با کارت.
+    </ParamField>
+
+    <ParamField path="Case.LastActivityUpdateTime">
+      تاریخ و زمان آخرین تغییر در فعالیت‌های مرتبط با کارت.
+    </ParamField>
+
+    <ParamField path="Case.DoneTime" type="string">
+      تاریخ و زمان تکمیل کارت.
+    </ParamField>
+
+    <ParamField path="Case.PipelineChangeTime" type="string">
+      تاریخ و زمان آخرین انتقال کارت بین کاریزها یا مراحل.
+
+      <ParamField path="Case.LabelIds" type="array">
+        فهرست کامل شناسه برچسب‌هایی که باید پس از عملیات روی رکورد باقی بمانند.
+      </ParamField>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Case": {
+    "Id": "a553a9b8-e551-40dd-abfe-fcef5eb642e7",
+    "Title": " 1231 123123123 تست",
+    "PipelineStageId": "422dfd72-549e-4443-9c32-6336e2275059",
+    "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+    "Description": "asdfas asdf adfs asdf",
+    "CompanyId": "c867d72d-a5ca-47dd-8e0c-e65db830dea6",
+    "PersonId": "c86978d0-7d19-45ad-9c54-bfb270b97c07",
+    "CaseCategoryId": "37375848-a403-4186-8460-d45754f49e4c",
+    "DealId": "16d952cc-2321-4680-a951-957c3eb21423",
+    "IsDeleted": false,
+    "Status": "InProgress",
+    "DueDate": "2025-08-31T11:19:58.4577817Z",
+    "Priority": -2,
+    "UserIds": [
+      "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+      "04c4f658-64a5-4231-8850-36089c8a77d5"
+    ],
+    "OtherContactIds": "b868fc4c-f8bc-460e-ac4e-a302cae45a1a,c8968598-9720-494c-8894-cbf728f40255",
+    "ResultNote": "sdfasd  asdf a asdf",
+    "VisibilityType": "OwnerSubGroup",
+    "Fields": {
+      "Field_8785_0_13": "123123"
+    },
+    "CanDelete": true,
+    "CanEdit": true,
+    "IsCaseCategoryActive": null,
+    "InProgressTime": "2025-08-31T11:19:58.4577817Z",
+    "NextActivityDate": "2000-08-31T11:19:58.4577817Z",
+    "LastActivityUpdateTime": null,
+    "DoneTime": "2025-08-31T11:19:58.4577817Z",
+    "PipelineChangeTime": "2025-08-31T11:19:58.4577817Z",
+    "Category": null,
+    "IdleStatus": null,
+    "RottenInPipelineStatus": null,
+    "RottenInStageStatus": null,
+    "CaseRating": null
+  },
+    "LabelIds": [
+      "196d9122-3547-4386-b316-06a792e78958",
+      "19c80b4f-6b4a-4bdc-ab06-76d891406d2f"
+    ]
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/Case/Save_v2?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Case": {
+    "Id": "a553a9b8-e551-40dd-abfe-fcef5eb642e7",
+    "Title": " 1231 123123123 تست",
+    "PipelineStageId": "422dfd72-549e-4443-9c32-6336e2275059",
+    "OwnerId": "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+    "Description": "asdfas asdf adfs asdf",
+    "CompanyId": "c867d72d-a5ca-47dd-8e0c-e65db830dea6",
+    "PersonId": "c86978d0-7d19-45ad-9c54-bfb270b97c07",
+    "CaseCategoryId": "37375848-a403-4186-8460-d45754f49e4c",
+    "DealId": "16d952cc-2321-4680-a951-957c3eb21423",
+    "IsDeleted": false,
+    "Status": "InProgress",
+    "DueDate": "2025-08-31T11:19:58.4577817Z",
+    "Priority": -2,
+    "UserIds": [
+      "f1599895-3d58-44a8-a830-e77b42d8e4c6",
+      "04c4f658-64a5-4231-8850-36089c8a77d5"
+    ],
+    "OtherContactIds": "b868fc4c-f8bc-460e-ac4e-a302cae45a1a,c8968598-9720-494c-8894-cbf728f40255",
+    "ResultNote": "sdfasd  asdf a asdf",
+    "VisibilityType": "OwnerSubGroup",
+    "Fields": {
+      "Field_8785_0_13": "123123"
+    },
+    "CanDelete": true,
+    "CanEdit": true,
+    "IsCaseCategoryActive": null,
+    "InProgressTime": "2025-08-31T11:19:58.4577817Z",
+    "NextActivityDate": "2000-08-31T11:19:58.4577817Z",
+    "LastActivityUpdateTime": null,
+    "DoneTime": "2025-08-31T11:19:58.4577817Z",
+    "PipelineChangeTime": "2025-08-31T11:19:58.4577817Z",
+    "Category": null,
+    "IdleStatus": null,
+    "RottenInPipelineStatus": null,
+    "RottenInStageStatus": null,
+    "CaseRating": null
+  },
+  "SetLabelDto": {
+    "UpdatedLabels": [],
+    "AddedLabels": [],
+    "LabelIds": [
+      "196d9122-3547-4386-b316-06a792e78958",
+      "19c80b4f-6b4a-4bdc-ab06-76d891406d2f"
+    ]
+  }
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "Id": "b83965ac-5a28-4be2-a844-e783ba2f254c",
+        "OwnerId": "00000000-0000-0000-0000-000000000000",
+        "OwnerId_Old": "00000000-0000-0000-0000-000000000000",
+        "Title": " 1231  تست",
+        "CanDelete": true,
+        "CanEdit": true,
+        "IsCaseCategoryActive": true,
+        "Description": "",
+        "CompanyId": "00000000-0000-0000-0000-000000000000",
+        "PersonId": "00000000-0000-0000-0000-000000000000",
+        "ContactId": "00000000-0000-0000-0000-000000000000",
+        "IsDeleted": false,
+        "Status": "InProgress",
+        "CreateTime": "2026-07-28T16:35:51.9663563Z",
+        "DueDate": "2026-07-28T16:35:51.9663563Z",
+        "InProgressTime": "2026-07-28T16:35:51.9663563Z",
+        "DoneTime": "2026-07-28T16:35:51.9663563Z",
+        "CaseType": "Simple",
+        "DealId": "00000000-0000-0000-0000-000000000000",
+        "LabelId": "048cba4c-c168-421d-949b-4ca2bb84ebb4",
+        "Code": 4,
+        "Color": "",
+        "Priority": 0,
+        "UserIds": [],
+        "PipelineStageId": "2d34c424-62e5-4fcc-b0f0-bfbd11bf440a",
+        "PipelineId": "f7861340-b22c-49b1-bb5a-d96b5cdba979",
+        "PipelineChangeTime": "2026-07-28T16:35:51.9663563Z",
+        "CaseCategoryId": "00000000-0000-0000-0000-000000000000",
+        "OtherContactIds": null,
+        "ResultNote": null,
+        "NextActivityDate": null,
+        "LastActivityUpdateTime": null,
+        "VisibilityType": "Owner",
+        "CategoryType": "ActivityOriented",
+        "CreatorId": "00000000-0000-0000-0000-000000000000",
+        "Creator": {
+            "UserId": "00000000-0000-0000-0000-000000000000",
+            "DisplayName": "کاربر میهمان ",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+            "Email": ""
+        },
+        "Owner": {
+            "UserId": "00000000-0000-0000-0000-000000000000",
+            "DisplayName": "کاربر میهمان ",
+            "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+            "Email": ""
+        },
+        "Category": null,
+        "Fields": {},
+        "Contact": null,
+        "Person": null,
+        "Company": null,
+        "OtherContacts": [],
+        "Deal": null,
+        "_Type": null,
+        "LabelIds": [
+            "048cba4c-c168-421d-949b-4ca2bb84ebb4"
+        ],
+        "IdleStatus": null,
+        "RottenInPipelineStatus": null,
+        "RottenInStageStatus": null,
+        "CaseRating": null
+    }
+}
+```
+
+</ResponseExample>

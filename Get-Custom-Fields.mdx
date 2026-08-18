@@ -1,0 +1,86 @@
+---
+title: "Get Custom Fields"
+description: "اجرای عملیات «Get Custom Field — فیلدهای اضافی» از طریق Open API دیدار"
+tag: "POST"
+sidebarTitle: "Get Custom Fields"
+---
+
+{/*  Endpoint: Get Custom Fields | /untitled-page-12  */}
+
+# دریافت فیلدهای اضافی
+
+فیلدهای اضافه در هر بیزدامنه متفاوت‌اند و توسط همان کسب‌وکار ساخته می‌شوند.‎ این Endpoint فهرست فیلدهای اضافه را همراه با `Key`، نوع، عنوان و تنظیماتشان برمی‌گرداند تا بدانید هنگام ایجاد، ویرایش یا جستجوی رکوردها چه مقادیری را باید داخل `Fields` ارسال کنید.‎
+
+```http
+POST {{baseURL}}/api/customfield/GetCustomfieldList?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## بدنه درخواست
+
+> این درخواست بدنه ندارد.
+
+<RequestExample>
+
+```shellscript Request Body (cURL)
+curl --location --request POST '{{baseURL}}/api/customfield/GetCustomfieldList?apikey={{API_KEY}}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+    "Response": {
+        "e944238a-be9c-443d-b02f-27129d5bba27": {
+            "Id": "e944238a-be9c-443d-b02f-27129d5bba27",
+            "Key": "Field_996_0_226",
+            "BizDomainId": "f846d756-64fa-4a0b-86c6-e8f571decbed",
+            "Type": 996,
+            "FieldType": "Contact",
+            "ControlType": "TextBox",
+            "Order": 226,
+            "IsSearchable": false,
+            "Title": " حوزه فعالیت",
+            "DefaultValue": "",
+            "Options": [],
+            "ViewOptions": {
+                "ShowInAddContact": true,
+                "ShowInAddDeal": true,
+                "ShowInSideBar": true
+            },
+            "IsDeleted": false,
+            "ExcludedPipeLineIds": [],
+            "RequiredPipeLineStageIds": []
+        },
+        "6295d2b0-13ea-4bdc-aa96-fd27d98e760c": {
+            "Id": "6295d2b0-13ea-4bdc-aa96-fd27d98e760c",
+            "Key": "Field_996_0_141",
+            "BizDomainId": "f846d756-64fa-4a0b-86c6-e8f571decbed",
+            "Type": 996,
+            "FieldType": "Contact",
+            "ControlType": "TextBox",
+            "Order": 141,
+            "IsSearchable": false,
+            "Title": "(تست)",
+            "DefaultValue": "",
+            "Options": [],
+            "ViewOptions": {
+                "ShowInAddContact": true,
+                "ShowInSideBar": true
+            },
+            "IsDeleted": false,
+            "ExcludedPipeLineIds": [],
+            "RequiredPipeLineStageIds": []
+        },
+    }
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,582 @@
+---
+title: "وب‌هوک‌های شخص"
+description: "مرجع ساختار داده و شرایط ارسال وب‌هوک‌های ایجاد و ویرایش شخص در دیدار"
+sidebarTitle: "وبهوک شخص"
+---
+
+# وب‌هوک‌های شخص
+
+وب‌هوک‌های شخص اطلاعات شخص را پس از ایجاد یا ویرایش آن به آدرس مقصد ارسال می‌کنند. ساختار کلی Payload در هر دو رویداد یکسان است؛ با این تفاوت که در وب‌هوک ویرایش، آرایه `changes` مشخص می‌کند کدام اطلاعات شخص در همان عملیات تغییر کرده‌اند.
+
+## ساختار داده ارسالی
+
+<ParamField path="data" type="object">
+  اطلاعات کامل شخصی است که این وب‌هوک برای او ارسال شده است. در وب‌هوک ایجاد، این Object اطلاعات شخصی را نشان می‌دهد که تازه در دیدار ثبت شده و در وب‌هوک ویرایش، آخرین وضعیت همان شخص را پس از ذخیره تغییرات نمایش می‌دهد.
+
+  <Expandable title="property">
+    <ParamField path="data.Id" type="string">
+      شناسه شخصی است که این وب‌هوک برای او ارسال شده است. در وب‌هوک ایجاد، این مقدار شناسه شخصی است که تازه در دیدار ساخته شده و در وب‌هوک ویرایش، شناسه همان شخصی است که اطلاعاتش ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="data.Code" type="number">
+      کد عددی شخص در دیدار است که برای نمایش، ارجاع و جست‌وجوی ساده‌تر مخاطب استفاده می‌شود. این کد با `data.Id` فرق دارد؛ `Id` شناسه فنی رکورد است، اما `Code` یک شماره قابل‌خواندن‌تر برای کاربران و سیستم‌های متصل است.
+    </ParamField>
+
+    <ParamField path="data.Title" type="string">
+      عنوانی است که قبل از نام و نام خانوادگی این شخص نمایش داده می‌شود؛ برای مثال «آقای»، «خانم» یا «دکتر». این مقدار بخشی از نحوه نمایش نام شخص در دیدار است.
+    </ParamField>
+
+    <ParamField path="data.FirstName" type="string">
+      نام شخصی است که این وب‌هوک برای او ارسال شده است. این مقدار همراه نام خانوادگی برای ساخت نام نمایشی مخاطب در دیدار استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.LastName" type="string">
+      نام خانوادگی شخصی است که ایجاد یا ویرایش شده است. این فیلد یکی از اطلاعات اصلی برای شناسایی و نمایش شخص در دیدار محسوب می‌شود.
+    </ParamField>
+
+    <ParamField path="data.DisplayName" type="string">
+      نام کامل و آماده‌نمایش شخص در دیدار است. این مقدار معمولاً از ترکیب نام، نام خانوادگی و اطلاعات نمایشی مخاطب ساخته می‌شود و همان متنی است که در فهرست‌ها، جست‌وجو و بخش‌های مختلف CRM دیده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.OwnerId" type="string">
+      شناسه Userی است که در حال حاضر مسئول پیگیری این شخص در دیدار است. این کاربر وظیفه دارد ارتباط با مخاطب را مدیریت کند و فعالیت‌ها یا پیگیری‌های مربوط به او را پیش ببرد.
+    </ParamField>
+
+    <ParamField path="data.CompanyId" type="string">
+      شناسه شرکتی است که این شخص به آن متصل شده است؛ برای مثال شرکتی که شخص در آن کار می‌کند. اگر شخص به هیچ شرکتی متصل نباشد، این مقدار می‌تواند شناسه خالی سیستم باشد.
+    </ParamField>
+
+    <ParamField path="data.BirthDate" type="string">
+      تاریخ تولد ثبت‌شده برای این شخص است. این مقدار می‌تواند برای نمایش اطلاعات پروفایل مخاطب و قابلیت‌هایی مثل یادآوری تولد استفاده شود.
+    </ParamField>
+
+    <ParamField path="data.BirthDateisValid" type="boolean">
+      مشخص می‌کند مقدار موجود در `data.BirthDate` به‌عنوان تاریخ تولد معتبر قابل استفاده است یا خیر. مقدار `true` یعنی تاریخ تولد معتبر ثبت شده و مقدار `false` یعنی مقدار فعلی نباید به‌عنوان تاریخ تولد قطعی شخص در نظر گرفته شود.
+    </ParamField>
+
+    <ParamField path="data.BirthDateMessageId" type="string">
+      شناسه پیام یا الگوی پیام مرتبط با یادآوری تولد این شخص است. این مقدار ارتباط میان تاریخ تولد مخاطب و تنظیمات پیام یا یادآوری مربوط به تولد را مشخص می‌کند.
+    </ParamField>
+
+    <ParamField path="data.MobilePhone" type="string">
+      شماره موبایل اصلی شخصی است که ایجاد یا ویرایش شده است. این شماره برای تماس، جست‌وجوی مخاطب، تشخیص رکورد و هماهنگ‌سازی شخص با سیستم‌های دیگر استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.WorkPhone" type="string">
+      شماره تلفن ثابت یا محل کار این شخص است. این مقدار راه تماس کاری مخاطب را نشان می‌دهد و می‌تواند در کنار شماره داخلی استفاده شود.
+    </ParamField>
+
+    <ParamField path="data.WorkPhoneExtension" type="string">
+      عنوان یا شماره داخلی ثبت‌شده کنار تلفن محل کار این شخص است؛ برای مثال داخلی واحد فروش یا عبارت «دفتر». این مقدار باید همراه `data.WorkPhone` تفسیر شود.
+    </ParamField>
+
+    <ParamField path="data.Fax" type="string">
+      شماره فکس ثبت‌شده برای این شخص است. خالی بودن این مقدار یعنی شماره فکسی برای مخاطب ثبت نشده است.
+    </ParamField>
+
+    <ParamField path="data.Email" type="string">
+      نشانی ایمیل اصلی شخصی است که ایجاد یا ویرایش شده است. این ایمیل برای ارتباط با مخاطب، جست‌وجوی او و تطبیق رکورد با سیستم‌های دیگر قابل استفاده است.
+    </ParamField>
+
+    <ParamField path="data.CanDelete" type="boolean">
+      مشخص می‌کند رکورد این شخص در Context فعلی قابل حذف است یا خیر. مقدار `true` یعنی حذف شخص مجاز است و مقدار `false` یعنی براساس وضعیت رکورد یا دسترسی‌ها نمی‌توان او را حذف کرد.
+    </ParamField>
+
+    <ParamField path="data.CanEdit" type="boolean">
+      مشخص می‌کند رکورد این شخص در Context فعلی قابل ویرایش است یا خیر. مقدار `true` یعنی اطلاعات شخص قابل تغییر است و مقدار `false` یعنی ویرایش رکورد مجاز نیست.
+    </ParamField>
+
+    <ParamField path="data.IsDeleted" type="boolean">
+      مشخص می‌کند شخص حذف شده است یا خیر. مقدار `true` یعنی رکورد شخص حذف شده و مقدار `false` یعنی شخص همچنان در دیدار موجود و فعال است.
+    </ParamField>
+
+    <ParamField path="data.IsVIP" type="boolean">
+      مشخص می‌کند این شخص به‌عنوان مخاطب ویژه علامت‌گذاری شده است یا خیر. مقدار `true` یعنی شخص VIP است و مقدار `false` یعنی به‌عنوان مخاطب ویژه علامت نخورده است.
+    </ParamField>
+
+    <ParamField path="data.IsMine" type="boolean">
+      مشخص می‌کند این شخص در حوزه مسئولیت کاربری قرار دارد که Context این داده براساس او ساخته شده است یا خیر. مقدار `true` یعنی رکورد متعلق به همان کاربر یا تحت مسئولیت اوست و مقدار `false` یعنی مسئول شخص کاربر دیگری است.
+    </ParamField>
+
+    <ParamField path="data.HasAccess" type="boolean">
+      مشخص می‌کند کاربر مربوط به Context این داده اجازه مشاهده شخص را دارد یا خیر. مقدار `true` یعنی رکورد برای او قابل مشاهده است و مقدار `false` یعنی قواعد دسترسی اجازه مشاهده این شخص را نمی‌دهند.
+    </ParamField>
+
+    <ParamField path="data.LeadGenerationType" type="number">
+      نحوه ورود یا ایجاد این شخص به‌عنوان سرنخ در دیدار را مشخص می‌کند. این مقدار نشان می‌دهد مخاطب از چه نوع فرایندی وارد CRM شده است؛ برای مثال در پاسخ Endpoint ایجاد شخص، مقدار `Manual` یعنی شخص به‌صورت دستی ثبت شده است.
+    </ParamField>
+
+    <ParamField path="data.LeadStatus" type="number">
+      وضعیت این شخص در فرایند سرنخ را نشان می‌دهد. این مقدار مشخص می‌کند مخاطب در حال حاضر در چه وضعیت تجاری قرار گرفته و آیا برای او وضعیت مشخصی در چرخه سرنخ ثبت شده است یا خیر.
+    </ParamField>
+
+    <ParamField path="data.LeadType" type="number">
+      نوع سرنخ ثبت‌شده برای این شخص را مشخص می‌کند. این مقدار برای دسته‌بندی مخاطب در فرایند جذب و پیگیری سرنخ‌ها استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.ContactType" type="string">
+      نوع ارتباط تجاری این شخص با کسب‌وکار را نشان می‌دهد. این مقدار می‌تواند مشخص کند مخاطب یک رکورد عمومی، مشتری بالقوه یا نوع دیگری از مخاطب است.
+    </ParamField>
+
+    <ParamField path="data.IsCustomer" type="boolean">
+      مشخص می‌کند این شخص در دیدار مشتری محسوب می‌شود یا خیر. مقدار `true` یعنی شخص به‌عنوان مشتری شناخته شده و مقدار `false` یعنی هنوز مشتری محسوب نمی‌شود.
+    </ParamField>
+
+    <ParamField path="data.IsProspect" type="boolean">
+      مشخص می‌کند این شخص مشتری بالقوه یا Prospect است یا خیر. مقدار `true` یعنی شخص در گروه مشتریان بالقوه قرار دارد و مقدار `false` یعنی در این وضعیت نیست.
+    </ParamField>
+
+    <ParamField path="data.Type" type="number">
+      نوع رکورد مخاطب را مشخص می‌کند. در وب‌هوک شخص، این مقدار نشان می‌دهد داده ارسال‌شده متعلق به یک شخص است، نه یک شرکت یا User سیستم.
+    </ParamField>
+
+    <ParamField path="data.BackgroundInfo" type="string">
+      یادداشت و اطلاعات زمینه‌ای ثبت‌شده درباره این شخص است. این فیلد برای نگهداری نکاتی مثل سابقه ارتباط، نیازهای مخاطب یا اطلاعاتی استفاده می‌شود که جای مشخصی در فیلدهای ساختاریافته ندارند.
+    </ParamField>
+
+    <ParamField path="data.RegisterTime" type="string">
+      زمانی است که این شخص برای اولین بار در دیدار ثبت شده است. در وب‌هوک ویرایش نیز این مقدار زمان ایجاد اولیه شخص را نشان می‌دهد و نباید با زمان آخرین ویرایش اشتباه گرفته شود.
+    </ParamField>
+
+    <ParamField path="data.Position" type="string">
+      عنوان شغلی یا سمت این شخص در شرکت مرتبط است؛ برای مثال «مدیر فروش» یا «مدیرعامل». این مقدار نقش فرد را در سازمانی که به آن متصل شده مشخص می‌کند.
+    </ParamField>
+
+    <ParamField path="data.CustomerCode" type="string">
+      کد مشتری ثبت‌شده برای این شخص است. این کد معمولاً برای تطبیق مخاطب با رکورد متناظر او در حسابداری، ERP یا سایر سیستم‌های بیرونی استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.EconomicIssue" type="string">
+      کد اقتصادی ثبت‌شده برای این مخاطب است. این فیلد بیشتر در اطلاعات مالیاتی و اسناد رسمی کاربرد دارد و ممکن است برای شخص خالی باشد.
+    </ParamField>
+
+    <ParamField path="data.NationalCode" type="string">
+      کد ملی ثبت‌شده برای این شخص است. این مقدار برای شناسایی هویتی مخاطب در فرایندهای مالی، حقوقی یا تطبیق با سیستم‌های دیگر استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.RegistrationNumber" type="string">
+      شماره ثبت حقوقی موجود در ساختار مشترک مخاطبان است. برای رکورد شخص معمولاً مقدار ندارد، چون شماره ثبت به شرکت یا شخص حقوقی مربوط می‌شود.
+    </ParamField>
+
+    <ParamField path="data.NationalID" type="string">
+      شناسه ملی موجود در ساختار مشترک مخاطبان است. برای رکورد شخص معمولاً خالی است، چون شناسه ملی به شرکت یا شخص حقوقی مربوط می‌شود و کد ملی شخص در `data.NationalCode` قرار می‌گیرد.
+    </ParamField>
+
+    <ParamField path="data.ZipCode" type="string">
+      کد پستی نشانی اصلی این شخص است. این مقدار برای تکمیل اطلاعات آدرس و استفاده در فرایندهای ارسال یا اسناد مالی کاربرد دارد.
+    </ParamField>
+
+    <ParamField path="data.CityTitle" type="string">
+      نام شهری است که برای نشانی این شخص ثبت شده است. این مقدار نسخه قابل‌نمایش شهری است که شناسه آن در `data.CityId` قرار دارد.
+    </ParamField>
+
+    <ParamField path="data.ProvinceTitle" type="string">
+      نام استانی است که برای نشانی این شخص ثبت شده است. این مقدار نسخه قابل‌نمایش استانی است که شناسه آن در `data.ProvinceId` قرار دارد.
+    </ParamField>
+
+    <ParamField path="data.ProvinceId" type="string">
+      شناسه استانی است که در اطلاعات نشانی این شخص انتخاب شده است. این شناسه مشخص می‌کند مخاطب در کدام استان قرار دارد و عنوان همان استان در `data.ProvinceTitle` ارسال می‌شود.
+    </ParamField>
+
+    <ParamField path="data.CityId" type="string">
+      شناسه شهری است که در اطلاعات نشانی این شخص انتخاب شده است. این شناسه مشخص می‌کند مخاطب در کدام شهر قرار دارد و عنوان همان شهر در `data.CityTitle` ارسال می‌شود.
+    </ParamField>
+
+    <ParamField path="data.HasCompany" type="boolean">
+      مشخص می‌کند این شخص به یک شرکت در دیدار متصل است یا خیر. مقدار `true` یعنی برای شخص شرکت مرتبط ثبت شده و مقدار `false` یعنی شخص بدون ارتباط با شرکت ذخیره شده است.
+    </ParamField>
+
+    <ParamField path="data.CompanyName" type="string">
+      نام شرکت مرتبط با این شخص است. این مقدار شرکتی را نشان می‌دهد که شخص در آن کار می‌کند یا از طرف آن با کسب‌وکار شما در ارتباط است.
+    </ParamField>
+
+    <ParamField path="data.CompanyIsCustomer" type="string">
+      مشخص می‌کند شرکت مرتبط با این شخص، در دیدار مشتری محسوب می‌شود یا خیر. مقدار `true` یعنی شرکت مشتری است، مقدار `false` یعنی مشتری نیست و مقدار `null` یعنی شرکت مرتبطی وجود ندارد یا این وضعیت برای آن مشخص نشده است.
+    </ParamField>
+
+    <ParamField path="data.CompanyIsProspect" type="string">
+      مشخص می‌کند شرکت مرتبط با این شخص، مشتری بالقوه محسوب می‌شود یا خیر. مقدار `true` یعنی شرکت Prospect است، مقدار `false` یعنی در این وضعیت نیست و مقدار `null` یعنی شرکت مرتبطی وجود ندارد یا وضعیت آن مشخص نشده است.
+    </ParamField>
+
+    <ParamField path="data.CompanyCode" type="string">
+      کد عددی شرکت مرتبط با این شخص در دیدار است. این کد برای نمایش، جست‌وجو یا تطبیق شرکت مرتبط در سیستم مقصد استفاده می‌شود و در صورت نداشتن شرکت می‌تواند `null` باشد.
+    </ParamField>
+
+    <ParamField path="data.CompanyAndPosition" type="string">
+      متن ترکیبی نام شرکت و سمت شغلی این شخص است. این مقدار برای نمایش سریع جایگاه فرد استفاده می‌شود؛ یعنی خواننده بدون بررسی جداگانه فیلدهای شرکت و سمت می‌تواند ارتباط شغلی مخاطب را ببیند.
+    </ParamField>
+
+    <ParamField path="data.Feedback" type="number">
+      مقدار بازخورد ثبت‌شده برای این شخص است. این عدد نشان‌دهنده امتیاز یا ارزیابی ذخیره‌شده درباره مخاطب در دیدار است.
+    </ParamField>
+
+    <ParamField path="data.VisibilityType" type="number">
+      سطح مشاهده این شخص را مشخص می‌کند و تعیین می‌کند براساس تنظیمات دسترسی، چه کاربرانی امکان دیدن رکورد او را دارند؛ برای مثال فقط مسئول، مسئول و گروه او یا همه کاربران مجاز.
+    </ParamField>
+
+    <ParamField path="data.OtherPhones" type="array">
+      فهرست شماره‌های تلفن فرعی ثبت‌شده برای این شخص است. هر عضو Array یک شماره اضافه را همراه عنوان کاربرد آن، مثل «همراه»، «محل کار» یا «منزل»، نمایش می‌دهد.
+    </ParamField>
+
+    <ParamField path="data.OtherEmails" type="array">
+      فهرست ایمیل‌های فرعی ثبت‌شده برای این شخص است. هر عضو Array یک نشانی ایمیل اضافه را همراه عنوان کاربرد آن، مثل «کاری» یا «شخصی»، نمایش می‌دهد.
+    </ParamField>
+
+    <ParamField path="data.Websites" type="array">
+      فهرست نشانی‌های وب مرتبط با این شخص است. هر عضو Array یک وب‌سایت یا پروفایل آنلاین را همراه عنوانی که برای آن ثبت شده نمایش می‌دهد.
+    </ParamField>
+
+    <ParamField path="data.Addresses" type="array">
+      فهرست نشانی‌های پستی ثبت‌شده برای این شخص است. هر عضو Array یک آدرس را همراه عنوان آن، مثل «محل کار»، «منزل» یا «سایر»، نمایش می‌دهد.
+    </ParamField>
+
+    <ParamField path="data.BankAccounts" type="array">
+      فهرست اطلاعات حساب‌های بانکی ثبت‌شده برای این شخص است. هر عضو Array اطلاعات یک کارت یا حساب بانکی را در ساختار داخلی دیدار نگهداری می‌کند و برای فرایندهای مالی قابل استفاده است.
+    </ParamField>
+
+    <ParamField path="data.Fields" type="object">
+      مقادیر فیلدهای اضافه‌ای است که برای شخص تعریف شده و روی همین مخاطب مقدار گرفته‌اند. نام هر property کلید فنی یک Custom Field و مقدار آن، داده ذخیره‌شده در همان فیلد است.
+
+      <Expandable title="property">
+        <ParamField path="data.Fields.Field_996_0_3" type="string">
+          مقدار ثبت‌شده در فیلد اضافه‌ای است که کلید فنی آن `Field_996_0_3` است. مفهوم این مقدار به عنوان و نوع Custom Field متناظر در تنظیمات همین بیزدامنه بستگی دارد.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="data.Segments" type="array">
+      فهرست گروه‌هایی است که این شخص عضو آن‌هاست. هر عضو Array یک Segment را نشان می‌دهد که برای دسته‌بندی مخاطبان، فیلترکردن آن‌ها یا اجرای فرایندهای هدفمند استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="data.LastUpdateTime" type="string">
+      زمان آخرین تغییری است که روی اطلاعات این شخص ذخیره شده است. در وب‌هوک ویرایش، این مقدار زمان به‌روزرسانی نهایی رکورد را نشان می‌دهد؛ در حالی که `data.RegisterTime` زمان ایجاد اولیه شخص است.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="changes" type="array">
+  تغییراتی که باعث ارسال وب‌هوک ویرایش شخص شده‌اند در این Array قرار می‌گیرند. در وب‌هوک ایجاد، `changes` خالی است؛ چون شخص تازه ساخته شده و نسخه قبلی‌ای برای مقایسه وجود ندارد. در وب‌هوک ویرایش، هر عضو مشخص می‌کند کدام فیلد تغییر کرده، مقدار آن پیش از ویرایش چه بوده و پس از ویرایش به چه مقداری تبدیل شده است. Object `data` وضعیت نهایی شخص را نشان می‌دهد و `changes` فقط تغییرات همان عملیات را گزارش می‌کند.
+
+  <Expandable title="property">
+    <ParamField path="changes[].propertyName" type="string">
+      نام فیلدی از شخص است که در این عملیات ویرایش تغییر کرده است. این مقدار مشخص می‌کند `before` و `after` مربوط به کدام بخش از اطلاعات شخص هستند.
+    </ParamField>
+
+    <ParamField path="changes[].before" type="string">
+      مقدار فیلد پیش از انجام این ویرایش است. با مقایسه آن با `changes[].after` می‌توانید دقیقاً تشخیص دهید اطلاعات شخص از چه مقداری تغییر کرده است. نوع مقدار به فیلد نوشته‌شده در `propertyName` بستگی دارد و می‌تواند رشته، عدد، Boolean، Object، Array یا `null` باشد.
+    </ParamField>
+
+    <ParamField path="changes[].after" type="string">
+      مقدار فیلد پس از انجام و ذخیره ویرایش است. این مقدار نتیجه نهایی همان تغییر را نشان می‌دهد و باید با مقدار متناظر آن در Object `data` هم‌خوان باشد.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="meta" type="object">
+  اطلاعات فنی مربوط به خود رویداد وب‌هوک است، نه اطلاعات شخص. این Object مشخص می‌کند چه عملیاتی انجام شده، رویداد متعلق به کدام بیزدامنه و شخص است، چه کاربری آن را ایجاد کرده، تغییر از چه منبعی آمده و Payload توسط کدام تنظیم وب‌هوک و در چندمین تلاش ارسال شده است.
+
+  <Expandable title="property">
+    <ParamField path="meta.actionType" type="number">
+      کد عددی نوع عملیاتی است که باعث ارسال این وب‌هوک شده است. براساس نمونه‌ها، مقدار `1` یعنی شخص ایجاد شده و مقدار `2` یعنی شخص ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.actionTypeTitle" type="string">
+      عنوان متنی همان عملیاتی است که در `meta.actionType` به‌صورت عددی مشخص شده است. در نمونه ایجاد مقدار `Add` و در نمونه ویرایش مقدار `Change` ارسال می‌شود.
+    </ParamField>
+
+    <ParamField path="meta.bizDomainId" type="string">
+      شناسه بیزدامنه‌ای است که شخص در آن ایجاد یا ویرایش شده است. این مقدار مشخص می‌کند رویداد وب‌هوک متعلق به کدام حساب یا فضای کاری دیدار است.
+    </ParamField>
+
+    <ParamField path="meta.entityId" type="string">
+      شناسه شخصی است که رویداد وب‌هوک برای آن ثبت شده است. این مقدار باید به همان رکوردی اشاره کند که اطلاعات کامل آن داخل `data` قرار گرفته و معمولاً با `data.Id` یکسان است.
+    </ParamField>
+
+    <ParamField path="meta.entity" type="number">
+      کد عددی داخلی نوع موجودیتی است که رویداد برای آن ثبت شده است. در Payload این صفحه، این کد به موجودیت شخص اشاره می‌کند.
+    </ParamField>
+
+    <ParamField path="meta.entityTitle" type="string">
+      عنوان فنی موجودیتی است که این وب‌هوک به آن مربوط می‌شود و نشان می‌دهد رکورد داخل `data` از نوع شخص است.
+    </ParamField>
+
+    <ParamField path="meta.id" type="number">
+      شناسه رویدادی است که پس از ایجاد یا ویرایش شخص در سیستم ثبت شده و این Payload براساس آن ساخته شده است. این شناسه مربوط به خود رویداد است، نه شناسه شخص.
+    </ParamField>
+
+    <ParamField path="meta.isBulkEdit" type="boolean">
+      مشخص می‌کند تغییر شخص در قالب یک عملیات گروهی انجام شده است یا خیر. مقدار `true` یعنی این رویداد نتیجه ویرایش گروهی بوده و مقدار `false` یعنی شخص به‌صورت تکی ایجاد یا ویرایش شده است.
+    </ParamField>
+
+    <ParamField path="meta.timeStamp" type="string">
+      زمانی است که رویداد ایجاد یا ویرایش شخص در دیدار ثبت شده و Payload وب‌هوک براساس آن تولید شده است. این زمان لزوماً با تاریخ‌های داخل خود شخص یکسان نیست.
+    </ParamField>
+
+    <ParamField path="meta.userId" type="string">
+      شناسه کاربری است که عملیات منجر به ارسال این وب‌هوک را انجام داده است. در رویداد ایجاد، کاربری را نشان می‌دهد که شخص را ساخته و در رویداد ویرایش، کاربری را مشخص می‌کند که تغییر را انجام داده است.
+    </ParamField>
+
+    <ParamField path="meta.webhookId" type="number">
+      شناسه تنظیم وب‌هوکی است که این Payload را به آدرس مقصد ارسال کرده است. این مقدار برای تشخیص وب‌هوک تعریف‌شده‌ای که رویداد از طریق آن ارسال شده کاربرد دارد.
+    </ParamField>
+
+    <ParamField path="meta.changeSource" type="number">
+      کد عددی منبعی است که عملیات ایجاد یا ویرایش از طریق آن انجام شده است. عنوان قابل‌خواندن همین منبع در `meta.changeSourceTitle` قرار می‌گیرد.
+    </ParamField>
+
+    <ParamField path="meta.changeSourceTitle" type="string">
+      عنوان متنی منبعی است که شخص از طریق آن ایجاد یا ویرایش شده است. برای مثال مقدار `Api` یعنی عملیات از طریق API انجام شده است.
+    </ParamField>
+
+    <ParamField path="meta.attempt" type="number">
+      شماره تلاش برای ارسال همین رویداد وب‌هوک به آدرس مقصد است. مقدار `1` یعنی Payload در اولین تلاش ارسال شده است.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## وب‌هوک ایجاد شخص چه زمانی ارسال می‌شود؟
+
+وب‌هوک ایجاد شخص زمانی ارسال می‌شود که یک شخص جدید با موفقیت در دیدار ثبت شود. آبجکت `data` شامل اطلاعات شخص تازه ایجادشده است و آرایه `changes` خالی ارسال می‌شود، چون پیش از این عملیات رکوردی وجود نداشته که فیلدی از آن تغییر کرده باشد.
+
+## وب‌هوک ویرایش شخص چه زمانی ارسال می‌شود؟
+
+وب‌هوک ویرایش شخص زمانی ارسال می‌شود که حداقل یکی از اطلاعات موجود در `data` تغییر کند. فیلدهایی که تغییر آن‌ها می‌تواند باعث ارسال این وب‌هوک شود عبارت‌اند از:
+
+- `data.Id`
+- `data.Code`
+- `data.Title`
+- `data.FirstName`
+- `data.LastName`
+- `data.DisplayName`
+- `data.OwnerId`
+- `data.CompanyId`
+- `data.BirthDate`
+- `data.BirthDateisValid`
+- `data.BirthDateMessageId`
+- `data.MobilePhone`
+- `data.WorkPhone`
+- `data.WorkPhoneExtension`
+- `data.Fax`
+- `data.Email`
+- `data.CanDelete`
+- `data.CanEdit`
+- `data.IsDeleted`
+- `data.IsVIP`
+- `data.IsMine`
+- `data.HasAccess`
+- `data.LeadGenerationType`
+- `data.LeadStatus`
+- `data.LeadType`
+- `data.ContactType`
+- `data.IsCustomer`
+- `data.IsProspect`
+- `data.Type`
+- `data.BackgroundInfo`
+- `data.RegisterTime`
+- `data.Position`
+- `data.CustomerCode`
+- `data.EconomicIssue`
+- `data.NationalCode`
+- `data.RegistrationNumber`
+- `data.NationalID`
+- `data.ZipCode`
+- `data.CityTitle`
+- `data.ProvinceTitle`
+- `data.ProvinceId`
+- `data.CityId`
+- `data.HasCompany`
+- `data.CompanyName`
+- `data.CompanyIsCustomer`
+- `data.CompanyIsProspect`
+- `data.CompanyCode`
+- `data.CompanyAndPosition`
+- `data.Feedback`
+- `data.VisibilityType`
+- `data.OtherPhones`
+- `data.OtherEmails`
+- `data.Websites`
+- `data.Addresses`
+- `data.BankAccounts`
+- `data.Fields.Field_996_0_3`
+- `data.Segments`
+- `data.LastUpdateTime`
+
+اگر هیچ‌کدام از فیلدهای موجود در `data` تغییر نکنند، وب‌هوک ویرایش شخص ارسال نمی‌شود. آرایه `changes` عامل Trigger نیست؛ این آرایه نتیجه تغییرات انجام‌شده را گزارش می‌کند و `data` آخرین وضعیت شخص را پس از ویرایش نشان می‌دهد.
+
+## نمونه داده ارسالی
+
+<CodeGroup>
+
+```json وب‌هوک ایجاد شخص
+{
+  "data": {
+    "Id": "a88c049a-159a-4ce3-8a24-a28f6bc8dacf",
+    "Code": 4,
+    "Title": "",
+    "FirstName": "",
+    "LastName": "test",
+    "DisplayName": "test",
+    "OwnerId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "CompanyId": "00000000-0000-0000-0000-000000000000",
+    "BirthDate": "2026-08-02T15:25:43.6680471+00:00",
+    "BirthDateisValid": false,
+    "BirthDateMessageId": "00000000-0000-0000-0000-000000000000",
+    "MobilePhone": "09101111212",
+    "WorkPhone": "",
+    "WorkPhoneExtension": "",
+    "Fax": "",
+    "Email": "",
+    "CanDelete": true,
+    "CanEdit": true,
+    "IsDeleted": false,
+    "IsVIP": false,
+    "IsMine": true,
+    "HasAccess": true,
+    "LeadGenerationType": 0,
+    "LeadStatus": -1,
+    "LeadType": 0,
+    "ContactType": "General",
+    "IsCustomer": false,
+    "IsProspect": false,
+    "Type": 0,
+    "BackgroundInfo": "",
+    "RegisterTime": "2026-08-02T15:25:43.6680471+00:00",
+    "Position": "",
+    "CustomerCode": "",
+    "EconomicIssue": "",
+    "NationalCode": "",
+    "RegistrationNumber": "",
+    "NationalID": "",
+    "ZipCode": "",
+    "CityTitle": "",
+    "ProvinceTitle": "",
+    "ProvinceId": "00000000-0000-0000-0000-000000000000",
+    "CityId": "00000000-0000-0000-0000-000000000000",
+    "HasCompany": false,
+    "CompanyName": "",
+    "CompanyIsCustomer": null,
+    "CompanyIsProspect": null,
+    "CompanyCode": null,
+    "CompanyAndPosition": "",
+    "Feedback": 0,
+    "VisibilityType": 1,
+    "OtherPhones": [],
+    "OtherEmails": [],
+    "Websites": [],
+    "Addresses": [],
+    "BankAccounts": [],
+    "Fields": {},
+    "Segments": [],
+    "LastUpdateTime": "2026-08-02T15:25:43.6680471+00:00"
+  },
+  "changes": [],
+  "meta": {
+    "actionType": 1,
+    "actionTypeTitle": "Add",
+    "bizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "entityId": "a88c049a-159a-4ce3-8a24-a28f6bc8dacf",
+    "entity": 996,
+    "entityTitle": "Contact",
+    "id": 639212811438569622,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-02T15:25:43.8569622Z",
+    "userId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "webhookId": 32490,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+```json وب‌هوک ویرایش شخص
+{
+  "data": {
+    "Id": "a88c049a-159a-4ce3-8a24-a28f6bc8dacf",
+    "Code": 4,
+    "Title": "",
+    "FirstName": "",
+    "LastName": "test",
+    "DisplayName": "test",
+    "OwnerId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "CompanyId": "00000000-0000-0000-0000-000000000000",
+    "BirthDate": "2026-08-02T00:00:00Z",
+    "BirthDateisValid": false,
+    "BirthDateMessageId": "00000000-0000-0000-0000-000000000000",
+    "MobilePhone": "09101111212",
+    "WorkPhone": "",
+    "WorkPhoneExtension": "",
+    "Fax": "",
+    "Email": "",
+    "CanDelete": true,
+    "CanEdit": true,
+    "IsDeleted": false,
+    "IsVIP": false,
+    "IsMine": true,
+    "HasAccess": true,
+    "LeadGenerationType": 0,
+    "LeadStatus": -1,
+    "LeadType": 0,
+    "ContactType": "Prospect",
+    "IsCustomer": false,
+    "IsProspect": true,
+    "Type": 0,
+    "BackgroundInfo": "",
+    "RegisterTime": "2026-08-02T15:25:43Z",
+    "Position": "",
+    "CustomerCode": "",
+    "EconomicIssue": "",
+    "NationalCode": "",
+    "RegistrationNumber": "",
+    "NationalID": "",
+    "ZipCode": "",
+    "CityTitle": "",
+    "ProvinceTitle": "",
+    "ProvinceId": "00000000-0000-0000-0000-000000000000",
+    "CityId": "00000000-0000-0000-0000-000000000000",
+    "HasCompany": false,
+    "CompanyName": "",
+    "CompanyIsCustomer": null,
+    "CompanyIsProspect": null,
+    "CompanyCode": null,
+    "CompanyAndPosition": "",
+    "Feedback": 0,
+    "VisibilityType": 1,
+    "OtherPhones": [],
+    "OtherEmails": [],
+    "Websites": [],
+    "Addresses": [],
+    "BankAccounts": [],
+    "Fields": {
+      "Field_996_0_3": "20"
+    },
+    "Segments": [],
+    "LastUpdateTime": "2026-08-02T15:25:43Z"
+  },
+  "changes": [
+    {
+      "propertyName": "Field_Field_996_0_3",
+      "before": null,
+      "after": "20"
+    }
+  ],
+  "meta": {
+    "actionType": 2,
+    "actionTypeTitle": "Change",
+    "bizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "entityId": "a88c049a-159a-4ce3-8a24-a28f6bc8dacf",
+    "entity": 996,
+    "entityTitle": "Contact",
+    "id": 639212814506269541,
+    "isBulkEdit": false,
+    "timeStamp": "2026-08-02T15:30:50.6269541Z",
+    "userId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+    "webhookId": 32491,
+    "changeSource": 1,
+    "changeSourceTitle": "Api",
+    "attempt": 1
+  }
+}
+```
+
+</CodeGroup>

@@ -1,0 +1,862 @@
+---
+title: "Create Invoice"
+tag: "POST"
+sidebarTitle: "Create Invoice"
+description: "ایجاد فاکتور جدید در دیدار همراه با ردیف‌های محصول، اطلاعات خریدار و فروشنده و تنظیمات مالی سند"
+---
+
+## ایجاد فاکتور
+
+فاکتور سند نهایی فروش محصولات یا خدمات به مشتری است.‎ با این Endpoint می‌توانید ردیف‌های فاکتور، تعداد، قیمت، تخفیف، مالیات و اطلاعات خریدار و فروشنده را ثبت کنید و در صورت نیاز، فاکتور را به یک معامله متصل کنید.‎
+
+```http
+POST {{baseURL}}/api/AccountingInvoice/Create?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+<ParamField path="Items[]" type="array" required>
+  فهرست ردیف‌های محصول یا خدمت داخل فاکتور یا پیش‌فاکتور است. هر عضو یک ردیف مستقل با محصول، تعداد، قیمت، تخفیف و مالیات می‌سازد.
+
+  <Expandable title="وابستگی‌ها">
+    شناسه و اطلاعات محصول یا زیرمحصول را از Endpointهای محصول بردارید.
+
+    - [Create Product](/Create_product) — اگر محصول هنوز ساخته نشده است
+    - [Search Products](/Search_Products) — برای جست‌وجوی محصول
+    - [Get Product By Codes](/get-product-by-code) — اگر کد محصول را دارید
+  </Expandable>
+
+  <Expandable title="property">
+    <ParamField path="Items[].VariantId" type="string">
+      شناسه زیرمحصول انتخاب‌شده برای این ردیف است.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه و اطلاعات محصول یا زیرمحصول را از Endpointهای محصول بردارید.
+
+        - [Create Product](/create_product) — اگر محصول هنوز ساخته نشده است
+        - [Search Products](/Search_Products) — برای جست‌وجوی محصول
+        - [Get Product By Codes](/get-product-by-code) — اگر کد محصول را دارید
+      </Expandable>
+
+      <Expandable title="شرایط ارسال">
+        اگر محصول زیرمحصول ندارد، این فیلد را ارسال نکنید یا مطابق نمونه `null` بفرستید.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].VariantTitle" type="string">
+      عنوان زیرمحصول انتخاب‌شده است و روی ردیف سند مالی نمایش داده می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه و اطلاعات محصول یا زیرمحصول را از Endpointهای محصول بردارید.
+
+        - [Create Product](/create-product) — اگر محصول هنوز ساخته نشده است
+        - [Search Products](/Search-Products) — برای جست‌وجوی محصول
+        - [Get Product By Codes](/get-product-by-code) — اگر کد محصول را دارید
+      </Expandable>
+
+      <Expandable title="شرایط ارسال">
+        فقط برای ردیفی معنا دارد که زیرمحصول مشخصی انتخاب شده است.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].Title" type="string">
+      عنوان ردیف محصول یا خدمت که در فاکتور نمایش داده می‌شود.
+    </ParamField>
+
+    <ParamField path="Items[].Id" type="string">
+      شناسه ردیف موجود در فاکتور یا پیش‌فاکتور؛ در ویرایش برای تطبیق ردیف ارسالی با ردیف ذخیره‌شده استفاده می‌شود.
+    </ParamField>
+
+    <ParamField path="Items[].TitleForInvoice" type="string">
+      عنوان محصول برای نمایش در فاکتور.
+    </ParamField>
+
+    <ParamField path="Items[].ProductCode" type="string">
+      کد اختصاصی محصول.
+    </ParamField>
+
+    <ParamField path="Items[].VariantCode" type="string">
+      کد زیرمحصول انتخاب‌شده برای این ردیف است.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه و اطلاعات محصول یا زیرمحصول را از Endpointهای محصول بردارید.
+
+        - [Create Product](/create-product) — اگر محصول هنوز ساخته نشده است
+        - [Search Products](/Search-Products) — برای جست‌وجوی محصول
+        - [Get Product By Codes](/get-product-by-code) — اگر کد محصول را دارید
+      </Expandable>
+
+      <Expandable title="شرایط ارسال">
+        فقط برای ردیفی ارسالش کنید که زیرمحصول مشخصی انتخاب شده است.
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].Description" type="string">
+      توضیحات تکمیلی این ردیف در فاکتور.
+    </ParamField>
+
+    <ParamField path="Items[].Unit" type="string">
+      واحد شمارش یا فروش محصول در این ردیف.
+    </ParamField>
+
+    <ParamField path="Items[].UnitPrice" type="string">
+      قیمت هر واحد محصول پیش از تخفیف و مالیات.
+    </ParamField>
+
+    <ParamField path="Items[].VariantPrices[]" type="array">
+      فهرست قیمت‌های زیرمحصول به تفکیک ارز.
+
+      <Expandable title="property">
+        <ParamField path="Items[].VariantPrices[].Id" type="number">
+          شناسه رکورد قیمت زیرمحصول؛ در ویرایش برای تطبیق قیمت ارسالی با قیمت ذخیره‌شده استفاده می‌شود.
+        </ParamField>
+
+        <ParamField path="Items[].VariantPrices[].CurrencyId" type="number">
+          شناسه ارز قیمت زیرمحصول.
+        </ParamField>
+
+        <ParamField path="Items[].VariantPrices[].Price" type="string">
+          قیمت زیرمحصول در ارز مشخص‌شده.
+        </ParamField>
+
+        <ParamField path="Items[].VariantPrices[].VariantId" type="string">
+          شناسه زیرمحصولی است که این قیمت به آن تعلق دارد.
+
+          <Expandable title="وابستگی‌ها">
+            شناسه و اطلاعات محصول یا زیرمحصول را از Endpointهای محصول بردارید.
+
+            - [Create Product](/create_product) — اگر محصول هنوز ساخته نشده است
+            - [Search Products](/Search_Products) — برای جست‌وجوی محصول
+            - [Get Product By Codes](/get-product-by-code) — اگر کد محصول را دارید
+          </Expandable>
+        </ParamField>
+
+        <ParamField path="Items[].VariantPrices[].IsDeleted" type="boolean">
+          مشخص می‌کند رکورد قیمت زیرمحصول حذف شده است یا فعال است.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].ProductId" type="string">
+      شناسه محصولی است که این ردیف فاکتور به آن مربوط می‌شود.
+
+      <Expandable title="وابستگی‌ها">
+        شناسه و اطلاعات محصول یا زیرمحصول را از Endpointهای محصول بردارید.
+
+        - [Create Product](/create_product) — اگر محصول هنوز ساخته نشده است
+        - [Search Products](/Search_Products) — برای جست‌وجوی محصول
+        - [Get Product By Codes](/get-product-by-code) — اگر کد محصول را دارید
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].Discount" type="string">
+      مبلغ تخفیف این ردیف.
+    </ParamField>
+
+    <ParamField path="Items[].TaxPercent" type="string">
+      درصد مالیات قابل اعمال روی این ردیف محصول
+    </ParamField>
+
+    <ParamField path="Items[].DiscountPercent" type="number">
+      درصد تخفیف این ردیف محصول
+    </ParamField>
+
+    <ParamField path="Items[].Quantity" type="number">
+      تعداد محصول یا خدمت در این ردیف.
+    </ParamField>
+
+    <ParamField path="Items[].DiscountType" type="string">
+      روش محاسبه تخفیف ردیف، مانند مبلغ ثابت یا درصدی. مقادیر: `Amount` `Percent`
+
+      <Expandable title="مقادیر مجاز">
+        - `Amount` — `Discount` به‌صورت مبلغ ثابت محاسبه می‌شود
+        - `Percent` — `DiscountPercent` به‌صورت درصد محاسبه می‌شود
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="Items[].SaleTypeId" type="string">
+      شناسه نوع فروش محصول در این ردیف. بصورت پیشفرض مقدار این فیلد برابر است با مقدار زیر: `00000000-0000-0000-0000-000000000000`
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="BizdomainProvider" type="object">
+  اطلاعات سرویس‌دهنده یا اتصال خارجی فعال برای بیزدامنه.
+</ParamField>
+
+<ParamField path="SellerInfo" type="object" required>
+  اطلاعات هویتی، ثبتی و تماس فروشنده است که روی فاکتور یا پیش‌فاکتور درج می‌شود.
+
+  <Expandable title="property">
+    <ParamField path="SellerInfo.SellerName" type="string">
+      نام حقیقی یا حقوقی فروشنده که در سربرگ فاکتور یا پیش‌فاکتور نمایش داده می‌شود.
+    </ParamField>
+
+    <ParamField path="SellerInfo.BizDomainId" type="string" required>
+      شناسه بیزدامنه فروشنده که اطلاعات سند مالی به آن تعلق دارد.
+    </ParamField>
+
+    <ParamField path="SellerInfo.QuoteExpirationDays" type="number">
+      تعداد روزهای اعتبار پیش‌فاکتور از زمان صدور.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerEconomicCode" type="string">
+      کد اقتصادی فروشنده برای صدور فاکتور رسمی.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerNationalCode" type="string">
+      شناسه ملی فروشنده حقیقی برای درج در سند رسمی.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerPostalCode" type="string">
+      کد پستی فروشنده.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerProvince" type="string">
+      استان نشانی فروشنده.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerGrandCity" type="string">
+      شهرستان یا محدوده شهری اصلی فروشنده.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerCity" type="string">
+      شهر نشانی فروشنده.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerAddress" type="string">
+      نشانی کامل فروشنده برای درج در سند.
+    </ParamField>
+
+    <ParamField path="SellerInfo.SellerPhone" type="string">
+      شماره تلفن فروشنده برای درج در سند.
+    </ParamField>
+
+    <ParamField path="SellerInfo.InvoiceConditions" type="string">
+      شرایط و توضیحات فروشنده که در فاکتور نمایش داده می‌شود.
+    </ParamField>
+
+    <ParamField path="SellerInfo.QuoteConditions" type="string">
+      شرایط و توضیحات فروشنده که در پیش‌فاکتور نمایش داده می‌شود.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="BuyerInfo" type="object" required>
+  اطلاعات هویتی، ثبتی و تماس خریدار است که روی فاکتور یا پیش‌فاکتور درج می‌شود.
+
+  <Expandable title="وابستگی‌ها">
+    اطلاعات خریدار را از شخص یا شرکت مرتبط بردارید و در فیلدهای همین آبجکت قرار دهید؛ خود `BuyerInfo` فقط یک `Id` دریافت نمی‌کند.
+
+    - [Create Person](/untitled-page-14) — ساخت شخص خریدار
+    - [Get Person By Id](/untitled-page-16) — دریافت اطلاعات شخص
+    - [Get Person By Mobile](/untitled-page-17) — پیداکردن شخص با موبایل
+    - [Search Person](/untitled-page-18) — جست‌وجوی شخص
+    - [Create Company](/untitled-page-19) — ساخت شرکت خریدار
+    - [Get Company By Id](/untitled-page-21) — دریافت اطلاعات شرکت
+    - [Search Company](/untitled-page-22) — جست‌وجوی شرکت
+  </Expandable>
+
+  <Expandable title="property">
+    <ParamField path="BuyerInfo.BuyerType" type="string">
+      نوع خریدار، مانند شخص حقیقی یا حقوقی؛ تعیین می‌کند کدام اطلاعات هویتی و ثبتی در سند معتبر و قابل نمایش باشند.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerTitle" type="string">
+      عنوان یا نام تجاری خریدار برای نمایش در فاکتور یا پیش‌فاکتور.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerName" type="string">
+      نام خریدار برای درج در سند مالی.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerEconomicCode" type="string">
+      کد اقتصادی خریدار برای صدور فاکتور رسمی.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerNationalCode" type="string">
+      کد ملی خریدار حقیقی برای اسناد رسمی.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerNationalID" type="string">
+      شناسه ملی خریدار حقوقی برای اسناد رسمی.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerRegistrationNumber" type="string">
+      شماره ثبت خریدار حقوقی.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerProvince" type="string">
+      استان نشانی خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerGrandCity" type="string">
+      شهرستان یا محدوده شهری اصلی خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerCity" type="string">
+      شهر نشانی خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerPostalCode" type="string">
+      کد پستی خریدار برای درج در سند رسمی.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerMobilePhone" type="string">
+      شماره تلفن همراه خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerFaxNumber" type="string">
+      شماره فکس خریدار.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerAddress" type="object">
+      ساختار نشانی خریدار؛ اجزای نشانی و مقادیر تکمیلی در این آبجکت قرار می‌گیرند.
+
+      <Expandable title="property">
+        <ParamField path="BuyerInfo.BuyerAddress.KeyValues[]" type="array">
+          فهرست اجزای نشانی خریدار؛ هر عضو عنوان و مقدار یکی از بخش‌های نشانی را نگهداری می‌کند.
+
+          <Expandable title="property">
+            <ParamField path="BuyerInfo.BuyerAddress.KeyValues[].Key" type="string">
+              کلید داخلی جزء نشانی برای تشخیص نوع آن در ساختار آدرس.
+            </ParamField>
+
+            <ParamField path="BuyerInfo.BuyerAddress.KeyValues[].Title" type="string">
+              عنوان جزء نشانی، مانند خیابان، پلاک یا واحد.
+            </ParamField>
+
+            <ParamField path="BuyerInfo.BuyerAddress.KeyValues[].Value" type="string">
+              مقدار ثبت‌شده برای این جزء از نشانی خریدار.
+            </ParamField>
+          </Expandable>
+        </ParamField>
+
+        <ParamField path="BuyerInfo.BuyerAddress.FilledKeyValues[]" type="array">
+          فهرست اجزای تکمیل‌شده نشانی خریدار.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerPhone" type="string">
+      شماره تلفن ثابت خریدار برای درج در سند.
+    </ParamField>
+
+    <ParamField path="BuyerInfo.BuyerEmail" type="string">
+      نشانی ایمیل خریدار.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="Creator" type="object">
+  اطلاعات کاربری که رکورد را ایجاد کرده است.
+</ParamField>
+
+<ParamField path="CreatorId" type="string">
+  شناسه Userی است که به‌عنوان ایجادکننده رکورد ثبت می‌شود.
+
+  <Expandable title="وابستگی‌ها">
+    این فیلد نام کاربر را نمی‌پذیرد؛ باید `UserId` یک User موجود در دیدار را بفرستید.
+
+    - [User List](/untitled-page-13) — مقدار `UserId` کاربر موردنظر را بردارید
+  </Expandable>
+</ParamField>
+
+<ParamField path="IssueDate" type="string">
+  تاریخ صدور فاکتور یا پیش‌فاکتور.
+</ParamField>
+
+<ParamField path="Adjustment" type="string">
+  مبلغ تخفیف نهایی که به جمع فاکتور اضافه یا از آن کم می‌شود.
+</ParamField>
+
+<ParamField path="DiscountRows[]" type="array">
+  فهرست ردیف‌های تخفیف که هرکدام بخشی از تخفیف کل را مشخص می‌کنند.
+
+  <Expandable title="property">
+    <ParamField path="DiscountRows[].DiscountName" type="string">
+      عنوان این ردیف تخفیف که دلیل یا نوع تخفیف را در سند مالی نمایش می‌دهد.
+    </ParamField>
+
+    <ParamField path="DiscountRows[].RowPrice" type="string">
+      مبلغ تخفیف یا تعدیل مربوط به این ردیف محاسباتی.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="BizDomainId" type="string">
+  شناسه بیزدامنه‌ای که داده یا تنظیمات به آن تعلق دارد.
+</ParamField>
+
+<ParamField path="CurrencyId" type="number">
+  شناسه ارزی که مبالغ درخواست بر اساس آن ثبت یا محاسبه می‌شوند.
+</ParamField>
+
+<ParamField path="DealId" type="string">
+  شناسه معامله‌ای است که فاکتور، پیش‌فاکتور یا فیلتر باید به آن مرتبط باشد.
+
+  <Expandable title="وابستگی‌ها">
+    مقدار این فیلد باید `Id` یک معامله موجود در دیدار باشد.
+
+    - [Create Deal](/untitled-page-23) — اگر معامله هنوز ساخته نشده است
+    - [Get Deal By Id](/untitled-page-24) — اگر `Id` معامله را دارید
+    - [Search Deal](/untitled-page-27) — برای جست‌وجوی معامله
+  </Expandable>
+</ParamField>
+
+<ParamField path="Description" type="string">
+  توضیحات تکمیلی رکورد برای ثبت اطلاعاتی که در سایر فیلدها جای نمی‌گیرند.
+</ParamField>
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+    "Items": [
+        {
+            "Id": "9646c644-5d35-4678-bcb7-98ca370c952d",
+            "Price": 120000,
+            "Unit": "عدد",
+            "UnitPrice": 120000,
+            "TaxPrice": 12000,
+            "Title": "product1 - product1-1",
+            "TitleForInvoice": "product1",
+            "Description": "",
+            "Discount": 0,
+            "DiscountPercent": 0,
+            "DiscountType": "Amount",
+            "EditorId": "00000000-0000-0000-0000-000000000000",
+            "CreatedDate": "2026-07-28T14:20:04Z",
+            "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+            "ModifiedDate": "0001-01-01T00:00:00Z",
+            "DealId": "b00449d3-5d9d-4154-a1fd-ea478e6b9b1c",
+            "PriceAfterDiscount": 120000,
+            "ProductCode": "100",
+            "ProductId": "d62ae600-e151-404a-9030-84485e665017",
+            "Quantity": 1,
+            "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+            "TaxPercent": 10,
+            "VariantCode": "1",
+            "VariantId": "57b4205e-1d64-4f67-9610-a9251d993de8",
+            "VariantTitle": "product1-1",
+            "itemStockSummary": [],
+            "ExistInSepidyar": false
+        },
+        {
+            "Id": "1162288f-10c0-4c3f-b25a-129616582d99",
+            "Price": 500000,
+            "Unit": "عدد",
+            "UnitPrice": 500000,
+            "TaxPrice": 50000,
+            "Title": "product2",
+            "TitleForInvoice": "product2",
+            "Description": "",
+            "Discount": 0,
+            "DiscountPercent": 0,
+            "DiscountType": "Amount",
+            "EditorId": "00000000-0000-0000-0000-000000000000",
+            "CreatedDate": "2026-07-28T14:20:04Z",
+            "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+            "ModifiedDate": "0001-01-01T00:00:00Z",
+            "DealId": "b00449d3-5d9d-4154-a1fd-ea478e6b9b1c",
+            "PriceAfterDiscount": 500000,
+            "ProductCode": "101",
+            "ProductId": "6a76de58-b3ab-456a-8e0b-635a620f1599",
+            "Quantity": 1,
+            "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+            "TaxPercent": 10,
+            "VariantCode": null,
+            "VariantId": null,
+            "VariantTitle": null,
+            "itemStockSummary": [],
+            "ExistInSepidyar": false
+        }
+    ],
+    "BizdomainProvider": {},
+    "SellerInfo": {
+        "SellerName": "زیما",
+        "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+        "QuoteExpirationDays": 3,
+        "SellerEconomicCode": "",
+        "SellerNationalCode": "",
+        "SellerPostalCode": "",
+        "SellerProvince": "",
+        "SellerGrandCity": "",
+        "SellerCity": "",
+        "SellerAddress": "",
+        "SellerPhone": "",
+        "InvoiceConditions": "",
+        "QuoteConditions": ""
+    },
+    "BuyerInfo": {
+        "BuyerType": "Person",
+        "BuyerTitle": "",
+        "BuyerName": "nafari",
+        "BuyerEconomicCode": "",
+        "BuyerNationalCode": "16546545",
+        "BuyerNationalID": "",
+        "BuyerRegistrationNumber": "",
+        "BuyerProvince": "",
+        "BuyerGrandCity": "",
+        "BuyerCity": "",
+        "BuyerPostalCode": "68965",
+        "BuyerMobilePhone": "09122526427",
+        "BuyerFaxNumber": "",
+        "BuyerAddress": {
+            "KeyValues": [
+                {
+                    "Key": "سایر",
+                    "Title": "سایر",
+                    "Value": ""
+                }
+            ],
+            "FilledKeyValues": []
+        },
+        "BuyerPhone": "",
+        "BuyerEmail": ""
+    },
+    "Creator": {},
+    "IssueDate": "2026-07-28T14:23:49.846Z",
+    "Adjustment": "-100000",
+    "DiscountRows": [],
+    "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "CurrencyId": 258325,
+    "DealId": "b00449d3-5d9d-4154-a1fd-ea478e6b9b1c",
+    "InvoiceFormattedNumber": "I-3",
+    "InvoiceNumber": 3,
+    "Description": ""
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location 'https://app.didar.me/api/AccountingInvoice/Create?apikey=5xk2y6ua5vswf5d6a6ig1vk3vw8ee3ur' \
+--header 'Content-Type: application/json' \
+--data '{
+    "Items": [
+        {
+            "Id": "9646c644-5d35-4678-bcb7-98ca370c952d",
+            "Price": 120000,
+            "Unit": "عدد",
+            "UnitPrice": 120000,
+            "TaxPrice": 12000,
+            "Title": "product1 - product1-1",
+            "TitleForInvoice": "product1",
+            "Description": "",
+            "Discount": 0,
+            "DiscountPercent": 0,
+            "DiscountType": "Amount",
+            "EditorId": "00000000-0000-0000-0000-000000000000",
+            "CreatedDate": "2026-07-28T14:20:04Z",
+            "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+            "ModifiedDate": "0001-01-01T00:00:00Z",
+            "DealId": "b00449d3-5d9d-4154-a1fd-ea478e6b9b1c",
+            "PriceAfterDiscount": 120000,
+            "ProductCode": "100",
+            "ProductId": "d62ae600-e151-404a-9030-84485e665017",
+            "Quantity": 1,
+            "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+            "TaxPercent": 10,
+            "VariantCode": "1",
+            "VariantId": "57b4205e-1d64-4f67-9610-a9251d993de8",
+            "VariantTitle": "product1-1",
+            "itemStockSummary": [],
+            "ExistInSepidyar": false
+        },
+        {
+            "Id": "1162288f-10c0-4c3f-b25a-129616582d99",
+            "Price": 500000,
+            "Unit": "عدد",
+            "UnitPrice": 500000,
+            "TaxPrice": 50000,
+            "Title": "product2",
+            "TitleForInvoice": "product2",
+            "Description": "",
+            "Discount": 0,
+            "DiscountPercent": 0,
+            "DiscountType": "Amount",
+            "EditorId": "00000000-0000-0000-0000-000000000000",
+            "CreatedDate": "2026-07-28T14:20:04Z",
+            "CreatorId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+            "ModifiedDate": "0001-01-01T00:00:00Z",
+            "DealId": "b00449d3-5d9d-4154-a1fd-ea478e6b9b1c",
+            "PriceAfterDiscount": 500000,
+            "ProductCode": "101",
+            "ProductId": "6a76de58-b3ab-456a-8e0b-635a620f1599",
+            "Quantity": 1,
+            "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+            "TaxPercent": 10,
+            "VariantCode": null,
+            "VariantId": null,
+            "VariantTitle": null,
+            "itemStockSummary": [],
+            "ExistInSepidyar": false
+        }
+    ],
+    "BizdomainProvider": {},
+    "SellerInfo": {
+        "SellerName": "زیما",
+        "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+        "QuoteExpirationDays": 3,
+        "SellerEconomicCode": "",
+        "SellerNationalCode": "",
+        "SellerPostalCode": "",
+        "SellerProvince": "",
+        "SellerGrandCity": "",
+        "SellerCity": "",
+        "SellerAddress": "",
+        "SellerPhone": "",
+        "InvoiceConditions": "",
+        "QuoteConditions": ""
+    },
+    "BuyerInfo": {
+        "BuyerType": "Person",
+        "BuyerTitle": "",
+        "BuyerName": "nafari",
+        "BuyerEconomicCode": "",
+        "BuyerNationalCode": "16546545",
+        "BuyerNationalID": "",
+        "BuyerRegistrationNumber": "",
+        "BuyerProvince": "",
+        "BuyerGrandCity": "",
+        "BuyerCity": "",
+        "BuyerPostalCode": "68965",
+        "BuyerMobilePhone": "09122526427",
+        "BuyerFaxNumber": "",
+        "BuyerAddress": {
+            "KeyValues": [
+                {
+                    "Key": "سایر",
+                    "Title": "سایر",
+                    "Value": ""
+                }
+            ],
+            "FilledKeyValues": []
+        },
+        "BuyerPhone": "",
+        "BuyerEmail": ""
+    },
+    "Creator": {},
+    "IssueDate": "2026-07-28T14:23:49.846Z",
+    "Adjustment": "-100000",
+    "DiscountRows": [],
+    "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "CurrencyId": 258325,
+    "DealId": "b00449d3-5d9d-4154-a1fd-ea478e6b9b1c",
+    "InvoiceFormattedNumber": "I-3",
+    "InvoiceNumber": 3,
+    "Description": ""
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+  "Response": {
+    "Id": 2329527,
+    "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+    "BizdomainProviderId": 144125,
+    "DealId": "b00449d3-5d9d-4154-a1fd-ea478e6b9b1c",
+    "Deal": null,
+    "FinalPrice": 682000.0,
+    "CreatedOn": "0001-01-01T00:00:00Z",
+    "CreatorId": "00000000-0000-0000-0000-000000000000",
+    "Creator": {
+      "LoggedInStatus": "LoggedIn",
+      "ConfirmationCode": "00000000-0000-0000-0000-000000000000",
+      "Password": "",
+      "GenderTitle": "مرد",
+      "RegisterDate": "0001-01-01T00:00:00Z",
+      "ThumbnailUrl": "/PortalData/Subsystems/Profile/UserPics/Thumbnail/UP_00000000-0000-0000-0000-000000000000.jpg",
+      "Title": "آقاي",
+      "UserName": null,
+      "CustomProperties": {},
+      "HasPicture": false,
+      "PictureUrl": "/PortalData/Subsystems/Profile/UserPics/nopicture.png",
+      "FirstName": "",
+      "LastName": "",
+      "DisplayName": " ",
+      "SSN": "",
+      "Gender": 0,
+      "JobId": "00000000-0000-0000-0000-000000000000",
+      "BirthDate": "2026-07-28T14:24:10.2431139Z",
+      "CountryId": "00000000-0000-0000-0000-000000000000",
+      "ProvinceId": "00000000-0000-0000-0000-000000000000",
+      "CityId": "00000000-0000-0000-0000-000000000000",
+      "PostalCode": "",
+      "Address": "",
+      "PictureFileName": "nopicture.png",
+      "HomePhone": "",
+      "OfficePhone": "",
+      "MobilePhone": "",
+      "EmergencyPhone": "",
+      "Email": "",
+      "Website": "",
+      "CommonUserId": "00000000-0000-0000-0000-000000000000",
+      "EmailConfirm": false,
+      "Active": "Active",
+      "VerifiedSentEmailDate": "2026-07-28T14:24:10.2431139Z",
+      "VerifiedSentEmailCount": 1,
+      "Code": 0
+    },
+    "IssueDate": "2026-07-28T14:23:49.846Z",
+    "IsCanceled": false,
+    "InvoiceNumber": "3.0",
+    "QuoteNumber": "",
+    "QuoteFormattedNumber": null,
+    "InvoiceFormattedNumber": "I-3",
+    "InvoiceType": "Invoice",
+    "FiscalYear": 0,
+    "Items": [
+      {
+        "ThirdPartyInvoiceItemId": "7360031",
+        "ProductId": "d62ae600-e151-404a-9030-84485e665017",
+        "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+        "ProductCode": "100",
+        "VariantId": "57b4205e-1d64-4f67-9610-a9251d993de8",
+        "Title": "product1 - product1-1",
+        "Description": "",
+        "Unit": "عدد",
+        "UnitPrice": 120000.0,
+        "Quantity": 1.0,
+        "Discount": 0.0,
+        "VariantCode": "1",
+        "VariantTitle": "product1-1",
+        "TaxPercent": 10,
+        "Index": 0,
+        "DiscountPercent": 0.0,
+        "DiscountType": "Amount",
+        "Price": 120000.0,
+        "PriceAfterDiscount": 120000.0,
+        "DiscountPrice": 0.0,
+        "TaxPrice": 12000.0,
+        "FinalPrice": 132000.0,
+        "ProductName": null
+      },
+      {
+        "ThirdPartyInvoiceItemId": "7360032",
+        "ProductId": "6a76de58-b3ab-456a-8e0b-635a620f1599",
+        "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+        "ProductCode": "101",
+        "VariantId": null,
+        "Title": "product2",
+        "Description": "",
+        "Unit": "عدد",
+        "UnitPrice": 500000.0,
+        "Quantity": 1.0,
+        "Discount": 0.0,
+        "VariantCode": null,
+        "VariantTitle": null,
+        "TaxPercent": 10,
+        "Index": 0,
+        "DiscountPercent": 0.0,
+        "DiscountType": "Amount",
+        "Price": 500000.0,
+        "PriceAfterDiscount": 500000.0,
+        "DiscountPrice": 0.0,
+        "TaxPrice": 50000.0,
+        "FinalPrice": 550000.0,
+        "ProductName": null
+      }
+    ],
+    "Price": 620000.0,
+    "Discount": 0.0,
+    "Tax": 62000.0,
+    "Description": "",
+    "Logo": null,
+    "CanEdit": false,
+    "Adjustment": -100000.0,
+    "DiscountRows": [],
+    "QuoteExpirationDays": 0,
+    "CurrencyId": 258325,
+    "CurrencyCode": null,
+    "BuyerInfo": {
+      "BuyerType": "Person",
+      "BuyerTitle": "",
+      "BuyerName": "nafari",
+      "BuyerEconomicCode": "",
+      "BuyerNationalCode": "16546545",
+      "BuyerNationalID": "",
+      "BuyerRegistrationNumber": "",
+      "BuyerProvince": "",
+      "BuyerGrandCity": "",
+      "BuyerCity": "",
+      "BuyerPostalCode": "68965",
+      "BuyerMobilePhone": "09122526427",
+      "BuyerFaxNumber": "",
+      "BuyerAddress": {
+        "KeyValues": [
+          {
+            "Key": "سایر",
+            "Title": "سایر",
+            "Value": ""
+          }
+        ],
+        "FilledKeyValues": []
+      },
+      "BuyerPhone": "",
+      "BuyerEmail": ""
+    },
+    "SellerInfo": {
+      "SellerName": "زیما",
+      "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+      "QuoteExpirationDays": 3,
+      "SellerEconomicCode": "",
+      "SellerNationalCode": "",
+      "SellerPostalCode": "",
+      "SellerProvince": "",
+      "SellerGrandCity": "",
+      "SellerCity": "",
+      "SellerAddress": "",
+      "SellerPhone": "",
+      "InvoiceConditions": "",
+      "QuoteConditions": ""
+    },
+    "CurrencyIsSystemDefault": false,
+    "InvoiceSignImageUrl": null,
+    "AppExternalViewUrl": "http://app.didar.me/customer/invoice/323332393532372C62303034343964332D356439642D343135342D613166642D656134373865366239623163",
+    "TotalPrice": 620000.0,
+    "TotalDiscount": 0.0,
+    "TotalPriceAfterDiscount": 620000.0,
+    "TotalTaxPrice": 62000.0,
+    "TotalFinalPrice": 682000.0,
+    "FinalAdjustmentPrice": 582000.0,
+    "ShowOnlinePayment": false
+  },
+  "Timer": ":0 :68",
+  "SessionId": "06bb2ad4-2cdc-4afa-b3d9-4551a0a7f04e",
+  "UserId": "58f610e7-061a-4efc-9a87-af7b31bde808",
+  "BizDomainId": "b8233b92-7a57-42a3-8f3e-59fdbbb6c833",
+  "LimitPackage": null
+}
+```
+
+</ResponseExample>
+
+## لینک های مرتبط:
+
+- [Search Deal](/untitled-page-27)
+- [Get Deal By Id](/untitled-page-24)
+- [Create Person](/untitled-page-14)
+- [Get Person By Id](/untitled-page-16)
+- [Get Person By Mobile](/untitled-page-17)
+- [Search Person](/untitled-page-18)
+- [Create Company](/untitled-page-19)
+- [Get Company By Id](/untitled-page-21)
+- [Search Company](/untitled-page-22)
+- [Search Products](/untitled-page-3)
+- [Get Product By Codes](/get-product-by-code)
