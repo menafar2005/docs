@@ -1,0 +1,32 @@
+---
+title: "Product — update"
+sidebarTitle: "Product — update"
+tag: "POST"
+---
+
+# Product — update
+
+این صفحه ورودی‌های نود n8n و endpoint متناظر دیدار را توضیح می‌دهد.
+
+## Endpoint
+
+```http
+POST {{baseURL}}/api/product/save?apikey={{API_KEY}}
+```
+
+## فیلدهای نود
+
+| عنوان در n8n | نوع | وضعیت |
+| --- | --- | --- |
+| Product ID | `string` | الزامی |
+| Title | `string` | الزامی |
+| Code | `string` | اختیاری |
+| Product Category | `options` | اختیاری |
+| Unit | `string` | اختیاری |
+| Unit Price | `number` | اختیاری |
+| Variants | `json` | اختیاری |
+| Active | `boolean` | اختیاری |
+| Description | `string` | اختیاری |
+| Custom Fields (JSON) | `json` | اختیاری |
+
+اطلاعات و پارامترهای این نود بر اساس endpoint بالا تنظیم می‌شوند.

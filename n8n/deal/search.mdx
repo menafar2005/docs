@@ -1,0 +1,35 @@
+---
+title: "Deal — search"
+sidebarTitle: "Deal — search"
+tag: "POST"
+---
+
+# Deal — search
+
+این صفحه ورودی‌های نود n8n و endpoint متناظر دیدار را توضیح می‌دهد.
+
+## Endpoint
+
+```http
+POST {{baseURL}}/api/deal/search_v2?apikey={{API_KEY}}
+```
+
+## فیلدهای نود
+
+| عنوان در n8n | نوع | وضعیت |
+| --- | --- | --- |
+| Keywords | `string` | اختیاری |
+| Status | `options` | اختیاری |
+| Owner Input Mode | `options` | اختیاری |
+| Owner | `options` | اختیاری |
+| Owner ID | `string` | اختیاری |
+| Contact IDs | `string` | اختیاری |
+| Label IDs | `string` | اختیاری |
+| Pipeline Input Mode | `options` | اختیاری |
+| Pipeline | `options` | اختیاری |
+| Pipeline Stage | `options` | اختیاری |
+| Pipeline ID (Manual) | `string` | اختیاری |
+| Pipeline Stage ID (Manual) | `string` | اختیاری |
+| Additional Filters | `collection` | اختیاری |
+
+اطلاعات و پارامترهای این نود بر اساس endpoint بالا تنظیم می‌شوند.

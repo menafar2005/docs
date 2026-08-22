@@ -1,0 +1,31 @@
+---
+title: "Activity — create"
+sidebarTitle: "Activity — create"
+tag: "POST"
+---
+
+# Activity — create
+
+این صفحه ورودی‌های نود n8n و endpoint متناظر دیدار را توضیح می‌دهد.
+
+## Endpoint
+
+```http
+POST {{baseURL}}/api/activity/save?apikey={{API_KEY}}
+```
+
+## فیلدهای نود
+
+| عنوان در n8n | نوع | وضعیت |
+| --- | --- | --- |
+| Title | `string` | الزامی |
+| Activity Type Input Mode | `options` | اختیاری |
+| Activity Type | `options` | اختیاری |
+| Activity Type ID | `string` | اختیاری |
+| Owner Input Mode | `options` | اختیاری |
+| Owner | `options` | اختیاری |
+| Owner ID | `string` | اختیاری |
+| Is Done | `boolean` | اختیاری |
+| Additional Fields | `collection` | اختیاری |
+
+اطلاعات و پارامترهای این نود بر اساس endpoint بالا تنظیم می‌شوند.
