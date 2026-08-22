@@ -241,7 +241,8 @@
             "pages": [
               "n8n/product/update",
               "n8n/product/getByCodes",
-              "n8n/product/search"
+              "n8n/product/search",
+              "n8n/product/create-product"
             ]
           },
           {
