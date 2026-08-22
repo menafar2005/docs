@@ -4,3 +4,288 @@ sidebarTitle: "Get Invoice / Quote"
 description: "دریافت یک فاکتور یا پیش‌فاکتور از دیدار با شناسه، شماره یا شماره فرمت‌شده سند"
 tag: "POST"
 ---
+
+# دریافت فاکتور یا پیش‌فاکتور
+
+این Endpoint برای دریافت اطلاعات یک فاکتور یا پیش‌فاکتور مشخص استفاده می‌شود. برای پیدا کردن سند می‌توانید یکی از شناسه، شماره سند یا شماره فرمت‌شده آن را ارسال کنید.
+
+**در هر درخواست باید فقط و فقط یکی از فیلدهای `Id`، `InvoiceFormattedNumber`، `InvoiceNumber`، `QuoteFormattedNumber` یا `QuoteNumber` ارسال شود. ارسال همزمان دو یا چند مورد باعث خطا می‌شود.**
+
+```http
+POST {{baseURL}}/api/AccountingInvoice/Get?apikey={{API_KEY}}
+```
+
+## پارامترهای Query
+
+| پارامتر | نوع | وضعیت | توضیح |
+| --- | --- | --- | --- |
+| `apikey` | `string` | الزامی | کلید API دیدار. |
+
+## Header درخواست
+
+```text
+Content-Type: application/json
+```
+
+## بدنه درخواست
+
+بدنه درخواست باید **دقیقاً یکی** از فیلدهای زیر را داشته باشد.
+
+<ParamField path="Id" type="number">
+  شناسه فاکتور یا پیش‌فاکتوری است که می‌خواهید دریافت کنید. همین فیلد برای شناسه هر دو نوع سند، یعنی فاکتور و پیش‌فاکتور، استفاده می‌شود.
+
+  <Expandable title="شرایط ارسال">
+    اگر `Id` را ارسال می‌کنید، هیچ‌کدام از فیلدهای `InvoiceFormattedNumber`، `InvoiceNumber`، `QuoteFormattedNumber` یا `QuoteNumber` را همراه آن نفرستید.
+  </Expandable>
+</ParamField>
+
+<ParamField path="InvoiceFormattedNumber" type="string">
+  شماره فرمت‌شده فاکتور است؛ برای مثال `I-23`.
+
+  <Expandable title="شرایط ارسال">
+    اگر `InvoiceFormattedNumber` را ارسال می‌کنید، هیچ‌کدام از چهار فیلد دیگر را همراه آن نفرستید.
+  </Expandable>
+</ParamField>
+
+<ParamField path="InvoiceNumber" type="string">
+  شماره فاکتور است؛ برای مثال `23.0`.
+
+  <Expandable title="شرایط ارسال">
+    اگر `InvoiceNumber` را ارسال می‌کنید، هیچ‌کدام از چهار فیلد دیگر را همراه آن نفرستید.
+  </Expandable>
+</ParamField>
+
+<ParamField path="QuoteFormattedNumber" type="string">
+  شماره فرمت‌شده پیش‌فاکتور است؛ برای مثال `Q-21`.
+
+  <Expandable title="شرایط ارسال">
+    اگر `QuoteFormattedNumber` را ارسال می‌کنید، هیچ‌کدام از چهار فیلد دیگر را همراه آن نفرستید.
+  </Expandable>
+</ParamField>
+
+<ParamField path="QuoteNumber" type="string">
+  شماره پیش‌فاکتور است؛ برای مثال `21.0`.
+
+  <Expandable title="شرایط ارسال">
+    اگر `QuoteNumber` را ارسال می‌کنید، هیچ‌کدام از چهار فیلد دیگر را همراه آن نفرستید.
+  </Expandable>
+</ParamField>
+
+## قواعد و محدودیت‌ها
+
+- بدنه درخواست باید **دقیقاً یک** فیلد از بین `Id`، `InvoiceFormattedNumber`، `InvoiceNumber`، `QuoteFormattedNumber` و `QuoteNumber` داشته باشد.
+- ارسال دو یا چند فیلد از این مجموعه در یک درخواست معتبر نیست و Endpoint خطا برمی‌گرداند.
+- فیلد `Id` هم برای شناسه فاکتور و هم برای شناسه پیش‌فاکتور استفاده می‌شود؛ فیلد جداگانه‌ای مثل `InvoiceId` یا `QuoteId` در این درخواست ارسال نمی‌شود.
+- برای دریافت فاکتور با شماره فرمت‌شده از `InvoiceFormattedNumber` و برای دریافت پیش‌فاکتور با شماره فرمت‌شده از `QuoteFormattedNumber` استفاده کنید.
+- برای دریافت فاکتور با شماره سند از `InvoiceNumber` و برای دریافت پیش‌فاکتور با شماره سند از `QuoteNumber` استفاده کنید.
+
+### نمونه درخواست‌های معتبر
+
+با شناسه فاکتور یا پیش‌فاکتور:
+
+```json
+{
+  "Id": 2220689
+}
+```
+
+با شماره فرمت‌شده فاکتور:
+
+```json
+{
+  "InvoiceFormattedNumber": "I-23"
+}
+```
+
+با شماره فاکتور:
+
+```json
+{
+  "InvoiceNumber": "23.0"
+}
+```
+
+با شماره فرمت‌شده پیش‌فاکتور:
+
+```json
+{
+  "QuoteFormattedNumber": "Q-21"
+}
+```
+
+با شماره پیش‌فاکتور:
+
+```json
+{
+  "QuoteNumber": "21.0"
+}
+```
+
+### نمونه درخواست نامعتبر
+
+در درخواست زیر دو فیلد برای پیدا کردن سند همزمان ارسال شده‌اند؛ بنابراین این درخواست نامعتبر است و خطا برمی‌گرداند.
+
+```json
+{
+  "Id": 2220689,
+  "InvoiceFormattedNumber": "I-23"
+}
+```
+
+<RequestExample>
+
+```json Request Body (JSON)
+{
+  "Id": 2220689
+}
+```
+
+```shellscript Request Body (cURL)
+curl --location '{{baseURL}}/api/AccountingInvoice/Get?apikey={{API_KEY}}' \
+--header 'Content-Type: application/json' \
+--data '{
+  "Id": 2220689
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Request Response (JSON)
+{
+  "Response": {
+    "Id": 2377207,
+    "BizDomainId": "67c7954d-1db7-41f5-8ed2-3bd055566636",
+    "BizdomainProviderId": 145179,
+    "DealId": "6b6740ac-7665-4c44-b7e3-f417ee1e7245",
+    "Deal": {
+      "Id": "6b6740ac-7665-4c44-b7e3-f417ee1e7245",
+      "VisibilityType": 1,
+      "OwnerId": "8bb84640-c11c-4349-97ab-d8f563c2f871",
+      "IsPaid": false,
+      "IsDeleted": false,
+      "CurrencyId": 259726,
+      "Title": "معامله احسان نفری",
+      "IsMine": false,
+      "IsVisible": true,
+      "CanViewPrice": true,
+      "PersonId": "42e2bcd6-8e74-45c8-939f-c24e8098ccb4",
+      "CompanyId": "00000000-0000-0000-0000-000000000000"
+    },
+    "FinalPrice": 10000.0000000,
+    "CreatedOn": "2026-08-16T13:38:07.18Z",
+    "CreatorId": "8bb84640-c11c-4349-97ab-d8f563c2f871",
+    "Creator": null,
+    "IssueDate": "2025-11-05T11:09:10.332Z",
+    "IsCanceled": false,
+    "InvoiceNumber": "3.0",
+    "QuoteNumber": "",
+    "QuoteFormattedNumber": null,
+    "InvoiceFormattedNumber": "I-3",
+    "InvoiceType": "Invoice",
+    "FiscalYear": 0,
+    "Items": [
+      {
+        "ThirdPartyInvoiceItemId": "7502399",
+        "ProductId": "569984af-a8e4-4060-88c1-9481464c5e8f",
+        "SaleTypeId": "00000000-0000-0000-0000-000000000000",
+        "ProductCode": "didar120",
+        "VariantId": "0a1721a1-ac91-49d3-bdcc-92d3ba9f2303",
+        "Title": "test product wp",
+        "Description": "تست 1",
+        "Unit": "عدد",
+        "UnitPrice": 5000.0,
+        "Quantity": 2.0,
+        "Discount": 0.0,
+        "VariantCode": "didar123",
+        "VariantTitle": "test product wp - سبز",
+        "TaxPercent": 0,
+        "Index": 0,
+        "DiscountPercent": 0.0,
+        "DiscountType": "Amount",
+        "Price": 10000.0,
+        "PriceAfterDiscount": 10000.0,
+        "DiscountPrice": 0.0,
+        "TaxPrice": 0.0,
+        "FinalPrice": 10000.0,
+        "ProductName": null
+      }
+    ],
+    "Price": 10000.0,
+    "Discount": 0.0,
+    "Tax": 0.0,
+    "Description": "توضیحات شرایط پیش فرض فاکتور",
+    "Logo": null,
+    "CanEdit": true,
+    "Adjustment": -7700.0,
+    "DiscountRows": [],
+    "QuoteExpirationDays": 0,
+    "CurrencyId": 259726,
+    "CurrencyCode": "IRR",
+    "BuyerInfo": {
+      "BuyerType": "Company",
+      "BuyerTitle": "",
+      "BuyerName": "test company2",
+      "BuyerEconomicCode": "",
+      "BuyerNationalCode": "",
+      "BuyerNationalID": "",
+      "BuyerRegistrationNumber": "",
+      "BuyerProvince": "",
+      "BuyerGrandCity": "",
+      "BuyerCity": "",
+      "BuyerPostalCode": "5453534534",
+      "BuyerMobilePhone": "0910111111",
+      "BuyerFaxNumber": "",
+      "BuyerAddress": {
+        "KeyValues": [
+          {
+            "Key": "home",
+            "Title": "منزل",
+            "Value": "آدرس تست"
+          }
+        ],
+        "FilledKeyValues": []
+      },
+      "BuyerPhone": "09101111111",
+      "BuyerEmail": "test@gmail.com"
+    },
+    "SellerInfo": {
+      "SellerName": "نرم نگاران آرمیتیس",
+      "BizDomainId": "67c7954d-1db7-41f5-8ed2-3bd055566636",
+      "QuoteExpirationDays": 5,
+      "SellerEconomicCode": "",
+      "SellerNationalCode": "",
+      "SellerPostalCode": "",
+      "SellerProvince": "تهران",
+      "SellerGrandCity": "تهران",
+      "SellerCity": "تهران",
+      "SellerAddress": "آدرس تست فروشنده",
+      "SellerPhone": "22353500",
+      "InvoiceConditions": "شرایط پیش فرض فاکتور",
+      "QuoteConditions": "این پیش فاکتور صرفا جهت اعلام قیمت به شرکت متقاضی داده شده و هیچ ارزش دیگری ندارد5"
+    },
+    "CurrencyIsSystemDefault": false,
+    "InvoiceSignImageUrl": null,
+    "AppExternalViewUrl": "http://app.didar.me/customer/invoice/323337373230372C36623637343061632D373636352D346334342D623765332D663431376565316537323435",
+    "TotalPrice": 10000.0,
+    "TotalDiscount": 0.0,
+    "TotalPriceAfterDiscount": 10000.0,
+    "TotalTaxPrice": 0.0,
+    "TotalFinalPrice": 10000.0,
+    "FinalAdjustmentPrice": 2300.0,
+    "ShowOnlinePayment": false
+  }
+}
+```
+
+</ResponseExample>
+
+## لینک‌های مرتبط
+
+- [Create Invoice](/Create-Invoice)
+- [Create Quote](/Create-Quote)
+- [Update Invoice](/Update-Invoice)
+- [Update Quote](/Update-Quote)
+- [Remove Invoice](/Remove-Invoice)
+- [Remove Quote](/Remove-Quote)
