@@ -1,0 +1,34 @@
+---
+title: "get-base-info"
+sidebarTitle: "get-base-info"
+tag: "POST"
+---
+
+# Supplementary — Get Base Info
+
+این نود برای دریافت یکی از داده‌های پایه دیدار استفاده می‌شود. مقدار انتخاب‌شده در فیلد `Dataset` endpoint متناظر را تعیین می‌کند.
+
+## حالت‌های Dataset
+
+| Dataset در n8n | متد | Endpoint |
+| --- | --- | --- |
+| Deal Pipelines | POST | `/api/pipeline/list/0` |
+| Case Pipelines | POST | `/api/pipeline/list/1` |
+| Activity Types | POST | `/api/activity/GetActivityType` |
+| User List | POST | `/api/User/List` |
+| Custom Fields List | POST | `/api/customfield/GetCustomfieldList` |
+| Product Categories | POST | `/api/product/categories` |
+| Segments | POST | `/api/Segment/GetList` |
+| Case Labels | GET | `/api/Label/GetCaseLabels` |
+| Deal Labels | GET | `/api/Label/GetDealLabels` |
+| Tags | POST | `/api/Tag/GetTagList` |
+| Lost Reasons | POST | `/api/Deal/GetLostReasons` |
+| Sources | POST | `/api/Source/GetList` |
+
+## فیلد نود
+
+| عنوان در n8n | نام فیلد | نوع | وضعیت |
+| --- | --- | --- | --- |
+| Dataset | `dataset` | `options` | اختیاری |
+
+هر حالت، endpoint همان ردیف را با درخواست خالی برای حالت‌های POST یا بدون بدنه برای حالت‌های GET فراخوانی می‌کند.

@@ -1,0 +1,23 @@
+---
+title: "popup-callerid"
+sidebarTitle: "popup-callerid"
+tag: "GET"
+---
+
+# Supplementary — Popup Caller ID
+
+این نود endpoint ثبت تماس را با پارامترهای Query زیر فراخوانی می‌کند.
+
+## Endpoint
+
+```http
+GET {{baseURL}}/api/calllog/insert?apikey={{CallerIdApiKey}}&number={{PhoneNumber}}&internalnumber={{UserExtension}}
+```
+
+## فیلدهای نود
+
+| عنوان در n8n | نام فیلد | نوع | وضعیت |
+| --- | --- | --- | --- |
+| Caller's APIKey | `callerIdApiKey` | `string` | الزامی |
+| Phone Number | `number` | `string` | الزامی |
+| User Extension | `internalnumber` | `string` | الزامی |
