@@ -184,7 +184,17 @@
       },
       {
         "tab": "n8n",
-        "href": "n8n"
+        "href": "n8n",
+        "groups": [
+          {
+            "group": "Activity Nodes",
+            "pages": [
+              "n8n/activity-create",
+              "n8n/activity-update",
+              "n8n/activity-search"
+            ]
+          }
+        ]
       }
     ]
   },
