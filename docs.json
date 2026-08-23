@@ -41,10 +41,10 @@
             "anchor": "محصولات",
             "icon": "rectangle-api",
             "pages": [
-              "Create_product",
-              "Search_Products",
+              "Create-product",
+              "Search-Products",
               "product-category",
-              "get-product-by-code"
+              "get-products-by-code"
             ]
           },
           {
@@ -174,7 +174,7 @@
           "case-webhooks",
           "activity-webhooks",
           "person-webhooks",
-          "untitled-page-2",
+          "company-webhooks",
           "note-webhooks",
           "payment-webhooks",
           "invoice-webhooks",
