@@ -1,0 +1,53 @@
+---
+title: "Update Activity Node"
+sidebarTitle: "Update Activity"
+description: "مستندات نود Update Activity در n8n دیدار"
+---
+
+# Update Activity Node
+
+نود **Update Activity** برای ویرایش فعالیت موجود در دیدار استفاده می‌شود.
+
+این نود از API زیر استفاده می‌کند:
+
+```text
+POST /api/activity/save
+```
+
+## فیلدهای الزامی
+
+### Id
+
+شناسه فعالیتی که باید ویرایش شود.
+
+### Title
+
+عنوان فعالیت.
+
+### Activity Type
+
+نوع فعالیت به صورت انتخاب از لیست یا ورود شناسه دستی.
+
+## فیلدهای قابل ویرایش
+
+- Owner
+- Is Done
+- Note
+- Result Note
+- Tags
+- Is Deleted
+- Is Pinned
+- Due Date
+- Duration
+- Done Date
+- Deal ID
+- Case ID
+- Contact IDs
+- Creator ID
+- Recurrence Type
+- Recurrence Data
+- Recurrence End Date
+
+## خروجی
+
+پاسخ API ویرایش فعالیت در خروجی نود قرار می‌گیرد.
