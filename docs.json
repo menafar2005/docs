@@ -181,6 +181,14 @@
           "quote-webhooks",
           "product-webhooks"
         ]
+      },
+      {
+        "tab": "n8n",
+        "pages": [
+          "n8n/getting-started",
+          "n8n/credentials",
+          "n8n/nodes"
+        ]
       }
     ]
   },
