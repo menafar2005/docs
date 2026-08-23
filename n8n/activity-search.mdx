@@ -5,56 +5,83 @@ sidebarTitle: "Search Activity"
 tag: "n8n"
 ---
 
-# Search Activity
+# Search Activity Node
 
-نود **Search Activity** برای جستجو و دریافت فعالیت‌های موجود در دیدار استفاده می‌شود.
+با این نود می‌توانید فعالیت‌ها را براساس پارامترهای مختلف جستجو کنید.
 
 ## Endpoint متناظر
 
-این نود بر پایه Endpoint زیر ساخته شده است:
+```http
+POST {{baseURL}}/api/activity/search?apikey={{API_KEY}}
+```
 
-[Search Activity API](/Search-Activity)
-
-## Operation
-
-با استفاده از این نود می‌توانید فعالیت‌ها را بر اساس فیلترهای مختلف جستجو کنید.
-
-## فیلترهای اصلی
+## Filters
 
 ### Activity Types
 
-جستجو بر اساس یک یا چند نوع فعالیت.
+**API Property:** `ActivityTypeIds[]`
+
+لیست شناسه نوع فعالیت برای محدود کردن نتایج.
+
+در n8n می‌توانید از لیست انتخاب کنید یا شناسه‌ها را دستی وارد کنید.
 
 ### Owner
 
-فیلتر فعالیت‌ها بر اساس مسئول فعالیت.
+**API Property:** `OwnerId`
 
-### Contact IDs
-
-فیلتر بر اساس مخاطب‌های مرتبط.
-
-### Deal ID
-
-فیلتر فعالیت‌های مرتبط با یک معامله.
-
-### Case ID
-
-فیلتر فعالیت‌های مرتبط با یک کارت.
+فیلتر براساس مسئول فعالیت.
 
 ### Creator
 
-فیلتر بر اساس ایجادکننده فعالیت.
+**API Property:** `CreatorId`
 
-## Additional Filters
+فیلتر براساس ایجادکننده فعالیت.
 
-فیلترهای تکمیلی شامل:
+### Contact IDs
 
-- From Date
-- To Date
-- Is Done
-- Is Deleted
-- Tag IDs
-- From
-- Limit
+**API Property:** `ContactIds[]`
 
-ساختار ورودی‌ها مطابق Endpoint جستجوی فعالیت دیدار است.
+لیست مخاطبان مرتبط.
+
+### Deal ID
+
+**API Property:** `DealId`
+
+فیلتر براساس معامله مرتبط.
+
+### Case ID
+
+**API Property:** `CaseId`
+
+فیلتر براساس کارت مرتبط.
+
+### Is Done
+
+**API Property:** `IsDone`
+
+فیلتر وضعیت انجام فعالیت:
+
+- `true`
+- `false`
+
+### Is Deleted
+
+**API Property:** `IsDeleted`
+
+فیلتر وضعیت حذف.
+
+### Tag IDs
+
+**API Property:** `TagIds[]`
+
+فیلتر براساس تگ‌ها.
+
+## Pagination
+
+- `From`: نقطه شروع نتایج
+- `Limit`: تعداد نتایج قابل دریافت
+
+## Date Range
+
+- `FromDate`: ابتدای بازه زمانی
+- `ToDate`: انتهای بازه زمانی
