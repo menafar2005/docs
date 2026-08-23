@@ -5,156 +5,166 @@ sidebarTitle: "نودهای n8n دیدار"
 
 # نودهای n8n دیدار
 
-نود اختصاصی دیدار مجموعه‌ای از عملیات آماده برای کار با APIهای دیدار را در اختیار شما قرار می‌دهد.
+Node اختصاصی دیدار مجموعه‌ای از عملیات آماده برای کار با APIهای دیدار را در اختیار شما قرار می‌دهد.
 
-هر نود براساس یکی از APIهای دیدار ساخته شده است و عملکرد آن مطابق همان Endpoint است.
+هر Operation در Node دیدار معادل یک Endpoint در API دیدار است. بنابراین برای شناخت دقیق ورودی‌ها، خروجی‌ها و نحوه استفاده از هر Operation می‌توانید به مستندات Endpoint مربوطه مراجعه کنید.
 
-## فعالیت‌ها (Activities)
+## عملیات‌های Node دیدار
 
-### Create Activity
+<AccordionGroup>
+  <Accordion title="Activity - فعالیت‌ها">
+    ### Create Activity
 
-ایجاد فعالیت جدید در دیدار.
+    برای ایجاد یک فعالیت جدید در دیدار استفاده می‌شود.
 
-Endpoint متناظر:
+    Endpoint متناظر:
 
-Create Activity
+    `Create Activity`
 
-لینک مستندات:
+    مستندات Endpoint:
 
-Create-Activity
+    `Create-Activity`
 
----
+    ---
 
-### Update Activity
+    ### Update Activity
 
-ویرایش فعالیت موجود در دیدار.
+    برای ویرایش اطلاعات یک فعالیت موجود در دیدار استفاده می‌شود.
 
-Endpoint متناظر:
+    Endpoint متناظر:
 
-Update Activity
+    `Update Activity`
 
-لینک مستندات:
+    مستندات Endpoint:
 
-Update-Activity
+    `Update-Activity`
 
----
+    ---
 
-### Search Activity
+    ### Search Activity
 
-جستجوی فعالیت‌ها در دیدار.
+    برای جستجو و دریافت فعالیت‌های موجود در دیدار استفاده می‌شود.
 
-Endpoint متناظر:
+    Endpoint متناظر:
 
-Search Activity
+    `Search Activity`
 
-لینک مستندات:
+    مستندات Endpoint:
 
-Search-Activity
+    `Search-Activity`
+  </Accordion>
 
-## اشخاص (Persons)
+  <Accordion title="Person - اشخاص">
+    ### Create Person
 
-### Create Person
+    برای ایجاد یک شخص جدید در دیدار استفاده می‌شود.
 
-ایجاد شخص جدید در دیدار.
+    Endpoint متناظر:
 
-Endpoint متناظر:
+    `Create Person`
 
-Create Person
+    مستندات Endpoint:
 
-لینک مستندات:
+    `Create-Person`
 
-Create-Person
+    ---
 
----
+    ### Update Person
 
-### Update Person
+    برای ویرایش اطلاعات یک شخص موجود استفاده می‌شود.
 
-ویرایش شخص موجود.
+    Endpoint متناظر:
 
-Endpoint متناظر:
+    `Update Person`
 
-Update Person
+    مستندات Endpoint:
 
-لینک مستندات:
+    `Update-Person`
 
-Update-Person
+    ---
 
----
+    ### Search Person
 
-### Search Person
+    برای جستجوی اشخاص در دیدار استفاده می‌شود.
 
-جستجوی اشخاص در دیدار.
+    Endpoint متناظر:
 
-Endpoint متناظر:
+    `Search Person`
 
-Search Person
+    مستندات Endpoint:
 
-لینک مستندات:
+    `Search-Person`
+  </Accordion>
 
-Search-Person
+  <Accordion title="Company - شرکت‌ها">
+    ### Create Company
 
-## شرکت‌ها (Companies)
+    برای ایجاد شرکت جدید در دیدار استفاده می‌شود.
 
-### Create Company
+    Endpoint متناظر:
 
-ایجاد شرکت جدید.
+    `Create Company`
 
-Endpoint متناظر:
+    مستندات Endpoint:
 
-Create Company
+    `Create-Company`
+  </Accordion>
 
-لینک مستندات:
+  <Accordion title="Deal - معاملات">
+    ### Create Deal
 
-Create-Company
+    برای ایجاد معامله جدید در دیدار استفاده می‌شود.
 
-## معاملات (Deals)
+    Endpoint متناظر:
 
-### Create Deal
+    `Create Deal`
 
-ایجاد معامله جدید در دیدار.
+    مستندات Endpoint:
 
-Endpoint متناظر:
+    `Create-Deal`
 
-Create Deal
+    ---
 
-لینک مستندات:
+    ### Update Deal
 
-Create-Deal
+    برای ویرایش معامله موجود استفاده می‌شود.
 
-### Update Deal
+    Endpoint متناظر:
 
-ویرایش معامله.
+    `Update Deal`
 
-Endpoint متناظر:
+    مستندات Endpoint:
 
-Update Deal
+    `Update-Deal`
 
-لینک مستندات:
+    ---
 
-Update-Deal
+    ### Search Deal
 
-### Search Deal
+    برای جستجوی معاملات موجود در دیدار استفاده می‌شود.
 
-جستجوی معاملات.
+    Endpoint متناظر:
 
-Endpoint متناظر:
+    `Search Deal`
 
-Search Deal
+    مستندات Endpoint:
 
-لینک مستندات:
+    `Search-Deal`
+  </Accordion>
 
-Search-Deal
+  <Accordion title="Base Data - اطلاعات پایه">
+    این عملیات برای دریافت اطلاعات پایه موردنیاز Workflowها استفاده می‌شوند، مانند:
 
-## اطلاعات پایه
+    - کاریزها
+    - کاربران
+    - فیلدهای اضافی
+    - برچسب‌ها
+    - سایر اطلاعات پایه دیدار
 
-نودهای اطلاعات پایه برای دریافت اطلاعاتی مثل کاریزها، کاربران، فیلدهای اضافی و سایر داده‌های موردنیاز استفاده می‌شوند.
+    برای هر Operation، مستندات Endpoint متناظر در بخش API Reference قابل مشاهده است.
+  </Accordion>
+</AccordionGroup>
 
-لیست کامل Endpointهای مربوط به هر عملیات:
+\[محل قرارگیری تصویر: لیست کامل Nodeهای Didar در n8n\]
 
-- API Reference دیدار
-
-\[محل قرارگیری تصویر: لیست Nodeهای دیدار در n8n\]
-
-\[محل قرارگیری تصویر: صفحه تنظیمات یک نود و نمایش Operationهای قابل انتخاب\]
-
-/
+\[محل قرارگیری تصویر: صفحه تنظیمات Node و لیست Operationهای قابل انتخاب\]
