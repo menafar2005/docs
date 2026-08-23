@@ -1,63 +1,67 @@
 ---
 title: "Create Activity Node"
-description: "مستندات نود Create Activity در n8n دیدار"
 sidebarTitle: "Create Activity"
+description: "مستندات نود Create Activity در n8n دیدار"
 tag: "n8n"
 ---
 
-# Create Activity
+# Create Activity Node
 
-نود **Create Activity** برای ایجاد فعالیت جدید در دیدار استفاده می‌شود.
+با این نود می‌توانید یک فعالیت جدید در دیدار ایجاد کنید. این نود بر اساس Endpoint [Create Activity](/Create-Activity) ساخته شده است.
 
 ## Endpoint متناظر
 
-این نود بر پایه Endpoint زیر ساخته شده است:
+```http
+POST {{baseURL}}/api/activity/save?apikey={{API_KEY}}
+```
 
-[Create Activity API](/Create-Activity)
+## Activity Type
 
-## Operation
+**API Property:** `Activity.ActivityTypeId`
 
-این نود درخواست ایجاد فعالیت را به Endpoint ذخیره فعالیت ارسال می‌کند.
+مشخص می‌کند این فعالیت از چه نوعی است؛ مثلا تماس، جلسه یا پیگیری.
 
-## فیلدهای اصلی
+در n8n دو روش برای مقداردهی وجود دارد:
 
-### Title
+- **Select from list:** انتخاب نوع فعالیت از لیست دیدار
+- **Enter ID manually:** وارد کردن مستقیم شناسه نوع فعالیت
 
-عنوان فعالیت. این فیلد الزامی است.
+مقدار واردشده باید `Id` یکی از نوع‌های فعالیت موجود در دیدار باشد.
 
-### Activity Type
+## Title
 
-نوع فعالیت را مشخص می‌کند. می‌توانید:
+**API Property:** `Activity.Title`
 
-- نوع فعالیت را از لیست انتخاب کنید.
-- شناسه نوع فعالیت را به صورت دستی وارد کنید.
+عنوان کوتاه فعالیت که به کاربر نمایش داده می‌شود.
 
-### Owner
+این فیلد الزامی است.
 
-مسئول فعالیت را مشخص می‌کند. می‌توانید کاربر را از لیست انتخاب کنید یا شناسه آن را وارد کنید.
+## Owner
 
-### Is Done
+**API Property:** `Activity.OwnerId`
 
-مشخص می‌کند فعالیت انجام شده است یا خیر.
+شناسه User مسئول انجام و پیگیری فعالیت است.
+
+در n8n می‌توانید کاربر را از لیست انتخاب کنید یا UserId را دستی وارد کنید.
+
+## Is Done
+
+**API Property:** `Activity.IsDone`
+
+وضعیت انجام فعالیت را مشخص می‌کند:
+
+- `true` — انجام شده
+- `false` — انجام نشده
 
 ## Additional Fields
 
-فیلدهای تکمیلی فعالیت شامل:
-
-- Note
-- Result Note
-- Tags
-- Is Deleted
-- Is Pinned
-- Due Date
-- Duration
-- Done Date
-- Deal ID
-- Case ID
-- Contact IDs
-- Creator ID
-- Recurrence Type
-- Recurrence Data
-- Recurrence End Date
-
-ساختار و مقادیر این فیلدها مطابق Endpoint اصلی دیدار است.
+- `Activity.Note`: توضیحات لازم پیش از انجام فعالیت
+- `Activity.ResultNote`: نتیجه نهایی فعالیت
+- `Activity.Tags[]`: شناسه تگ‌های مرتبط با فعالیت
+- `Activity.DealId`: شناسه معامله مرتبط
+- `Activity.CaseId`: شناسه کارت مرتبط
+- `Activity.ContactIds[]`: شناسه مخاطبان مرتبط
+- `Activity.CreatorId`: شناسه ایجادکننده فعالیت
+- `Activity.RecurrenceType`: الگوی تکرار فعالیت
+- `Activity.RecurrenceData`: فاصله تکرار
+- `Activity.RecurrenceEndDate`: تاریخ پایان تکرار
