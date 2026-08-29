@@ -67,7 +67,7 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
 
     ### عملیات‌ها
 
-    | Operation | کاربرد | مستندات Endpoint |
+    | Operation | کاربرد | صفحه Endpoint متناظر این نود |
     | --- | --- | --- |
     | `Create` | ساخت معامله جدید و مشخص‌کردن شخص، شرکت، مسئول، کاریز، مرحله، مبلغ، وضعیت و محصولات | [Create Deal](/Create-Deal) |
     | `Update` | ویرایش یک معامله موجود؛ مثل تغییر مرحله، مسئول، مبلغ، وضعیت یا محصولات | [Update Deal](/Update-Deal) |
@@ -78,14 +78,14 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
 
     - **Person / Company** — مشخص می‌کند معامله به کدام شخص و شرکت مربوط است.
     - **Owner** — User مسئول پیگیری معامله.
-    - **Pipeline / Pipeline Stage** — کاریز و مرحله فعلی معامله. مرحله باید متعلق به همان کاریز باشد. برای دریافت IDها از [Get Deal Pipelines](/List-Deal-Pipelines) استفاده کنید.
+    - **Pipeline / Pipeline Stage** — کاریز و مرحله فعلی معامله. مرحله باید متعلق به همان کاریز باشد.
     - **Status** — وضعیت معامله: `Pending`، `Won` یا `Lost`.
     - **Price** — مبلغ معامله.
-    - **Source** — نحوه آشنایی معامله. گزینه‌ها را از [Get Sources](/Sources) دریافت کنید.
-    - **Labels** — برچسب‌های معامله. گزینه‌ها را از [Get Deal Labels](/Deal-Labels) دریافت کنید.
-    - **Lost Reason** — در معامله ناموفق، دلیل شکست را مشخص می‌کند. گزینه‌ها از [Get Lost Reasons](/Lost-Reasons) دریافت می‌شوند.
+    - **Source** — نحوه آشنایی معامله را مشخص می‌کند.
+    - **Labels** — برچسب‌های معامله برای دسته‌بندی و شناسایی سریع‌تر معاملات استفاده می‌شوند.
+    - **Lost Reason** — در معامله ناموفق، دلیل شکست معامله را مشخص می‌کند.
     - **Deal Items** — محصولات یا خدمات معامله همراه با تعداد، قیمت، تخفیف، مالیات و زیرمحصول.
-    - **Custom Fields** — برای مقداردهی فیلدهای اضافه معامله؛ کلید فیلدها را از [Get Custom Fields](/Get-Custom-Fields) بگیرید.
+    - **Custom Fields** — برای مقداردهی فیلدهای اضافه معامله استفاده می‌شود.
   </Accordion>
 
   <Accordion title="Person — شخص">
@@ -93,7 +93,7 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
 
     ### عملیات‌ها
 
-    | Operation | کاربرد | مستندات Endpoint |
+    | Operation | کاربرد | صفحه Endpoint متناظر این نود |
     | --- | --- | --- |
     | `Create` | ساخت شخص جدید همراه با اطلاعات تماس، مسئول، شرکت، آدرس و فیلدهای اضافه | [Create Person](/Create-Person) |
     | `Update` | ویرایش اطلاعات شخص موجود | [Update Person](/Update-Person) |
@@ -109,7 +109,7 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
     - **Company ID** — اتصال شخص به یک شرکت موجود.
     - **Company Name** — در Create، اگر Company ID ارسال نشود، می‌تواند برای ساخت شرکت جدید همراه با شخص استفاده شود.
     - **Position** — سمت شخص در شرکت.
-    - **Segments** — گروه‌بندی‌های شخص. IDها را از [Get Segments](/Segments) دریافت کنید.
+    - **Segments** — برای گروه‌بندی شخص در دسته‌های مختلف استفاده می‌شود.
     - **Addresses / Other Phones / Other Emails / Websites** — اطلاعات چندمقداری مخاطب.
     - **Custom Fields** — فیلدهای اضافه شخص.
   </Accordion>
@@ -119,7 +119,7 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
 
     ### عملیات‌ها
 
-    | Operation | کاربرد | مستندات Endpoint |
+    | Operation | کاربرد | صفحه Endpoint متناظر این نود |
     | --- | --- | --- |
     | `Create` | ساخت شرکت جدید همراه با اطلاعات تماس، اطلاعات ثبتی، مسئول و آدرس | [Create Company](/Create-Company) |
     | `Update` | ویرایش اطلاعات شرکت موجود | [Update Company](/Update-Company) |
@@ -142,7 +142,7 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
 
     ### عملیات‌ها
 
-    | Operation | کاربرد | مستندات Endpoint |
+    | Operation | کاربرد | صفحه Endpoint متناظر این نود |
     | --- | --- | --- |
     | `Create` | ساخت فعالیت جدید و تعیین نوع، مسئول، زمان و رکوردهای مرتبط | [Create Activity](/Create-Activity) |
     | `Update` | ویرایش فعالیت موجود؛ مثل زمان، مسئول، نتیجه یا وضعیت انجام | [Update Activity](/Update-Activity) |
@@ -151,14 +151,14 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
     ### فیلدهای مهم
 
     - **Title** — عنوان فعالیت.
-    - **Activity Type** — نوع فعالیت مثل تماس یا جلسه. گزینه‌ها را از [Get Activity Types](/Activity-Type) دریافت کنید.
+    - **Activity Type** — نوع فعالیت را مشخص می‌کند؛ مثل تماس، جلسه یا پیگیری.
     - **Owner** — User مسئول انجام فعالیت.
     - **Due Date / Duration** — زمان و مدت برنامه‌ریزی‌شده فعالیت.
     - **Is Done / Done Date** — وضعیت و زمان انجام فعالیت.
     - **Note** — توضیحات قبل از انجام فعالیت.
     - **Result Note** — نتیجه فعالیت بعد از انجام آن.
     - **Deal ID / Case ID / Contact IDs** — رکوردهایی که فعالیت به آن‌ها مرتبط است.
-    - **Tags** — تگ‌های فعالیت. گزینه‌ها را از [Get Tags](/Tags) دریافت کنید.
+    - **Tags** — برای دسته‌بندی و شناسایی فعالیت‌ها استفاده می‌شوند.
     - **Recurrence** — تنظیمات فعالیت تکرارشونده.
   </Accordion>
 
@@ -167,7 +167,7 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
 
     ### عملیات‌ها
 
-    | Operation | کاربرد | مستندات Endpoint |
+    | Operation | کاربرد | صفحه Endpoint متناظر این نود |
     | --- | --- | --- |
     | `Create` | ساخت یادداشت جدید و اتصال آن به رکوردهای مرتبط | [Create Note](/Create-Note) |
     | `Update` | تغییر متن یا ارتباط‌های یک یادداشت موجود | [Update Note](/Update-Note) |
@@ -185,7 +185,7 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
 
     ### عملیات‌ها
 
-    | Operation | کاربرد | مستندات Endpoint |
+    | Operation | کاربرد | صفحه Endpoint متناظر این نود |
     | --- | --- | --- |
     | `Create` | ساخت کارت جدید و تعیین مرحله، مسئول، مخاطبان، اولویت و سایر اطلاعات | [Create Case](/Create-Case) |
     | `Update` | ویرایش یک کارت موجود | [Update Case](/Update-Case) |
@@ -195,13 +195,13 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
 
     - **Title** — عنوان کارت.
     - **Owner / Users** — مسئول و کاربران مرتبط با کارت.
-    - **Pipeline Stage** — مرحله کارت. مراحل کارت از کاریزهای مخصوص کارت دریافت می‌شوند؛ [Get Case Pipelines](/List-Case-Pipelines).
+    - **Pipeline Stage** — مرحله‌ای از کاریز کارت که کارت در آن قرار دارد.
     - **Status** — وضعیت کارت؛ مثل در حال انجام یا انجام‌شده.
     - **Person / Company / Other Contacts** — مخاطبان مرتبط.
     - **Deal ID** — معامله مرتبط با کارت.
     - **Due Date** — موعد کارت.
     - **Priority** — اولویت کارت.
-    - **Labels** — برچسب‌های مخصوص کارت؛ [Get Case Labels](/Case-Labels).
+    - **Labels** — برچسب‌های مخصوص کارت برای دسته‌بندی و شناسایی سریع‌تر کارت‌ها.
     - **Custom Fields** — فیلدهای اضافه کارت.
   </Accordion>
 
@@ -210,7 +210,7 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
 
     ### عملیات‌ها
 
-    | Operation | کاربرد | مستندات Endpoint |
+    | Operation | کاربرد | صفحه Endpoint متناظر این نود |
     | --- | --- | --- |
     | `Create` | ساخت محصول یا خدمت جدید همراه با کد، قیمت، گروه و زیرمحصول‌ها | [Create Product](/Create-product) |
     | `Update` | ویرایش محصول موجود با استفاده از Product ID | [Create Product — ساختار Endpoint مشترک](/Create-product) |
@@ -220,7 +220,7 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
     ### فیلدهای مهم
 
     - **Title / Code** — عنوان و کد محصول.
-    - **Product Category** — گروه محصول. گزینه‌ها را از [Get Product Categories](/product-category) دریافت کنید.
+    - **Product Category** — گروهی که محصول یا خدمت در آن دسته‌بندی می‌شود.
     - **Unit / Unit Price** — واحد و قیمت پایه.
     - **Variants** — زیرمحصول‌ها و مشخصات آن‌ها.
     - **Active** — فعال یا غیرفعال بودن محصول.
@@ -238,7 +238,7 @@ Community Node دیدار دو دسته نود اصلی در اختیار شما
 
     در `Dataset` مشخص می‌کنید کدام اطلاعات پایه را می‌خواهید دریافت کنید:
 
-    | Dataset | کاربرد | مستندات |
+    | Dataset | کاربرد | صفحه Endpoint متناظر این نود |
     | --- | --- | --- |
     | `Deal Pipelines` | کاریزهای معامله و مراحل آن‌ها | [Get Deal Pipelines](/List-Deal-Pipelines) |
     | `Case Pipelines` | کاریزهای کارت و مراحل آن‌ها | [Get Case Pipelines](/List-Case-Pipelines) |
