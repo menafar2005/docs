@@ -5,166 +5,372 @@ sidebarTitle: "نودهای n8n دیدار"
 
 # نودهای n8n دیدار
 
-Node اختصاصی دیدار مجموعه‌ای از عملیات آماده برای کار با APIهای دیدار را در اختیار شما قرار می‌دهد.
+Node اختصاصی **Didar CRM** عملیات‌های آماده‌ای برای کار با موجودیت‌های اصلی دیدار دارد. این صفحه براساس Operationهای واقعی Community Node دیدار نوشته شده و توضیح هر Operation از مستندات Endpoint متناظر آن گرفته شده است.
 
-هر Operation در Node دیدار معادل یک Endpoint در API دیدار است. بنابراین برای شناخت دقیق ورودی‌ها، خروجی‌ها و نحوه استفاده از هر Operation می‌توانید به مستندات Endpoint مربوطه مراجعه کنید.
-
-## عملیات‌های Node دیدار
+<Note>
+  هرجا فیلدی مثل `Owner Input Mode`، `Pipeline Input Mode` یا `Activity Type Input Mode` می‌بینید، دو راه دارید: **Select from list** تا n8n گزینه‌ها را از دیدار دریافت کند، یا **Enter ID manually** تا خودتان ID را وارد کنید یا با Expression از نود قبلی بگیرید.
+</Note>
 
 <AccordionGroup>
-  <Accordion title="Activity - فعالیت‌ها">
-    ### Create Activity
+  <Accordion title="Deal — معامله">
+    معامله برای پیگیری یک فروش مشخص از شروع تا نتیجه نهایی استفاده می‌شود.
 
-    برای ایجاد یک فعالیت جدید در دیدار استفاده می‌شود.
+    ### Create
 
-    Endpoint متناظر:
+    یک معامله جدید می‌سازد و می‌توانید شخص و شرکت مرتبط، مسئول، کاریز و مرحله فروش، وضعیت، مبلغ، منبع، برچسب و محصولات معامله را مشخص کنید.
 
-    `Create Activity`
+    **Endpoint متناظر:** [Create Deal](/Create-Deal)
 
-    مستندات Endpoint:
+    **فیلدهای اصلی در نود:**
 
-    `Create-Activity`
+    - `Title` — عنوان معامله که در کارت و لیست معاملات نمایش داده می‌شود.
+    - `Owner` / `Owner ID` — User مسئول پیگیری معامله. مقدار نهایی باید `UserId` یک کاربر دیدار باشد. برای پیدا کردن ID از [User List](/User-List) استفاده می‌شود.
+    - `Pipeline` / `Pipeline ID` و `Pipeline Stage` / `Pipeline Stage ID` — کاریز و مرحله‌ای که معامله داخل آن قرار می‌گیرد. مرحله باید متعلق به همان کاریز باشد. لیست کاریزها و مراحل از [List Deal Pipelines](/List-Deal-Pipelines) می‌آید.
+    - `Person ID` — ID شخص اصلی طرف معامله. API نام یا موبایل را به‌جای ID قبول نمی‌کند؛ اگر ID را ندارید از [Get Person By Mobile](/Get-Person-By-Mobile) یا [Search Person](/Search-Person) استفاده کنید.
+    - `Company ID` — ID شرکت مرتبط با معامله، در صورتی که معامله به یک شرکت هم مربوط باشد.
+    - `Status` — وضعیت معامله: `Pending` برای معامله باز، `Won` برای معامله موفق و `Lost` برای معامله ناموفق.
+    - `Label IDs` — ID برچسب‌های معامله؛ مقادیر معتبر را از [Deal Labels](/Deal-Labels) بگیرید.
+    - `Additional Fields` — شامل توضیحات، مبلغ (`Price`)، نحوه آشنایی (`Source ID` / `Source Other`)، دلیل شکست، سطح مشاهده، ایجادکننده، Custom Fieldها و `Deal Items` است.
+    - `Deal Items (JSON)` — ردیف محصولات یا خدمات معامله. هر ردیف می‌تواند `ProductId`، تعداد، قیمت، تخفیف، مالیات، توضیحات و `VariantId` داشته باشد. ID محصول را می‌توانید با [Search Products](/Search-Products) یا [Get Product By Codes](/get-products-by-code) پیدا کنید.
 
-    ---
+    <Note>
+      `Lost Reason ID` فقط وقتی معنا دارد که وضعیت معامله `Lost` باشد. اگر دلیل شکست از قبل در دیدار تعریف شده، ID آن را از [Lost Reasons](/Lost-Reasons) بگیرید؛ اگر در لیست نیست از `Lost Reason Other` استفاده کنید.
+    </Note>
 
-    ### Update Activity
+    ### Update
 
-    برای ویرایش اطلاعات یک فعالیت موجود در دیدار استفاده می‌شود.
+    اطلاعات یا وضعیت یک معامله موجود را تغییر می‌دهد؛ مثلا معامله را به مرحله دیگری می‌برد، مسئول یا مبلغ را عوض می‌کند، آن را موفق/ناموفق می‌کند یا محصولاتش را به‌روزرسانی می‌کند.
 
-    Endpoint متناظر:
+    **Endpoint متناظر:** [Update Deal](/Update-Deal)
 
-    `Update Activity`
+    فیلدهای این Operation با Create یکسان‌اند، با این تفاوت که `Id` مشخص می‌کند **کدام معامله** باید ویرایش شود.
 
-    مستندات Endpoint:
+    ### Get
 
-    `Update-Activity`
+    اطلاعات کامل یک معامله مشخص را از روی ID آن می‌گیرد؛ از جمله طرف معامله، مبلغ، وضعیت، مسئول، مرحله کاریز، محصولات و فیلدهای اضافه.
 
-    ---
+    **Endpoint متناظر:** [Get Deal By Id](/Get-Deal-By-Id)
 
-    ### Search Activity
+    - `Deal Id` — ID معامله‌ای که می‌خواهید جزئیاتش را دریافت کنید.
 
-    برای جستجو و دریافت فعالیت‌های موجود در دیدار استفاده می‌شود.
+    ### Search
 
-    Endpoint متناظر:
+    برای پیدا کردن معاملات با ترکیبی از فیلترها استفاده می‌شود؛ مثل مخاطب، مسئول، وضعیت، کاریز، مرحله، منبع، برچسب، دلیل شکست یا زمان فعالیت بعدی.
 
-    `Search Activity`
+    **Endpoint متناظر:** [Search Deal](/Search-Deal)
 
-    مستندات Endpoint:
+    **فیلترهای موجود در نود:**
 
-    `Search-Activity`
+    - `Keywords` و `Status`
+    - `Owner` / `Owner ID`
+    - `Contact IDs` و `Label IDs`
+    - `Pipeline` و `Pipeline Stage` یا ID دستی آن‌ها
+    - بازه زمانی `Search From Time` و `Search To Time`
+    - `Probability` و بازه `Next Activity`
+    - `Source ID`، `Lost Reason ID` و `Custom Fields (JSON)`
+    - `Sort By` و `Limit`
+
+    <Note>
+      اگر در Search کاریز یا مرحله را فیلتر می‌کنید، `Pipeline` و `Pipeline Stage` باید با هم سازگار باشند؛ مرحله باید متعلق به همان کاریز باشد.
+    </Note>
   </Accordion>
 
-  <Accordion title="Person - اشخاص">
-    ### Create Person
+  <Accordion title="Person — شخص">
+    شخص یکی از مخاطبان واقعی کسب‌وکار است؛ مثل مشتری، سرنخ فروش یا فردی که در یک شرکت کار می‌کند.
 
-    برای ایجاد یک شخص جدید در دیدار استفاده می‌شود.
+    ### Create
 
-    Endpoint متناظر:
+    یک شخص جدید را همراه با اطلاعات تماس، مسئول، شرکت مرتبط، آدرس‌ها، گروه‌بندی‌ها و فیلدهای اضافه در دیدار ثبت می‌کند.
 
-    `Create Person`
+    **Endpoint متناظر:** [Create Person](/Create-Person)
 
-    مستندات Endpoint:
+    **فیلدهای اصلی در نود:**
 
-    `Create-Person`
+    - `First Name` و `Last Name` — نام و نام خانوادگی شخص. در API، `LastName` برای ساخت شخص الزامی است.
+    - `Mobile Phone` — شماره موبایل اصلی شخص که برای جستجو و شناسایی مخاطب استفاده می‌شود و باید تکراری نباشد.
+    - `Work Phone` — شماره تلفن ثابت یا محل کار.
+    - `Owner` / `Owner ID` — User مسئول پیگیری شخص؛ مقدار نهایی باید `UserId` معتبر باشد.
+    - `Company Name` — اگر `Company ID` ندهید و این فیلد مقدار داشته باشد، هنگام ساخت شخص یک شرکت جدید با همین نام ساخته می‌شود.
+    - `Company ID` — برای اتصال شخص به یک شرکت موجود. مقدار باید ID شرکت باشد، نه نام آن.
+    - `Additional Fields` — عنوان، تاریخ تولد، ایمیل، داخلی، فکس، VIP، توضیحات زمینه‌ای، سمت، کد مشتری، کد ملی، کد پستی، سطح مشاهده و Custom Fieldها.
+    - `Websites`، `Other Phones`، `Other Emails`، `Addresses` و `Bank Accounts` — اطلاعات چندمقداری مخاطب.
+    - `Segment IDs` — گروه‌بندی‌هایی که شخص عضو آن‌ها می‌شود؛ IDها را از [Segments](/Segments) بگیرید.
 
-    ---
+    ### Update
 
-    ### Update Person
+    اطلاعات شخصی را که از قبل در دیدار ثبت شده تغییر می‌دهد؛ مثل نام، شماره تماس، مسئول، شرکت مرتبط یا فیلدهای اضافه.
 
-    برای ویرایش اطلاعات یک شخص موجود استفاده می‌شود.
+    **Endpoint متناظر:** [Update Person](/Update-Person)
 
-    Endpoint متناظر:
+    فیلدهای اصلی همان Create هستند و `Id` تعیین می‌کند کدام شخص ویرایش شود.
 
-    `Update Person`
+    ### Get
 
-    مستندات Endpoint:
+    اطلاعات یک شخص مشخص را از روی ID او دریافت می‌کند. زمانی مناسب است که ID شخص را دارید و به جزئیات کامل‌تر مخاطب نیاز دارید.
 
-    `Update-Person`
+    **Endpoint متناظر:** [Get Person By Id](/Get-Person-By-Id)
 
-    ---
+    - `Person Id` — ID شخص موردنظر.
 
-    ### Search Person
+    ### Get by Phone
 
-    برای جستجوی اشخاص در دیدار استفاده می‌شود.
+    بررسی می‌کند شماره موبایل واردشده برای کدام شخص در دیدار ثبت شده است. این Operation برای جلوگیری از ساخت مخاطب تکراری یا پیدا کردن ID شخص قبل از ساخت معامله و فعالیت کاربرد دارد.
 
-    Endpoint متناظر:
+    **Endpoint متناظر:** [Get Person By Mobile](/Get-Person-By-Mobile)
 
-    `Search Person`
+    - `Mobile Phone` — شماره موبایلی که باید در دیدار جستجو شود.
 
-    مستندات Endpoint:
+    ### Search
 
-    `Search-Person`
+    اشخاص را براساس نام و اطلاعات تماس یا مشخصات ثبت‌شده پیدا می‌کند؛ وقتی ID دقیق شخص را ندارید از این Operation استفاده کنید.
+
+    **Endpoint متناظر:** [Search Person](/Search-Person)
+
+    **فیلترهای موجود در نود:** `Keywords`، موبایل، تلفن، ایمیل، کد ملی، کد پستی، کد مشتری، مسئول، بازه زمانی، ترتیب نتایج، وضعیت حذف‌شده، Pin، VIP، Custom Fieldها و `Limit`.
   </Accordion>
 
-  <Accordion title="Company - شرکت‌ها">
-    ### Create Company
+  <Accordion title="Company — شرکت">
+    شرکت در دیدار یعنی یک سازمان یا کسب‌وکاری که به‌عنوان مشتری با آن در ارتباط هستید.
 
-    برای ایجاد شرکت جدید در دیدار استفاده می‌شود.
+    ### Create
 
-    Endpoint متناظر:
+    یک شرکت جدید می‌سازد و اطلاعات تماس، اطلاعات ثبتی و اقتصادی، مسئول، آدرس‌ها و فیلدهای اضافه آن را ثبت می‌کند.
 
-    `Create Company`
+    **Endpoint متناظر:** [Create Company](/Create-Company)
 
-    مستندات Endpoint:
+    **فیلدهای اصلی در نود:**
 
-    `Create-Company`
+    - `Name` — نام شرکت.
+    - `Mobile Phone` و `Work Phone` — شماره‌های تماس اصلی شرکت.
+    - `Owner` / `Owner ID` — User مسئول پیگیری شرکت.
+    - `Additional Fields` — داخلی تلفن، فکس، ایمیل، VIP، توضیحات زمینه‌ای، کد مشتری، کد اقتصادی، شماره ثبت، شناسه ملی، کد پستی، سطح مشاهده و Custom Fieldها.
+    - `Websites`، `Other Phones`، `Other Emails`، `Addresses` و `Bank Accounts` — اطلاعات چندمقداری شرکت.
+    - `Segment IDs` — گروه‌بندی‌های شرکت؛ مقادیر معتبر را از [Segments](/Segments) بگیرید.
+
+    ### Update
+
+    اطلاعات شرکتی را که از قبل در دیدار ثبت شده تغییر می‌دهد؛ از اطلاعات تماس و ثبتی تا مسئول، آدرس‌ها و فیلدهای اضافه.
+
+    **Endpoint متناظر:** [Update Company](/Update-Company)
+
+    فیلدهای اصلی همان Create هستند و `Id` تعیین می‌کند کدام شرکت ویرایش شود.
+
+    ### Get
+
+    اطلاعات کامل یک شرکت مشخص را براساس ID می‌گیرد؛ مثل مسئول، راه‌های تماس، آدرس‌ها و فیلدهای اضافه.
+
+    **Endpoint متناظر:** [Get Company By Id](/Get-Company-By-Id)
+
+    - `Company Id` — ID شرکت موردنظر.
+
+    ### Search
+
+    شرکت‌ها را براساس نام، شماره تماس، شناسه ملی، شماره ثبت، کد اقتصادی، کد مشتری یا تاریخ ثبت پیدا می‌کند.
+
+    **Endpoint متناظر:** [Search Company](/Search-Company)
+
+    **فیلترهای موجود در نود:** `Keywords`، مسئول، بازه زمانی، ترتیب نتایج، حذف‌شده، Pin، VIP، Custom Fieldها و `Limit`.
   </Accordion>
 
-  <Accordion title="Deal - معاملات">
-    ### Create Deal
+  <Accordion title="Activity — فعالیت">
+    فعالیت کاری است که باید در زمان مشخصی انجام شود؛ مثل تماس، جلسه یا پیگیری یک معامله.
 
-    برای ایجاد معامله جدید در دیدار استفاده می‌شود.
+    ### Create
 
-    Endpoint متناظر:
+    یک فعالیت جدید می‌سازد، نوع و مسئول آن را مشخص می‌کند و می‌تواند فعالیت را به شخص، شرکت، معامله یا کارت مرتبط کند.
 
-    `Create Deal`
+    **Endpoint متناظر:** [Create Activity](/Create-Activity)
 
-    مستندات Endpoint:
+    **فیلدهای اصلی در نود:**
 
-    `Create-Deal`
+    - `Title` — عنوان کوتاه فعالیت.
+    - `Activity Type` / `Activity Type ID` — نوع فعالیت مثل تماس یا جلسه. مقدار نهایی باید ID یکی از انواع فعالیت باشد؛ لیست را از [Activity Type](/Activity-Type) بگیرید.
+    - `Owner` / `Owner ID` — User مسئول انجام فعالیت.
+    - `Is Done` — مشخص می‌کند فعالیت باز است یا انجام شده.
+    - `Note` — توضیحاتی که قبل از انجام فعالیت باید دیده شود.
+    - `Result Note` — نتیجه نهایی فعالیت؛ معمولا زمانی استفاده می‌شود که فعالیت انجام شده است.
+    - `Due Date` — زمان برنامه‌ریزی‌شده فعالیت و `Duration` مدت فعالیت برحسب دقیقه.
+    - `Done Date` — زمان واقعی انجام فعالیت؛ زمانی معنا دارد که `Is Done` برابر `true` باشد.
+    - `Deal ID` و `Case ID` — اتصال فعالیت به معامله یا کارت.
+    - `Contact IDs` — اشخاص یا شرکت‌هایی که فعالیت به آن‌ها مربوط است.
+    - `Tags` — تگ‌های فعالیت؛ ID معتبر را از [Tags](/Tags) بگیرید.
+    - `Creator ID` — Userی که به‌عنوان ایجادکننده ثبت می‌شود.
+    - `Recurrence Type`، `Recurrence Data` و `Recurrence End Date` — تنظیم تکرار فعالیت. نوع تکرار می‌تواند یک‌باره، ساعتی، روزانه، هفتگی، ماهانه یا سالانه باشد.
 
-    ---
+    ### Update
 
-    ### Update Deal
+    اطلاعات یک فعالیت موجود را تغییر می‌دهد؛ مثل زمان، مسئول، نوع، توضیحات، رکوردهای مرتبط یا وضعیت انجام فعالیت.
 
-    برای ویرایش معامله موجود استفاده می‌شود.
+    **Endpoint متناظر:** [Update Activity](/Update-Activity)
 
-    Endpoint متناظر:
+    همان فیلدهای Create را دارد و `Id` مشخص می‌کند کدام فعالیت باید ویرایش شود.
 
-    `Update Deal`
+    ### Search
 
-    مستندات Endpoint:
+    فعالیت‌ها را براساس بازه زمانی، نوع فعالیت، مخاطب، مسئول، تگ، وضعیت انجام یا رکورد مرتبط پیدا می‌کند. برای ساخت لیست فعالیت‌ها، برنامه کاری کاربران یا پیدا کردن فعالیت‌های مرتبط مناسب است.
 
-    `Update-Deal`
+    **Endpoint متناظر:** [Search Activity](/Search-Activity)
 
-    ---
-
-    ### Search Deal
-
-    برای جستجوی معاملات موجود در دیدار استفاده می‌شود.
-
-    Endpoint متناظر:
-
-    `Search Deal`
-
-    مستندات Endpoint:
-
-    `Search-Deal`
+    **فیلترهای موجود در نود:** نوع فعالیت، مسئول، `Contact IDs`، `Deal ID`، `Case ID`، ایجادکننده، بازه تاریخ، `Is Done`، `Is Deleted`، `Tag IDs` و صفحه‌بندی با `From` و `Limit`.
   </Accordion>
 
-  <Accordion title="Base Data - اطلاعات پایه">
-    این عملیات برای دریافت اطلاعات پایه موردنیاز Workflowها استفاده می‌شوند، مانند:
+  <Accordion title="Note — یادداشت">
+    یادداشت یک متن آزاد برای ثبت اطلاعات کنار شخص، شرکت، معامله یا کارت است و برخلاف فعالیت، زمان برنامه‌ریزی‌شده برای انجام ندارد.
 
-    - کاریزها
-    - کاربران
-    - فیلدهای اضافی
-    - برچسب‌ها
-    - سایر اطلاعات پایه دیدار
+    ### Create
 
-    برای هر Operation، مستندات Endpoint متناظر در بخش API Reference قابل مشاهده است.
+    یک یادداشت جدید ثبت می‌کند و آن را به رکوردهای مرتبط وصل می‌کند.
+
+    **Endpoint متناظر:** [Create Note](/Create-Note)
+
+    **فیلدهای موجود در نود:**
+
+    - `Result Note` — متن اصلی یادداشت.
+    - `Tags` — تگ‌های یادداشت برای دسته‌بندی و پیدا کردن سریع‌تر.
+    - `Owner` / `Owner ID` — User مسئول رکورد.
+    - `Done Date` — زمان ثبت‌شده برای انجام/ثبت رکورد.
+    - `Deal ID` و `Case ID` — اتصال یادداشت به معامله یا کارت.
+    - `Contact IDs` — اتصال یادداشت به یک یا چند شخص یا شرکت.
+    - `Creator ID` — User ایجادکننده یادداشت.
+
+    ### Update
+
+    متن یا ارتباط‌های یک یادداشت موجود را تغییر می‌دهد.
+
+    **Endpoint متناظر:** [Update Note](/Update-Note)
+
+    - `Note ID` مشخص می‌کند کدام یادداشت ویرایش شود.
+    - بقیه فیلدها همان ارتباط‌ها و اطلاعاتی هستند که در Create توضیح داده شد.
+  </Accordion>
+
+  <Accordion title="Case — کارت">
+    کارت برای پیگیری فرایندهایی استفاده می‌شود که الزاماً فروش نیستند؛ مثل تیکت پشتیبانی، راه‌اندازی مشتری یا یک کار در کانبان.
+
+    ### Create
+
+    یک کارت جدید می‌سازد و می‌توانید مرحله، مسئول، کاربران مرتبط، مخاطبان، معامله مرتبط، اولویت، برچسب و فیلدهای اضافه آن را مشخص کنید.
+
+    **Endpoint متناظر:** [Create Case](/Create-Case)
+
+    **فیلدهای اصلی در نود:**
+
+    - `Title` — عنوان کارت.
+    - `Owner` / `Owner ID` — User مسئول کارت.
+    - `Pipeline Stage ID` — ID مرحله کاریز کارت. کاریزهای کارت از معاملات جدا هستند؛ ID مرحله را از [List Case Pipelines](/List-Case-Pipelines) بگیرید.
+    - `Status` — `InProgress` برای کارت در حال انجام و `Done` برای کارت انجام‌شده.
+    - `Users` / `User IDs (Manual)` — یک یا چند User مرتبط با کارت.
+    - `Result Note` — وقتی Status برابر `Done` است، نتیجه کارت را ثبت می‌کند.
+    - `Company ID`، `Person ID` و `Other Contact IDs` — مخاطبان مرتبط با کارت.
+    - `Deal ID` — معامله مرتبط با کارت.
+    - `Due Date` — موعد کارت.
+    - `Case Category` — نوع کارت: Activity Oriented، Kanban یا Ticket.
+    - `Priority` — بدون اولویت، کم، متوسط یا زیاد.
+    - `Label IDs` — برچسب‌های مخصوص کارت؛ IDها را از [Case Labels](/Case-Labels) بگیرید.
+    - `Custom Fields (JSON)` و `Visibility Type` — فیلدهای اضافه و سطح مشاهده کارت.
+
+    ### Update
+
+    یک کارت موجود را با `Case ID` تغییر می‌دهد؛ مثلا مرحله، وضعیت، مسئول، اولویت، مخاطبان، معامله مرتبط، برچسب‌ها یا سایر اطلاعات کارت را به‌روزرسانی می‌کند.
+
+    **Endpoint متناظر:** [Update Case](/Update-Case)
+
+    ### Search
+
+    کارت‌ها را براساس عنوان، بازه زمانی، مخاطب، مسئول، معامله مرتبط یا فیلدهای اضافه پیدا می‌کند و نتیجه را به‌صورت صفحه‌بندی‌شده برمی‌گرداند.
+
+    **Endpoint متناظر:** [Search Case](/Search-Case)
+
+    **فیلترهای موجود در نود:** `Keywords`، مسئول، بازه `Search From Time` / `Search To Time`، `Contact IDs`، `Deal ID`، `Custom Fields (JSON)` و `Limit`.
+  </Accordion>
+
+  <Accordion title="Product — محصول">
+    ### Create
+
+    یک محصول یا خدمت جدید در دیدار ثبت می‌کند و می‌توانید عنوان، کد، واحد، گروه محصول، قیمت و زیرمحصول‌ها را مشخص کنید.
+
+    **Endpoint متناظر:** [Create Product](/Create-product)
+
+    **فیلدهای موجود در نود:**
+
+    - `Title` — عنوان محصول یا خدمت.
+    - `Code` — کد محصول برای شناسایی و تطبیق با سیستم‌های دیگر.
+    - `Product Category` — گروه محصول؛ لیست گروه‌ها از [Product Categories](/product-category) دریافت می‌شود.
+    - `Unit` و `Unit Price` — واحد و قیمت پایه محصول.
+    - `Variants` — زیرمحصول‌ها به‌صورت JSON؛ هر زیرمحصول می‌تواند عنوان، کد و قیمت واحد خودش را داشته باشد.
+    - `Active` — فعال یا غیرفعال بودن محصول.
+    - `Description` و `Custom Fields (JSON)` — توضیحات و فیلدهای اضافه محصول.
+
+    ### Update
+
+    محصول موجود را با `Product ID` ویرایش می‌کند و همان اطلاعات Create را برای محصول موجود به‌روزرسانی می‌کند.
+
+    **Endpoint واقعی نود:** `POST /api/product/save`
+
+    <Warning>
+      در API Reference فعلی صفحه جداگانه‌ای با عنوان **Update Product** وجود ندارد. کد Community Node برای Create و Update هر دو از Endpoint `product/save` استفاده می‌کند؛ در Update، `Product ID` هم ارسال می‌شود. بنابراین لینک [Create Product](/Create-product) مرجع ساختار همین Endpoint است، اما توضیح «ویرایش محصول» هنوز صفحه مستقل ندارد.
+    </Warning>
+
+    ### Get by Codes
+
+    اطلاعات یک یا چند محصول را از روی کد آن‌ها می‌گیرد. وقتی کد محصولات را در سیستم خودتان دارید و می‌خواهید محصول متناظر را در دیدار پیدا کنید، از این Operation استفاده کنید.
+
+    **Endpoint متناظر:** [Get Product By Codes](/get-products-by-code)
+
+    - `Codes` — یک یا چند کد محصول که باید پیدا شوند.
+
+    ### Search
+
+    محصول را براساس عنوان جستجو می‌کند؛ وقتی ID یا کد محصول را ندارید و نام آن را می‌دانید مناسب است.
+
+    **Endpoint متناظر:** [Search Products](/Search-Products)
+
+    - `Keywords` — عبارت جستجو برای عنوان محصول.
+    - `Limit` — حداکثر تعداد نتیجه‌ای که برگردانده می‌شود.
+  </Accordion>
+
+  <Accordion title="Supplementary — اطلاعات تکمیلی">
+    این Resource عملیات‌هایی دارد که موجودیت جدیدی نمی‌سازند و برای گرفتن داده‌های پایه یا جستجوهای کمکی استفاده می‌شوند.
+
+    ### Get Base Info
+
+    از فیلد `Dataset` مشخص می‌کنید کدام اطلاعات پایه از دیدار دریافت شود. هر گزینه مستقیماً به Endpoint متناظر خودش وصل است:
+
+    - `Deal Pipelines` — کاریزهای معامله و مراحل هرکدام؛ [List Deal Pipelines](/List-Deal-Pipelines)
+    - `Case Pipelines` — کاریزهای کارت و مراحل هرکدام؛ [List Case Pipelines](/List-Case-Pipelines)
+    - `Activity Types` — انواع فعالیت مثل تماس، جلسه و پیگیری؛ [Activity Type](/Activity-Type)
+    - `User List` — کاربران بیزدامنه و `UserId` آن‌ها؛ [User List](/User-List)
+    - `Custom Fields List` — کلید، نوع، عنوان و تنظیمات فیلدهای اضافه؛ [Get Custom Fields](/Get-Custom-Fields)
+    - `Product Categories` — گروه‌های محصول و ID آن‌ها؛ [Product Categories](/product-category)
+    - `Segments` — گروه‌بندی‌های اشخاص و شرکت‌ها؛ [Segments](/Segments)
+    - `Case Labels` — برچسب‌های مخصوص کارت‌ها؛ [Case Labels](/Case-Labels)
+    - `Deal Labels` — برچسب‌های مخصوص معاملات؛ [Deal Labels](/Deal-Labels)
+    - `Tags` — تگ‌های قابل استفاده برای فعالیت و یادداشت؛ [Tags](/Tags)
+    - `Lost Reasons` — دلایل شکست معامله برای استفاده در `LostReasonId`؛ [Lost Reasons](/Lost-Reasons)
+    - `Sources` — گزینه‌های نحوه آشنایی برای استفاده در `SourceId` معامله؛ [Sources](/Sources)
+
+    ### Didaryab Searching
+
+    دیداریاب یک عبارت را هم‌زمان داخل چند نوع رکورد جستجو می‌کند. با `Keyword` عبارت جستجو و با `Types` نوع رکوردها را مشخص می‌کنید.
+
+    **Endpoint متناظر:** [Didaryab Search](/Didaryab-Global-Search)
+
+    - `Keyword` — عبارتی مثل نام شخص، عنوان معامله یا بخشی از نام شرکت.
+    - `Types` — یک یا چند مورد از `Contact`، `Company`، `Deal`، `Case` و `Attachment`.
+
+    ### Popup Caller ID
+
+    این Operation برای Trigger کردن Popup تماس براساس شماره تماس ورودی و داخلی کاربر استفاده می‌شود.
+
+    **فیلدهای نود:**
+
+    - `CallerId's APIKey` — کلید اختصاصی Caller ID؛ این مقدار با API Key اصلی Didar CRM فرق دارد.
+    - `Phone Number` — شماره تماس ورودی.
+    - `User Extension` — داخلی کاربری که تماس را دریافت می‌کند.
+
+    **Endpoint استفاده‌شده در Community Node:** `GET /api/calllog/insert`
+
+    <Warning>
+      برای `Popup Caller ID` در API Reference فعلی صفحه مستندات متناظر پیدا نشد. بنابراین این بخش فقط براساس پیاده‌سازی واقعی Community Node توضیح داده شده و نه یک صفحه Endpoint موجود در مستندات.
+    </Warning>
   </Accordion>
 </AccordionGroup>
-
-\[محل قرارگیری تصویر: لیست کامل Nodeهای Didar در n8n\]
-
-\[محل قرارگیری تصویر: صفحه تنظیمات Node و لیست Operationهای قابل انتخاب\]
