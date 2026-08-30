@@ -30,64 +30,94 @@ tag: "New"
   <Tab title="ChatGPT">
     ### اتصال مستندات دیدار
 
-    <Steps>
-      <Step title="Developer mode را فعال کنید">
-        در ChatGPT وارد **Settings → Apps → Advanced Settings** شوید و **Developer mode** را فعال کنید.
+    #### 1. Developer mode را فعال کنید
 
-        اگر از Workspace سازمانی استفاده می‌کنید، ممکن است لازم باشد Admin یا Owner ابتدا دسترسی ساخت Custom App را برای شما فعال کند.
-      </Step>
-      <Step title="یک Custom App بسازید">
-        وارد **Settings → Apps → Create** شوید.
+    در ChatGPT وارد **Settings** شوید و بخش **Plugins** را باز کنید. سپس گزینه **Developer mode** را انتخاب کنید.
 
-        برای App یک نام مثل `Didar Docs` انتخاب کنید و آدرس زیر را به‌عنوان MCP endpoint وارد کنید:
+    در صفحه‌ای که باز می‌شود، مطمئن شوید **Developer mode روشن است**.
 
-        `https://didar-crm.mintlify.site/mcp`
+    اگر حساب شما داخل یک **Workspace** قرار دارد، ابتدا Owner آن Workspace باید از تنظیمات Workspace، Developer mode را فعال کند. تا زمانی که این دسترسی از سمت Workspace فعال نشده باشد، امکان اضافه‌کردن Plugin کاستوم را نخواهید داشت.
 
-        در بخش Authentication، مقدار **None** را انتخاب کنید.
-      </Step>
-      <Step title="ابزارهای MCP را بررسی و App را ایجاد کنید">
-        گزینه **Scan Tools** را بزنید و صبر کنید تا ابزارهای MCP شناسایی شوند. سپس **Create** را بزنید.
-      </Step>
-    </Steps>
+    > 📷 **اسکرین‌شات پیشنهادی:** صفحه Developer mode در ChatGPT و وضعیت روشن بودن آن.
+
+    #### 2. Plugin کاستوم خود را اضافه کنید
+
+    بعد از فعال‌شدن Developer mode، دوباره وارد منوی **Plugins** شوید. کنار Search bar یک دکمه **\+** وجود دارد. روی آن بزنید تا فرم افزودن Plugin کاستوم باز شود.
+
+    > 📷 **اسکرین‌شات پیشنهادی:** منوی Plugins و دکمه `+` کنار Search bar.
+
+    #### 3. اطلاعات Plugin را وارد کنید
+
+    در مدالی که باز می‌شود، اطلاعات زیر را وارد کنید:
+
+    - **Name:** یک نام دلخواه، مثل `Didar Docs`
+    - **Description:** توضیح دلخواه برای Plugin
+    - **Connection:** روی **Server URL** قرار دهید.
+    - **Server URL:** آدرس MCP مستندات دیدار را وارد کنید:
+
+    ```text
+    https://didar-crm.mintlify.site/mcp
+    ```
+
+    - **Authentication:** روی **No Auth** قرار دهید.
+
+    در پایان تنظیمات را **Save** کنید.
+
+    > 📷 **اسکرین‌شات پیشنهادی:** مدال ساخت Plugin کاستوم با فیلدهای Name، Description، Connection روی Server URL و Authentication روی No Auth.
 
     ### استفاده در ChatGPT
 
-    یک Chat جدید باز کنید و از منوی Tools، App ساخته‌شده برای مستندات دیدار را انتخاب کنید. همچنین می‌توانید در Prompt نام App را صدا بزنید.
+    بعد از ذخیره Plugin، یک Chat جدید باز کنید. داخل کادر پیام، `@` را تایپ کنید و بعد نامی را که برای Plugin انتخاب کرده‌اید وارد کنید؛ مثلاً:
 
-    حالا درخواست خود را مطرح کنید؛ مثلاً:
+    ```text
+    @Didar Docs
+    ```
+
+    Plugin در لیست نمایش داده می‌شود. آن را انتخاب کنید تا در همان Chat در دسترس باشد. از این به بعد می‌توانید درخواست خود را مطرح کنید و ChatGPT برای انجام آن از مستندات دیدار استفاده کند.
+
+    > 📷 **اسکرین‌شات پیشنهادی:** نمایش Plugin دیدار بعد از تایپ `@` در یک Chat جدید.
+
+    مثلاً:
 
     > با استفاده از مستندات دیدار، این Integration را پیاده‌سازی کن و برای هر API که نیاز داری از مستندات دیدار استفاده کن.
 
     یا:
 
     > براساس مستندات دیدار بررسی کن برای این سناریو از چه Endpointها و Webhookهایی باید استفاده کنم و کد لازم را بنویس.
-
-    <Note>
-      دسترسی به Custom MCP Apps در ChatGPT به پلن و تنظیمات Workspace بستگی دارد. در Workspaceهای سازمانی ممکن است Admin نیاز داشته باشد App را ایجاد یا منتشر کند.
-    </Note>
   </Tab>
   <Tab title="Claude">
     ### اتصال مستندات دیدار
 
-    <Steps>
-      <Step title="بخش Connectors را باز کنید">
-        اگر از پلن **Free، Pro یا Max** استفاده می‌کنید، وارد **Customize → Connectors** شوید.
+    #### 1. وارد بخش Connectors شوید
 
-        اگر از **Team یا Enterprise** استفاده می‌کنید، Owner یا Primary Owner باید ابتدا از **Organization settings → Connectors** کانکتور را برای سازمان اضافه کند.
-      </Step>
-      <Step title="Custom Connector را اضافه کنید">
-        در پلن Free، Pro یا Max روی **\+ → Add custom connector** بزنید.
+    در Claude وارد **Settings** شوید، سپس مسیر **Customize → Connectors** را باز کنید.
 
-        در Team یا Enterprise، Owner روی **Add** بزند، روی **Custom** برود و **Web** را انتخاب کند.
-      </Step>
-      <Step title="آدرس MCP را وارد کنید">
-        آدرس زیر را وارد کنید:
+    > 📷 **اسکرین‌شات پیشنهادی:** صفحه `Customize → Connectors` در Claude.
 
-        `https://didar-crm.mintlify.site/mcp`
+    #### 2. Connector جدید اضافه کنید
 
-        این MCP نیاز به Authentication ندارد؛ بنابراین نیازی به تنظیم OAuth Client ID یا Client Secret نیست. سپس **Add** را بزنید.
-      </Step>
-    </Steps>
+    روی دکمه **Add** بزنید تا مدال افزودن Connector باز شود.
+
+    در این مدال:
+
+    - یک **نام دلخواه** برای Connector وارد کنید؛ مثلاً `Didar Docs`.
+    - آدرس MCP مستندات دیدار را وارد کنید:
+
+    ```text
+    https://didar-crm.mintlify.site/mcp
+    ```
+
+    سپس ادامه دهید تا به تنظیمات Authentication برسید.
+
+    > 📷 **اسکرین‌شات پیشنهادی:** مدال Add Connector و محل وارد کردن Name و MCP URL.
+
+    #### 3. Authentication را روی None قرار دهید
+
+    در بخش **Authentication**، مقدار **None** را انتخاب کنید و Connector را ذخیره کنید.
+
+    بعد از ذخیره، Connector مستندات دیدار به Claude اضافه می‌شود.
+
+    > 📷 **اسکرین‌شات پیشنهادی:** انتخاب `None` در بخش Authentication و وضعیت ذخیره‌شده Connector.
 
     ### استفاده در Claude
 
@@ -106,21 +136,27 @@ tag: "New"
 
     اگر از Codex Desktop یا IDE Extension استفاده می‌کنید:
 
-    <Steps>
-      <Step title="MCP Servers را باز کنید">
-        وارد **Settings → MCP servers** شوید.
-      </Step>
-      <Step title="Server جدید اضافه کنید">
-        روی **Add server** بزنید، یک نام مثل `didar-docs` انتخاب کنید و نوع اتصال را **Streamable HTTP** قرار دهید.
-      </Step>
-      <Step title="آدرس MCP را وارد کنید">
-        URL را روی مقدار زیر قرار دهید:
+    #### 1. MCP Servers را باز کنید
 
-        `https://didar-crm.mintlify.site/mcp`
+    وارد **Settings → MCP servers** شوید.
 
-        این سرور نیاز به Authentication ندارد. تنظیمات را Save کنید و Codex یا Extension را Restart کنید.
-      </Step>
-    </Steps>
+    > 📷 **اسکرین‌شات پیشنهادی:** صفحه MCP servers در Codex.
+
+    #### 2. Server جدید اضافه کنید
+
+    روی **Add server** بزنید، یک نام مثل `didar-docs` انتخاب کنید و نوع اتصال را **Streamable HTTP** قرار دهید.
+
+    #### 3. آدرس MCP را وارد کنید
+
+    URL را روی مقدار زیر قرار دهید:
+
+    ```text
+    https://didar-crm.mintlify.site/mcp
+    ```
+
+    این سرور نیاز به Authentication ندارد. تنظیمات را Save کنید و Codex یا Extension را Restart کنید.
+
+    > 📷 **اسکرین‌شات پیشنهادی:** فرم Add server با نوع Streamable HTTP و URL مستندات دیدار.
 
     اگر از Codex CLI استفاده می‌کنید، می‌توانید Server را با URL اضافه کنید:
 
@@ -178,21 +214,27 @@ tag: "New"
   <Tab title="Cursor">
     ### اتصال مستندات دیدار
 
-    <Steps>
-      <Step title="MCPها را باز کنید">
-        در Cursor از Sidebar وارد **Customize → MCPs** شوید.
-      </Step>
-      <Step title="MCP جدید اضافه کنید">
-        گزینه افزودن MCP Server جدید را انتخاب کنید و یک Remote MCP با URL زیر بسازید:
+    #### 1. MCPها را باز کنید
 
-        `https://didar-crm.mintlify.site/mcp`
+    در Cursor از Sidebar وارد **Customize → MCPs** شوید.
 
-        این MCP Authentication ندارد.
-      </Step>
-      <Step title="مطمئن شوید MCP فعال است">
-        در **Customize → MCPs** بررسی کنید که Server فعال باشد.
-      </Step>
-    </Steps>
+    > 📷 **اسکرین‌شات پیشنهادی:** صفحه `Customize → MCPs` در Cursor.
+
+    #### 2. MCP جدید اضافه کنید
+
+    گزینه افزودن MCP Server جدید را انتخاب کنید و یک Remote MCP با URL زیر بسازید:
+
+    ```text
+    https://didar-crm.mintlify.site/mcp
+    ```
+
+    این MCP Authentication ندارد.
+
+    > 📷 **اسکرین‌شات پیشنهادی:** فرم افزودن MCP Server در Cursor با URL مستندات دیدار.
+
+    #### 3. مطمئن شوید MCP فعال است
+
+    در **Customize → MCPs** بررسی کنید که Server فعال باشد.
 
     در صورت استفاده از فایل تنظیمات، می‌توانید این Server را در `.cursor/mcp.json` پروژه یا `~/.cursor/mcp.json` به شکل زیر تعریف کنید:
 
@@ -219,22 +261,25 @@ tag: "New"
 
     در بیشتر ابزارها مسیر کلی به این شکل است:
 
-    <Steps>
-      <Step title="بخش MCP یا Integrations را پیدا کنید">
-        در Settings ابزار دنبال گزینه‌هایی مثل **MCP**, **Integrations**, **Connectors**, **Tools** یا **Custom MCP Server** بگردید.
-      </Step>
-      <Step title="Remote MCP Server اضافه کنید">
-        یک MCP جدید بسازید و آدرس زیر را وارد کنید:
+    #### 1. بخش MCP یا Integrations را پیدا کنید
 
-        `https://didar-crm.mintlify.site/mcp`
-      </Step>
-      <Step title="Authentication را غیرفعال کنید">
-        اگر ابزار نوع Authentication را می‌پرسد، مقدار **None** یا **No authentication** را انتخاب کنید.
-      </Step>
-      <Step title="در Chat از MCP استفاده کنید">
-        بعد از اتصال، اگر ابزار امکان انتخاب Tool یا Connector برای هر گفتگو دارد، MCP دیدار را فعال کنید. سپس از AI بخواهید برای پاسخ یا پیاده‌سازی Integration از مستندات دیدار استفاده کند.
-      </Step>
-    </Steps>
+    در Settings ابزار دنبال گزینه‌هایی مثل **MCP**، **Integrations**، **Connectors**، **Tools** یا **Custom MCP Server** بگردید.
+
+    #### 2. Remote MCP Server اضافه کنید
+
+    یک MCP جدید بسازید و آدرس زیر را وارد کنید:
+
+    ```text
+    https://didar-crm.mintlify.site/mcp
+    ```
+
+    #### 3. Authentication را غیرفعال کنید
+
+    اگر ابزار نوع Authentication را می‌پرسد، مقدار **None** یا **No authentication** را انتخاب کنید.
+
+    #### 4. در Chat از MCP استفاده کنید
+
+    بعد از اتصال، اگر ابزار امکان انتخاب Tool یا Connector برای هر گفتگو دارد، MCP دیدار را فعال کنید. سپس از AI بخواهید برای پاسخ یا پیاده‌سازی Integration از مستندات دیدار استفاده کند.
 
     <Note>
       نام منوها و نحوه فعال‌کردن MCP در هر ابزار متفاوت است. اگر ابزار شما مستندات MCP دارد، راهنمای رسمی همان ابزار را برای افزودن Remote HTTP MCP دنبال کنید و از URL بالا استفاده کنید.
