@@ -17,12 +17,7 @@
     "href": "https://developers.didar.me/"
   },
   "navbar": {
-    "links": [
-      {
-        "href": "https://developers.didar.me",
-        "label": "test"
-      }
-    ],
+    "links": [],
     "primary": {
       "type": "button",
       "label": "Sign In",
