@@ -22,10 +22,6 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Getting Started",
-        "href": "/quick-start"
-      },
-      {
         "tab": "API Reference",
         "anchors": [
           {
