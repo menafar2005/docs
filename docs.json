@@ -27,7 +27,6 @@
           {
             "item": "test1",
             "pages": [
-              "getting-started",
               "ai-mcp-guide",
               "basic-concepts",
               "start-API"
