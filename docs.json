@@ -26,13 +26,18 @@
         "pages": [
           "getting-started",
           "ai-mcp-guide",
-          "basic-concepts",
-          "start-API"
+          "basic-concepts"
         ]
       },
       {
         "tab": "API Reference",
         "anchors": [
+          {
+            "anchor": "شروع کار با API دیدار",
+            "pages": [
+              "start-API"
+            ]
+          },
           {
             "anchor": "محصولات",
             "icon": "rectangle-api",
