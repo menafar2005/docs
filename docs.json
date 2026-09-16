@@ -36,7 +36,8 @@
             "anchor": "شروع کار با API دیدار",
             "pages": [
               "start-API"
-            ]
+            ],
+            "icon": "book-alt"
           },
           {
             "anchor": "محصولات",
