@@ -23,11 +23,16 @@
     "tabs": [
       {
         "tab": "Getting Started",
-        "pages": [
-          "getting-started",
-          "ai-mcp-guide",
-          "basic-concepts",
-          "start-API"
+        "menu": [
+          {
+            "item": "test1",
+            "pages": [
+              "getting-started",
+              "ai-mcp-guide",
+              "basic-concepts",
+              "start-API"
+            ]
+          }
         ]
       },
       {
