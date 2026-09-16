@@ -157,7 +157,11 @@
               "Tags",
               "Lost-Reasons",
               "Sources",
-              "Get-Locations"
+              "Get-Locations",
+              {
+                "group": "test",
+                "pages": []
+              }
             ]
           }
         ]
