@@ -51,7 +51,6 @@
               "Create-Activity",
               "Update-Activity",
               "Search-Activity",
-              "Attach-Files-To-Activity",
               "Get-Activity-By-Id"
             ]
           },
@@ -160,11 +159,17 @@
               "Get-Locations",
               {
                 "group": "test",
-                "pages": []
+                "pages": [
+                  "Create-Activity",
+                  "Create-Case"
+                ],
+                "expanded": true
               },
               {
                 "group": "test",
-                "pages": []
+                "pages": [
+                  "Attach-Files-To-Activity"
+                ]
               }
             ]
           }
