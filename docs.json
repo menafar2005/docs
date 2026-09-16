@@ -23,11 +23,7 @@
     "tabs": [
       {
         "tab": "Getting Started",
-        "pages": [
-          "getting-started",
-          "ai-mcp-guide",
-          "basic-concepts"
-        ]
+        "href": "/quick-start"
       },
       {
         "tab": "API Reference",
