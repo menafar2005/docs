@@ -24,6 +24,7 @@
       {
         "tab": "Getting Started",
         "pages": [
+          "quick-start",
           "getting-started",
           "ai-mcp-guide",
           "basic-concepts"
