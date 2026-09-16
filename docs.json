@@ -161,6 +161,10 @@
               {
                 "group": "test",
                 "pages": []
+              },
+              {
+                "group": "test",
+                "pages": []
               }
             ]
           }
