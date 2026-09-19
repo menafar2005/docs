@@ -32,16 +32,16 @@
       },
       {
         "tab": "API Reference",
-        "anchors": [
+        "groups": [
           {
-            "anchor": "شروع کار با API دیدار",
+            "group": "شروع کار با API دیدار",
+            "icon": "book-alt",
             "pages": [
               "start-API"
-            ],
-            "icon": "book-alt"
+            ]
           },
           {
-            "anchor": "محصولات",
+            "group": "محصولات",
             "icon": "rectangle-api",
             "pages": [
               "Create-product",
@@ -51,7 +51,7 @@
             ]
           },
           {
-            "anchor": "فعالیت",
+            "group": "فعالیت",
             "icon": "rectangle-api",
             "pages": [
               "Activity-Type",
@@ -63,7 +63,7 @@
             ]
           },
           {
-            "anchor": "یادداشت",
+            "group": "یادداشت",
             "icon": "rectangle-api",
             "pages": [
               "Create-Note",
@@ -73,28 +73,28 @@
             ]
           },
           {
-            "anchor": "دیداریاب",
+            "group": "دیداریاب",
             "icon": "rectangle-api",
             "pages": [
               "Didaryab-Global-Search"
             ]
           },
           {
-            "anchor": "فیلد های اضافی",
+            "group": "فیلد های اضافی",
             "icon": "rectangle-api",
             "pages": [
               "Get-Custom-Fields"
             ]
           },
           {
-            "anchor": "کاربران",
+            "group": "کاربران",
             "icon": "rectangle-api",
             "pages": [
               "User-List"
             ]
           },
           {
-            "anchor": "شخص",
+            "group": "شخص",
             "icon": "rectangle-api",
             "pages": [
               "Create-Person",
@@ -105,7 +105,7 @@
             ]
           },
           {
-            "anchor": "شرکت",
+            "group": "شرکت",
             "icon": "rectangle-api",
             "pages": [
               "Create-Company",
@@ -115,7 +115,7 @@
             ]
           },
           {
-            "anchor": "معامله",
+            "group": "معامله",
             "icon": "rectangle-api",
             "pages": [
               "Create-Deal",
@@ -125,7 +125,7 @@
             ]
           },
           {
-            "anchor": "فاکتور / پیش فاکتور",
+            "group": "فاکتور / پیش فاکتور",
             "icon": "rectangle-api",
             "pages": [
               "Create-Invoice",
@@ -138,7 +138,7 @@
             ]
           },
           {
-            "anchor": "کارت ها",
+            "group": "کارت ها",
             "icon": "rectangle-api",
             "pages": [
               "Create-Case",
@@ -147,7 +147,7 @@
             ]
           },
           {
-            "anchor": "کاریز ها",
+            "group": "کاریز ها",
             "icon": "rectangle-api",
             "pages": [
               "List-Deal-Pipelines",
@@ -155,7 +155,7 @@
             ]
           },
           {
-            "anchor": "اطلاعات پایه",
+            "group": "اطلاعات پایه",
             "icon": "rectangle-api",
             "pages": [
               "Segments",
