@@ -17,25 +17,7 @@
     "href": "https://developers.didar.me/"
   },
   "navbar": {
-    "links": [
-      {
-        "href": "/start-API",
-        "label": "API"
-      },
-      {
-        "href": "/start-webhook",
-        "label": "وب‌هوک"
-      },
-      {
-        "href": "/n8n/getting-started",
-        "label": "n8n"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "راهنمای شروع",
-      "href": "/quick-start"
-    }
+    "links": []
   },
   "navigation": {
     "tabs": [
@@ -241,9 +223,5 @@
   },
   "seo": {
     "indexing": "all"
-  },
-  "banner": {
-    "content": "دسترسی به مستندات دیدار با ابزارهای هوش مصنوعی - [راهنمای اتصال AI Agent](/ai-mcp-guide)",
-    "dismissible": true
   }
 }
